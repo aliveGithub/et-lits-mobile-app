@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">LITS</string>
+    <string name="add_animal">Add Animal</string>
+    <string name="button_save">Save</string>
+    <string name="select_date">Select Date...</string>
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
+</resources>

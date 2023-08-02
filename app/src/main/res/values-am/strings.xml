@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">LITS - Amharic</string>
+    <string name="add_animal">እንስሳ ይጨምሩ</string>
+    <string name="button_save">Save</string>
+</resources>
