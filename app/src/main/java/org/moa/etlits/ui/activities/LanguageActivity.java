@@ -1,4 +1,4 @@
-package org.moa.etlits;
+package org.moa.etlits.ui.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import org.moa.etlits.R;
 
 import java.util.Locale;
 

@@ -1,4 +1,4 @@
-package org.moa.etlits.dao;
+package org.moa.etlits.data.dao;
 
 import java.util.Date;
 

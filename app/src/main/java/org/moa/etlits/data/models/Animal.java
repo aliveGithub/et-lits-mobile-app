@@ -1,4 +1,4 @@
-package org.moa.etlits.models;
+package org.moa.etlits.data.models;
 
 import java.util.Date;
 

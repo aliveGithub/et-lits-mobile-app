@@ -1,6 +1,6 @@
-package org.moa.etlits.dao;
+package org.moa.etlits.data.dao;
 
-import org.moa.etlits.models.Animal;
+import org.moa.etlits.data.models.Animal;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;

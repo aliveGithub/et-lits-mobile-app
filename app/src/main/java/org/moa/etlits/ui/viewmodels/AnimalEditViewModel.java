@@ -1,12 +1,9 @@
-package org.moa.etlits.viewmodels;
+package org.moa.etlits.ui.viewmodels;
 
 import android.app.Application;
 
-import org.moa.etlits.models.Animal;
-import org.moa.etlits.repositories.AnimalRepository;
-
-import java.util.Date;
-import java.util.List;
+import org.moa.etlits.data.models.Animal;
+import org.moa.etlits.data.repositories.AnimalRepository;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;

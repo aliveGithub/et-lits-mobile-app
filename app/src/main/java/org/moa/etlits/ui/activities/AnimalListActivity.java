@@ -1,4 +1,4 @@
-package org.moa.etlits.activities;
+package org.moa.etlits.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,9 +7,9 @@ import android.view.View;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.moa.etlits.R;
-import org.moa.etlits.adapters.AnimalListAdapter;
-import org.moa.etlits.models.Animal;
-import org.moa.etlits.viewmodels.AnimalViewModel;
+import org.moa.etlits.ui.adapters.AnimalListAdapter;
+import org.moa.etlits.data.models.Animal;
+import org.moa.etlits.ui.viewmodels.AnimalViewModel;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;

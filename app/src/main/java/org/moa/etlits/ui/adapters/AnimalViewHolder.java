@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.moa.etlits.adapters;
+package org.moa.etlits.ui.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;

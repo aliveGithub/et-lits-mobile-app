@@ -1,9 +1,9 @@
-package org.moa.etlits.adapters;
+package org.moa.etlits.ui.adapters;
 
 
 import android.view.ViewGroup;
 
-import org.moa.etlits.models.Animal;
+import org.moa.etlits.data.models.Animal;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;

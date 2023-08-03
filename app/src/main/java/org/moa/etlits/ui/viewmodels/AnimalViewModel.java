@@ -1,19 +1,15 @@
-package org.moa.etlits.viewmodels;
+package org.moa.etlits.ui.viewmodels;
 
 import android.app.Application;
 
-import org.moa.etlits.dao.AnimalDao;
-import org.moa.etlits.models.Animal;
-import org.moa.etlits.repositories.AnimalRepository;
+import org.moa.etlits.data.models.Animal;
+import org.moa.etlits.data.repositories.AnimalRepository;
 
 import java.util.Date;
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
 
 
 public class AnimalViewModel extends AndroidViewModel {

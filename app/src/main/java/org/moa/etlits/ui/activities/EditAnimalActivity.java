@@ -1,32 +1,27 @@
-package org.moa.etlits.activities;
+package org.moa.etlits.ui.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.moa.etlits.R;
-import org.moa.etlits.models.Animal;
-import org.moa.etlits.viewmodels.AnimalEditViewModel;
-import org.moa.etlits.viewmodels.AnimalViewModel;
+import org.moa.etlits.data.models.Animal;
+import org.moa.etlits.ui.viewmodels.AnimalEditViewModel;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 public class EditAnimalActivity extends AppCompatActivity {
 

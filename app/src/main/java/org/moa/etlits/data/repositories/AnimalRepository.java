@@ -1,10 +1,10 @@
-package org.moa.etlits.repositories;
+package org.moa.etlits.data.repositories;
 
 import android.app.Application;
 
-import org.moa.etlits.dao.AnimalDao;
-import org.moa.etlits.dao.AppDatabase;
-import org.moa.etlits.models.Animal;
+import org.moa.etlits.data.dao.AnimalDao;
+import org.moa.etlits.data.dao.AppDatabase;
+import org.moa.etlits.data.models.Animal;
 
 import java.util.List;
 

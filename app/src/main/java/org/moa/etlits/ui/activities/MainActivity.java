@@ -1,4 +1,4 @@
-package org.moa.etlits.activities;
+package org.moa.etlits.ui.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -7,20 +7,15 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
-import org.moa.etlits.LanguageActivity;
+import org.moa.etlits.ui.activities.LanguageActivity;
 import org.moa.etlits.R;
 import org.moa.etlits.api.RetrofitClient;
-
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private Button btnShowAnimals, btnAPICall;
