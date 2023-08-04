@@ -21,13 +21,13 @@
             android:name=".ui.activities.LanguageActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.EditAnimalActivity"
+            android:name=".ui.activities.EditAnimalActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.AnimalListActivity"
+            android:name=".ui.activities.AnimalListActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".ui.activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,5 +1,6 @@
 package org.moa.etlits.ui.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import org.moa.etlits.R;
 import org.moa.etlits.databinding.FragmentLoginBinding;
+import org.moa.etlits.ui.activities.MainActivity;
 import org.moa.etlits.ui.viewmodels.login.LoggedInUserView;
 import org.moa.etlits.ui.viewmodels.login.LoginResult;
 import org.moa.etlits.ui.viewmodels.login.LoginViewModel;
@@ -25,6 +27,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -50,6 +53,14 @@ public class LoginFragment extends Fragment {
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
+        loginViewModel.getIsLoggedIn().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isLoggedIn) {
+                if (isLoggedIn) {
+                    navigateToHome();
+                }
+            }
+        });
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;
         final Button loginButton = binding.login;
@@ -149,5 +160,20 @@ public class LoginFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        ((MainActivity) getActivity()).disableDrawer();
+    }
+
+    private void navigateToHome() {
+        FragmentManager fm = getFragmentManager();
+        if (fm != null) {
+            fm.beginTransaction()
+                    .replace(R.id.container, new HomeFragment())
+                    .commit();
+        }
     }
 }

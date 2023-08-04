@@ -16,6 +16,7 @@ public class LoginViewModel extends ViewModel {
 
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isLoggedIn = new MutableLiveData<>();
     private LoginRepository loginRepository;
 
     LoginViewModel(LoginRepository loginRepository) {
@@ -33,13 +34,20 @@ public class LoginViewModel extends ViewModel {
     public void login(String username, String password) {
         // can be launched in a separate asynchronous job
         Result<LoggedInUser> result = loginRepository.login(username, password);
-
-        if (result instanceof Result.Success) {
+        loginResult.setValue(new LoginResult(new LoggedInUserView("Gerald")));
+        isLoggedIn.setValue(true);
+        /*if (result instanceof Result.Success) {
             LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
             loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
+            isLoggedIn.setValue(true);
         } else {
             loginResult.setValue(new LoginResult(R.string.login_failed));
-        }
+            isLoggedIn.setValue(false);
+        }*/
+    }
+
+    public MutableLiveData<Boolean> getIsLoggedIn() {
+        return isLoggedIn;
     }
 
     public void loginDataChanged(String username, String password) {

@@ -1,4 +1,4 @@
-package org.moa.etlits.api;
+package org.moa.etlits.api.services;
 import retrofit2.Call;
 import retrofit2.http.GET;
 

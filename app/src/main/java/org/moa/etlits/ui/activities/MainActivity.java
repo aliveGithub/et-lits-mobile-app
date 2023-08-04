@@ -1,85 +1,60 @@
 package org.moa.etlits.ui.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.drawerlayout.widget.DrawerLayout;
-
-import android.content.Context;
-import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-
-import org.moa.etlits.ui.activities.LanguageActivity;
 import org.moa.etlits.R;
-import org.moa.etlits.api.RetrofitClient;
+import org.moa.etlits.ui.fragments.LoginFragment;
 
 public class MainActivity extends AppCompatActivity {
-    private Button btnShowAnimals, btnAPICall;
-    private Context context;
-    private Resources resources;
 
     private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle actionBarDrawerToggle;
+    private ActionBarDrawerToggle drawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        btnShowAnimals = findViewById(R.id.btnAnimals);
-        btnAPICall = findViewById(R.id.btn_call_api);
-        drawerLayout = findViewById(R.id.main_drawer_layout);
+        drawerLayout = findViewById(R.id.drawer_layout);
 
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close);
+        drawerLayout.addDrawerListener(drawerToggle);
 
-        // pass the Open and Close toggle for the drawer layout listener
-        // to toggle the button
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.syncState();
 
-        // to make the Navigation drawer icon always appear on the action bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        btnShowAnimals.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AnimalListActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        btnAPICall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RetrofitClient.getConfigService("test@liferay.com", "aQJR8C2V");
-            }
-        });
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, new LoginFragment())
+                .commit();
     }
 
-    //public static final int LANGUAGE_MENU_ITEM = R.id.nav_language;
-    public static final int CCC = 1000012;
+    public void disableDrawer() {
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        drawerToggle.setDrawerIndicatorEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+    }
+
+    // Method to enable the drawer
+    public void enableDrawer() {
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        drawerToggle.setDrawerIndicatorEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        drawerToggle.syncState();
+    }
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
+    }
 
-        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
 
-        if  (item.getItemId() == R.id.nav_language) {
-            Intent intent = new Intent(MainActivity.this, LanguageActivity.class);
-            startActivity(intent);
-            return true;
-        }
-        /*switch(item.getItemId()){
-            case R.id.nav_language:
-                Intent intent = new Intent(MainActivity.this, LanguageActivity.class);
-                startActivity(intent);
-                return true;
-            default:
-                break;
-        }*/
         return super.onOptionsItemSelected(item);
     }
 }
