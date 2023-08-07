@@ -26,6 +26,7 @@ import org.moa.etlits.ui.viewmodels.login.LoginViewModelFactory;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import android.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
@@ -35,6 +36,8 @@ public class LoginFragment extends Fragment {
 
     private LoginViewModel loginViewModel;
     private FragmentLoginBinding binding;
+
+    private AlertDialog.Builder builder;
 
     @Nullable
     @Override
@@ -50,13 +53,14 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        builder = new AlertDialog.Builder(getActivity());
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
-        loginViewModel.getIsLoggedIn().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+        loginViewModel.getLoginResult().observe(getViewLifecycleOwner(), new Observer<LoginResult>() {
             @Override
-            public void onChanged(Boolean isLoggedIn) {
-                if (isLoggedIn) {
+            public void onChanged(LoginResult result) {
+                if (result != null && result.getLoginStatus().equals(LoginResult.LoginStatus.SUCCESS)) {
                     navigateToHome();
                 }
             }
@@ -89,11 +93,11 @@ public class LoginFragment extends Fragment {
                     return;
                 }
                 loadingProgressBar.setVisibility(View.GONE);
-                if (loginResult.getError() != null) {
+                if (loginResult.getLoginStatus().equals(LoginResult.LoginStatus.FAIL) && loginResult.getError() != null) {
                     showLoginFailed(loginResult.getError());
                 }
-                if (loginResult.getSuccess() != null) {
-                    updateUiWithUser(loginResult.getSuccess());
+                if (loginResult.getLoginStatus().equals(LoginResult.LoginStatus.SUCCESS)) {
+                    updateUiWithUser(loginResult);
                 }
             }
         });
@@ -122,8 +126,8 @@ public class LoginFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    loginViewModel.login(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString());
+                    loginViewModel.login(usernameEditText.getText().toString().trim(),
+                            passwordEditText.getText().toString().trim());
                 }
                 return false;
             }
@@ -139,21 +143,25 @@ public class LoginFragment extends Fragment {
         });
     }
 
-    private void updateUiWithUser(LoggedInUserView model) {
-        String welcome = getString(R.string.welcome) + model.getDisplayName();
+    private void updateUiWithUser(LoginResult loginResult) {
+        String welcome = getString(R.string.welcome) + loginResult.getUsername();
         // TODO : initiate successful logged in experience
         if (getContext() != null && getContext().getApplicationContext() != null) {
             Toast.makeText(getContext().getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
         }
     }
 
-    private void showLoginFailed(@StringRes Integer errorString) {
-        if (getContext() != null && getContext().getApplicationContext() != null) {
-            Toast.makeText(
-                    getContext().getApplicationContext(),
-                    errorString,
-                    Toast.LENGTH_LONG).show();
+    private void showLoginFailed(@StringRes Integer errorCode) {
+        if (errorCode == 401) {
+            builder.setTitle(R.string.login_alert_title).setMessage(R.string.login_unauthorized);
+        } else if (errorCode == 404) {
+            builder.setTitle(R.string.login_alert_title) .setMessage(R.string.login_server_unreachable);
+        } else {
+            builder.setTitle(R.string.login_alert_title) .setMessage(R.string.login_generic_error);
         }
+
+         AlertDialog alert = builder.create();
+         alert.show();
     }
 
     @Override
@@ -169,7 +177,8 @@ public class LoginFragment extends Fragment {
     }
 
     private void navigateToHome() {
-        FragmentManager fm = getFragmentManager();
+        //FragmentManager fm = getFragmentManager();
+        FragmentManager fm = this.getParentFragmentManager();
         if (fm != null) {
             fm.beginTransaction()
                     .replace(R.id.container, new HomeFragment())

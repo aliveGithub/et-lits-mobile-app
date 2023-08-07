@@ -1,10 +1,13 @@
 package org.moa.etlits.api;
 
+import org.moa.etlits.api.services.AuthService;
 import org.moa.etlits.api.services.ConfigService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
@@ -17,20 +20,27 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class RetrofitClient {
+public class RetrofitUtil {
     //TODO: move to settings
     private static final String BASE_URL = "https://lits.dgstg.org/lits-mobile-api/";
 
     private static OkHttpClient HTTP_CLIENT;
 
+    public static final ExecutorService callBackExecutors =
+            Executors.newFixedThreadPool(4);
     private static HashMap<String, List<Cookie>> cookieStore = new HashMap<>();
 
     private static OkHttpClient createHttpClient(String username, String password) {
-        if (HTTP_CLIENT == null) {
+       /* if (HTTP_CLIENT == null) {
             HTTP_CLIENT = new OkHttpClient();
-        }
+        }*/
 
-        return HTTP_CLIENT.newBuilder()
+        /*TODO: create new client - okHttp perform best if connections are reused.
+        There was an issue with the reused client. If authentication fails the first time, subsequent attempts fail even if the credentials are correct.
+        We need to investigate the issue and reuse the client.*/
+
+        OkHttpClient client = new OkHttpClient();
+        return client.newBuilder()
                 .addInterceptor(chain -> {
                     Request original = chain.request();
                     Request.Builder builder = original.newBuilder()
@@ -56,14 +66,22 @@ public class RetrofitClient {
         OkHttpClient client = createHttpClient(username, password);
         return new Retrofit.Builder()
                 .baseUrl(BASE_URL)
+                .callbackExecutor(callBackExecutors)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
 
-    public static ConfigService getConfigService(String username, String password) {
+    public static <T> T createAPI(Class<T> clazz, String username, String password) {
         Retrofit retrofit = createRetrofit(username, password);
-        ConfigService apiService = retrofit.create(ConfigService.class);
-        return apiService;
+        return retrofit.create(clazz);
+    }
+
+    public static ConfigService createCofigService(String username, String password) {
+        return createAPI(ConfigService.class, username, password);
+    }
+
+    public static AuthService createAuthService(String username, String password) {
+        return createAPI(AuthService.class, username, password);
     }
 }

@@ -3,9 +3,17 @@ package org.moa.etlits.ui.viewmodels.login;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
+import android.util.Log;
 import android.util.Patterns;
 
+import com.google.gson.Gson;
+
+import org.moa.etlits.api.RetrofitUtil;
+import org.moa.etlits.api.services.AuthService;
 import org.moa.etlits.data.repositories.LoginRepository;
 import org.moa.etlits.data.Result;
 import org.moa.etlits.data.models.LoggedInUser;
@@ -16,11 +24,12 @@ public class LoginViewModel extends ViewModel {
 
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
-    private MutableLiveData<Boolean> isLoggedIn = new MutableLiveData<>();
     private LoginRepository loginRepository;
 
+    private AuthService authService;
     LoginViewModel(LoginRepository loginRepository) {
         this.loginRepository = loginRepository;
+
     }
 
     public LiveData<LoginFormState> getLoginFormState() {
@@ -32,22 +41,33 @@ public class LoginViewModel extends ViewModel {
     }
 
     public void login(String username, String password) {
-        // can be launched in a separate asynchronous job
-        Result<LoggedInUser> result = loginRepository.login(username, password);
-        loginResult.setValue(new LoginResult(new LoggedInUserView("Gerald")));
-        isLoggedIn.setValue(true);
-        /*if (result instanceof Result.Success) {
-            LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
-            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
-            isLoggedIn.setValue(true);
-        } else {
-            loginResult.setValue(new LoginResult(R.string.login_failed));
-            isLoggedIn.setValue(false);
-        }*/
-    }
+        if (authService == null) {
+            authService = RetrofitUtil.createAuthService(username, password);
+        }
 
-    public MutableLiveData<Boolean> getIsLoggedIn() {
-        return isLoggedIn;
+        Call call = authService.login();
+        call.enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) {
+                if (response.isSuccessful()) {
+                    loginResult.postValue(new LoginResult(username, LoginResult.LoginStatus.SUCCESS));
+                    Log.i("LoginViewModel","successful");
+                    Log.i("LoginViewModel", "response: "+ new Gson().toJson(response.body()) );
+                } else {
+                    loginResult.postValue(new LoginResult(response.code(),LoginResult.LoginStatus.FAIL));
+                    Log.e("LoginViewModel","Not successful");
+                    Log.e("LoginViewModel", "response: "+ response.message() + ":" +  response.code());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call call, Throwable t) {
+                loginResult.postValue(new LoginResult(500, LoginResult.LoginStatus.FAIL));
+                Log.e("LoginViewModel", "onFailure: "+t.toString() );
+
+            }
+        });
     }
 
     public void loginDataChanged(String username, String password) {
@@ -62,18 +82,16 @@ public class LoginViewModel extends ViewModel {
 
     // A placeholder username validation check
     private boolean isUserNameValid(String username) {
-        if (username == null) {
+        if (username == null || username.trim().isEmpty()) {
             return false;
         }
-        if (username.contains("@")) {
-            return Patterns.EMAIL_ADDRESS.matcher(username).matches();
-        } else {
-            return !username.trim().isEmpty();
-        }
+
+        //return Patterns.EMAIL_ADDRESS.matcher(username).matches();
+        return true;
     }
 
     // A placeholder password validation check
     private boolean isPasswordValid(String password) {
-        return password != null && password.trim().length() > 5;
+        return password != null && password.trim().length() > 0;
     }
 }
