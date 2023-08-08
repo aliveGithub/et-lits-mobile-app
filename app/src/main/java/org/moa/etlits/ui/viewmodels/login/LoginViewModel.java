@@ -3,6 +3,7 @@ package org.moa.etlits.ui.viewmodels.login;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import okhttp3.Credentials;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,32 +43,32 @@ public class LoginViewModel extends ViewModel {
 
     public void login(String username, String password) {
         if (authService == null) {
-            authService = RetrofitUtil.createAuthService(username, password);
+            authService = RetrofitUtil.createAuthService();
         }
 
-        Call call = authService.login();
+        Call call = authService.login(Credentials.basic(username, password));
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
                 if (response.isSuccessful()) {
                     loginResult.postValue(new LoginResult(username, LoginResult.LoginStatus.SUCCESS));
-                    Log.i("LoginViewModel","successful");
-                    Log.i("LoginViewModel", "response: "+ new Gson().toJson(response.body()) );
                 } else {
+                    Log.e("LoginViewModel", "FAIL: "+ response.code());
                     loginResult.postValue(new LoginResult(response.code(),LoginResult.LoginStatus.FAIL));
-                    Log.e("LoginViewModel","Not successful");
-                    Log.e("LoginViewModel", "response: "+ response.message() + ":" +  response.code());
                 }
-
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
                 loginResult.postValue(new LoginResult(500, LoginResult.LoginStatus.FAIL));
-                Log.e("LoginViewModel", "onFailure: "+t.toString() );
-
+                Log.e("LoginViewModel", "onFailure: "+ t.toString() );
             }
         });
+    }
+
+    public void logout() {
+        loginResult.setValue(null);
+        //TODO: clear shared prefs
     }
 
     public void loginDataChanged(String username, String password) {

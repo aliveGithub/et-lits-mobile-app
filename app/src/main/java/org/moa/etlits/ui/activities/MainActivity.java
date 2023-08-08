@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
+
+
     public void disableDrawer() {
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         drawerToggle.setDrawerIndicatorEnabled(false);

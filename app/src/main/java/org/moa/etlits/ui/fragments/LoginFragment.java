@@ -18,7 +18,6 @@ import android.widget.Toast;
 import org.moa.etlits.R;
 import org.moa.etlits.databinding.FragmentLoginBinding;
 import org.moa.etlits.ui.activities.MainActivity;
-import org.moa.etlits.ui.viewmodels.login.LoggedInUserView;
 import org.moa.etlits.ui.viewmodels.login.LoginResult;
 import org.moa.etlits.ui.viewmodels.login.LoginViewModel;
 import org.moa.etlits.ui.viewmodels.login.LoginViewModelFactory;
@@ -54,13 +53,13 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         builder = new AlertDialog.Builder(getActivity());
-        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
+        loginViewModel = new ViewModelProvider(getActivity(), new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
         loginViewModel.getLoginResult().observe(getViewLifecycleOwner(), new Observer<LoginResult>() {
             @Override
             public void onChanged(LoginResult result) {
-                if (result != null && result.getLoginStatus().equals(LoginResult.LoginStatus.SUCCESS)) {
+                if (result != null && result.isLoggedIn()) {
                     navigateToHome();
                 }
             }

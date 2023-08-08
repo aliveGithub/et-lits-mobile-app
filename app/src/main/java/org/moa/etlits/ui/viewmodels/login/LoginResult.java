@@ -1,6 +1,5 @@
 package org.moa.etlits.ui.viewmodels.login;
 
-import org.moa.etlits.ui.viewmodels.login.LoggedInUserView;
 
 import androidx.annotation.Nullable;
 
@@ -44,6 +43,9 @@ public class LoginResult {
         return loginStatus;
     }
 
+    public boolean isLoggedIn() {
+        return LoginStatus.SUCCESS.equals(loginStatus);
+    }
     public void setLoginStatus(LoginStatus loginStatus) {
         this.loginStatus = loginStatus;
     }
