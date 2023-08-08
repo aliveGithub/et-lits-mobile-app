@@ -29,6 +29,7 @@ import android.app.AlertDialog;
 
 import com.google.android.material.textfield.TextInputLayout;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
@@ -55,7 +56,7 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        builder = new AlertDialog.Builder(getActivity());
+
         loginViewModel = new ViewModelProvider(getActivity(), new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
@@ -67,6 +68,10 @@ public class LoginFragment extends Fragment {
                 }
             }
         });
+
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+
+        builder = new AlertDialog.Builder(getActivity());
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;
         final Button loginButton = binding.login;
