@@ -1,6 +1,7 @@
 package org.moa.etlits.ui.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -173,7 +174,12 @@ public class LoginFragment extends Fragment {
         } else {
             builder.setTitle(R.string.login_alert_title) .setMessage(R.string.login_generic_error);
         }
-
+        builder.setNegativeButton("OK", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which){
+                dialog.cancel();
+            }
+        });
          AlertDialog alert = builder.create();
          alert.show();
     }
