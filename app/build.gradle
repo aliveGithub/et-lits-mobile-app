@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.firebase.appdistribution'
 }
 
 android {
@@ -16,11 +17,44 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        debug {
+            storeFile file('debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+    }
+
     buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+            firebaseAppDistribution {
+                serviceCredentialsFile="$rootDir/app/et-lits-firebase-adminsdk-6a7xu-0f624e823c.json"
+                appId="1:140083916398:android:a89206a6503a1f2cd0407f"
+                artifactType="APK"
+                artifactPath="$rootDir/app/build/outputs/apk/debug/app-debug.apk"
+                releaseNotes="This is a sample release note"
+                groups="qa-group"
+            }
+        }
         release {
+            // Caution! In production, you need to generate your own keystore file, and store it safely.
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            /*signingConfig signingConfigs.release
+            minifyEnabled enableProguardInReleaseBuilds
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            firebaseAppDistribution {
+                serviceCredentialsFile=''
+                appId=""
+                artifactType="AAB"
+                artifactPath=""
+                releaseNotes="This is a sample release note - Release"
+                groups="qa-group"
+            }*/
         }
+
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
