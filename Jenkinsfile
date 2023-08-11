@@ -8,7 +8,7 @@ pipeline {
                 }
             }
             steps {
-                sh './gradlew bundleDebug appDistributionUploadDebug'
+                sh './gradlew assembleDebug appDistributionUploadDebug'
             }
         }
     }
