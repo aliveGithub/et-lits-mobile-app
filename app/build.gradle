@@ -1,3 +1,11 @@
+import java.text.SimpleDateFormat
+
+def buildTime() {
+    def df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'")
+    df.setTimeZone(TimeZone.getTimeZone("UTC"))
+    return df.format(new Date())
+}
+
 plugins {
     id 'com.android.application'
     id 'com.google.firebase.appdistribution'
@@ -34,7 +42,7 @@ android {
                 appId="1:140083916398:android:a89206a6503a1f2cd0407f"
                 artifactType="APK"
                 artifactPath="$rootDir/app/build/outputs/apk/debug/app-debug.apk"
-                releaseNotes="This is a sample release note"
+                releaseNotes="${buildTime()}:This is a sample release note."
                 groups="qa-group"
             }
         }
