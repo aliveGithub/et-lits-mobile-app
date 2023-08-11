@@ -4,11 +4,11 @@ pipeline {
         stage('Build & Deploy') {
             agent {
                 docker {
-                    image 'cimg/android:2023.08'
+                    image 'mobiledevops/android-sdk-image'
                 }
             }
             steps {
-                sh 'gradle bundleDebug appDistributionUploadDebug'
+                sh './gradlew bundleDebug appDistributionUploadDebug'
             }
         }
     }
