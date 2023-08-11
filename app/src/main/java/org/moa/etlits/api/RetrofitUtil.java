@@ -16,6 +16,7 @@ import okhttp3.Credentials;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -35,7 +36,7 @@ public class RetrofitUtil {
             HTTP_CLIENT = new OkHttpClient();
         }
 
-       return HTTP_CLIENT.newBuilder()
+        return HTTP_CLIENT.newBuilder()
                .cookieJar(new CookieJar() {
                     @Override
                     public void saveFromResponse(HttpUrl httpUrl, List<Cookie> cookies) {
@@ -47,10 +48,12 @@ public class RetrofitUtil {
                         List<Cookie> cookies = cookieStore.get(httpUrl.host());
                         return cookies != null ? cookies : new ArrayList<Cookie>();
                     }
-                }).build();
+                })
+               .build();
     }
 
     private static Retrofit createRetrofit() {
+
         OkHttpClient client = createHttpClient();
         return new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -71,5 +74,8 @@ public class RetrofitUtil {
 
     public static AuthService createAuthService() {
         return createAPI(AuthService.class);
+    }
+    public static void clearCookies() {
+        cookieStore.clear();
     }
 }

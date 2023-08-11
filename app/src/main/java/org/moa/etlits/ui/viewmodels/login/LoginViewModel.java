@@ -51,6 +51,7 @@ public class LoginViewModel extends ViewModel {
             @Override
             public void onResponse(Call call, Response response) {
                 if (response.isSuccessful()) {
+                    Log.i("LoginViewModel", "SUCCESS: "+ username + ":" + response.code());
                     loginResult.postValue(new LoginResult(username, LoginResult.LoginStatus.SUCCESS));
                 } else {
                     Log.e("LoginViewModel", "FAIL: "+ response.code());
@@ -68,6 +69,7 @@ public class LoginViewModel extends ViewModel {
 
     public void logout() {
         loginResult.setValue(null);
+        RetrofitUtil.clearCookies();
         //TODO: clear shared prefs
     }
 
