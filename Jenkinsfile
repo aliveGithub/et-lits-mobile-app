@@ -7,14 +7,12 @@ pipeline {
                     image 'mobiledevops/android-sdk-image'
                 }
             }
+            environment {
+                FIREBASE_CREDENTIALS_FILE = credentials('ET_LITS_FIREBASE_CREDENTIALS')
+            }
 			steps {
-                script {                    
-					withCredentials([file(credentialsId: 'ET_LITS_FIREBASE_CREDENTIALS', variable: 'TEMP_SECRET_FILE')]) {
-                    env.FIREBASE_CREDENTIALS_FILE = TEMP_SECRET_FILE
-                }
-                }
 				sh './gradlew assembleDebug appDistributionUploadDebug'
-            }            
+            }
         }
     }
 }
