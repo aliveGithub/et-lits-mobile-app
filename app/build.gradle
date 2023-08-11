@@ -30,7 +30,7 @@ android {
         debug {
             signingConfig signingConfigs.debug
             firebaseAppDistribution {
-                serviceCredentialsFile="$rootDir/app/et-lits-firebase-adminsdk-6a7xu-0f624e823c.json"
+                serviceCredentialsFile=System.getenv("FIREBASE_CREDENTIALS_FILE")
                 appId="1:140083916398:android:a89206a6503a1f2cd0407f"
                 artifactType="APK"
                 artifactPath="$rootDir/app/build/outputs/apk/debug/app-debug.apk"
