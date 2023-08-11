@@ -1,8 +1,5 @@
 pipeline {
-    agent none
-	environment {        
-        FIREBASE_CREDENTIALS_FILE = credentials('ET_LITS_FIREBASE_CREDENTIALS')
-    }
+    agent none	
     stages {
         stage('Build & Deploy') {
             agent {
@@ -10,9 +7,12 @@ pipeline {
                     image 'mobiledevops/android-sdk-image'
                 }
             }
-            steps {
-                sh './gradlew assembleDebug appDistributionUploadDebug'
-            }
+			steps {
+                script {                    
+                    env.FIREBASE_CREDENTIALS_FILE = credentials('ET_LITS_FIREBASE_CREDENTIALS')
+                }
+				sh './gradlew assembleDebug appDistributionUploadDebug'
+            }            
         }
     }
 }
