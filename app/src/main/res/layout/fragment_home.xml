@@ -7,17 +7,13 @@
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_fragment_container"
     android:layout_width="match_parent"
     android:layout_height="0dp"
     android:layout_weight="1"
     tools:context=".ui.fragments.HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/tv_home_message"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+
 
 </FrameLayout>
     <com.google.android.material.bottomnavigation.BottomNavigationView
