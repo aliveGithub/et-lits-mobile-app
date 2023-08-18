@@ -152,8 +152,8 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                loginViewModel.login(usernameEditText.getText().toString().trim(),
+                        passwordEditText.getText().toString().trim());
             }
         });
     }
@@ -197,7 +197,6 @@ public class LoginFragment extends Fragment {
     }
 
     private void navigateToHome() {
-        //FragmentManager fm = getFragmentManager();
         FragmentManager fm = this.getParentFragmentManager();
         if (fm != null) {
             fm.beginTransaction()
