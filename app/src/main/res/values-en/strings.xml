@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ET-LITS</string>
+    <string name="add_animal">Add Animal</string>
+    <string name="button_save">Save</string>
+</resources>
