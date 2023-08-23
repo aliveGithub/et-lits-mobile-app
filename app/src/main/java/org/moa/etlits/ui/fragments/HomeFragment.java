@@ -1,8 +1,8 @@
 package org.moa.etlits.ui.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,28 +13,24 @@ import com.google.android.material.navigation.NavigationView;
 
 import org.moa.etlits.R;
 import org.moa.etlits.ui.activities.AnimalListActivity;
+import org.moa.etlits.ui.activities.LoginActivity;
 import org.moa.etlits.ui.activities.MainActivity;
-import org.moa.etlits.ui.viewmodels.login.LoginViewModel;
-import org.moa.etlits.ui.viewmodels.login.LoginViewModelFactory;
+import org.moa.etlits.utils.EncryptedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.ViewModelProvider;
 
 public class HomeFragment extends Fragment {
-
-    private LoginViewModel loginViewModel;
-
     private Fragment activeFragment;
     private Fragment dashboardFragment;
     private Fragment syncFragment;
     private Fragment moveFragment;
     private Fragment animalsFragment;
 
+    private EncryptedPreferences encryptedPreferences;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
@@ -87,22 +83,21 @@ public class HomeFragment extends Fragment {
     }
 
     private void navigateToLogin() {
-        //FragmentManager fm = getFragmentManager();
-        FragmentManager fm = this.getParentFragmentManager();
-        if (fm != null) {
-            fm.beginTransaction()
-                    .replace(R.id.container, new LoginFragment())
-                    .commit();
-        }
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        startActivity(intent);
+        getActivity().finish();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
 
-        loginViewModel = new ViewModelProvider(getActivity(), new LoginViewModelFactory())
-                .get(LoginViewModel.class);
+        encryptedPreferences = new EncryptedPreferences(getActivity());
+
+        String username = encryptedPreferences.read("username");
+
+        Log.i("MainActivity", "username:" + username);
+
         NavigationView navigationView = ((MainActivity) getActivity()).findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -112,9 +107,8 @@ public class HomeFragment extends Fragment {
                     Intent intent = new Intent(getActivity(), AnimalListActivity.class);
                     startActivity(intent);
                 } else if (item.getItemId() == R.id.nav_logout) {
-                    loginViewModel.logout();
+                    encryptedPreferences.remove("username");
                     navigateToLogin();
-
                 }
 
                 // Close the navigation drawer when an item is selected.
@@ -124,12 +118,6 @@ public class HomeFragment extends Fragment {
                 return true;
             }
         });
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        ((MainActivity) getActivity()).enableDrawer();
     }
 }
 

@@ -4,7 +4,7 @@ import org.moa.etlits.R;
 import org.moa.etlits.api.RetrofitUtil;
 import org.moa.etlits.api.services.AuthService;
 import org.moa.etlits.data.repositories.LoginRepository;
-import org.moa.etlits.ui.fragments.LoginFormState;
+import org.moa.etlits.ui.activities.LoginActivity;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -16,17 +16,20 @@ import retrofit2.Response;
 
 public class LoginViewModel extends ViewModel {
 
-    private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
+    private MutableLiveData<LoginActivity.LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
     private LoginRepository loginRepository;
+
 
     private AuthService authService;
     LoginViewModel(LoginRepository loginRepository) {
         this.loginRepository = loginRepository;
+        RetrofitUtil.clearCookies();
+
 
     }
 
-    public LiveData<LoginFormState> getLoginFormState() {
+    public LiveData<LoginActivity.LoginFormState> getLoginFormState() {
         return loginFormState;
     }
 
@@ -59,17 +62,16 @@ public class LoginViewModel extends ViewModel {
 
     public void logout() {
         loginResult.setValue(null);
-        RetrofitUtil.clearCookies();
         //TODO: clear shared prefs
     }
 
     public void loginDataChanged(String username, String password) {
         if (!isUserNameValid(username)) {
-            loginFormState.setValue(new LoginFormState(R.string.invalid_username, null));
+            loginFormState.setValue(new LoginActivity.LoginFormState(R.string.invalid_username, null));
         } else if (!isPasswordValid(password)) {
-            loginFormState.setValue(new LoginFormState(null, R.string.invalid_password));
+            loginFormState.setValue(new LoginActivity.LoginFormState(null, R.string.invalid_password));
         } else {
-            loginFormState.setValue(new LoginFormState(true));
+            loginFormState.setValue(new LoginActivity.LoginFormState(true));
         }
     }
 
