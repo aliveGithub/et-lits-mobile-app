@@ -25,8 +25,6 @@ public class LoginViewModel extends ViewModel {
     LoginViewModel(LoginRepository loginRepository) {
         this.loginRepository = loginRepository;
         RetrofitUtil.clearCookies();
-
-
     }
 
     public LiveData<LoginActivity.LoginFormState> getLoginFormState() {

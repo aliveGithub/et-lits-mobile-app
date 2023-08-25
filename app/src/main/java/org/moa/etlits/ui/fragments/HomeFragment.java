@@ -1,8 +1,9 @@
 package org.moa.etlits.ui.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,7 +20,6 @@ import org.moa.etlits.utils.EncryptedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
@@ -29,6 +29,8 @@ public class HomeFragment extends Fragment {
     private Fragment syncFragment;
     private Fragment moveFragment;
     private Fragment animalsFragment;
+
+    private AlertDialog.Builder builder;
 
     private EncryptedPreferences encryptedPreferences;
     @Override
@@ -82,22 +84,35 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private void navigateToLogin() {
-        Intent intent = new Intent(getActivity(), LoginActivity.class);
-        startActivity(intent);
-        getActivity().finish();
+    private void logout() {
+        builder.setMessage(R.string.sign_out_confirmation_prompt);
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which){
+                dialog.cancel();
+            }
+        });
+
+        builder.setPositiveButton("Sign Out", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which){
+                encryptedPreferences.remove("username");
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent);
+                getActivity().finish();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        builder = new AlertDialog.Builder(getActivity());
 
         encryptedPreferences = new EncryptedPreferences(getActivity());
-
-        String username = encryptedPreferences.read("username");
-
-        Log.i("MainActivity", "username:" + username);
-
         NavigationView navigationView = ((MainActivity) getActivity()).findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -107,8 +122,7 @@ public class HomeFragment extends Fragment {
                     Intent intent = new Intent(getActivity(), AnimalListActivity.class);
                     startActivity(intent);
                 } else if (item.getItemId() == R.id.nav_logout) {
-                    encryptedPreferences.remove("username");
-                    navigateToLogin();
+                    logout();
                 }
 
                 // Close the navigation drawer when an item is selected.
