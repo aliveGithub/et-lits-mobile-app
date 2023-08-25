@@ -1,12 +1,10 @@
 package org.moa.etlits.ui.activities;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import org.moa.etlits.R;
 import org.moa.etlits.ui.fragments.HomeFragment;
-import org.moa.etlits.utils.EncryptedPreferences;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;

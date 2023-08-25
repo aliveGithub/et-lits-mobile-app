@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -52,10 +51,8 @@ public class LoginActivity extends AppCompatActivity {
         encryptedPreferences = new EncryptedPreferences(LoginActivity.this);
 
 
-
         loginViewModel = new ViewModelProvider(LoginActivity.this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
-
 
         loginViewModel.getLoginFormState().observe(LoginActivity.this, new Observer<LoginFormState>() {
             @Override
@@ -120,7 +117,6 @@ public class LoginActivity extends AppCompatActivity {
         usernameEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -174,13 +170,7 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-    private void saveCredentials(LoginResult loginResult) {
-        //TODO: save token or pass for use by the sync background task
-
-
-    }
-
-    /**
+     /**
      * Data validation state of the login form.
      */
     public static class LoginFormState {
