@@ -13,12 +13,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.moa.etlits.R;
 import org.moa.etlits.databinding.ActivityLoginBinding;
+import org.moa.etlits.ui.validation.LoginFormState;
 import org.moa.etlits.ui.viewmodels.login.LoginResult;
 import org.moa.etlits.ui.viewmodels.login.LoginViewModel;
 import org.moa.etlits.ui.viewmodels.login.LoginViewModelFactory;
@@ -29,11 +29,18 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import java.net.HttpURLConnection;
 
 public class LoginActivity extends AppCompatActivity {
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
     private AlertDialog.Builder builder;
+
+    private EditText usernameEditText;
+    private EditText passwordEditText;
+    private Button loginButton;
+    private ProgressBar loadingProgressBar;
+    private TextInputLayout passwordLayout;
 
     private EncryptedPreferences encryptedPreferences;
 
@@ -42,15 +49,18 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        final EditText usernameEditText = binding.username;
-        final EditText passwordEditText = binding.password;
-        final Button loginButton = binding.login;
-        final ProgressBar loadingProgressBar = binding.loading;
-        final TextInputLayout passwordLayout = binding.passwordLayout;
+        usernameEditText = binding.username;
+        passwordEditText = binding.password;
+        loginButton = binding.login;
+        loadingProgressBar = binding.loading;
+        passwordLayout = binding.passwordLayout;
         builder = new AlertDialog.Builder(LoginActivity.this);
         encryptedPreferences = new EncryptedPreferences(LoginActivity.this);
+        initViewModels();
+        attachEventListeners();
+    }
 
-
+    private void initViewModels() {
         loginViewModel = new ViewModelProvider(LoginActivity.this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
@@ -82,25 +92,20 @@ public class LoginActivity extends AppCompatActivity {
                     showLoginFailed(loginResult.getError());
                 }
                 if (loginResult.getLoginStatus().equals(LoginResult.LoginStatus.SUCCESS)) {
-
-                    //TODO: save credentials for use in sync
-                    encryptedPreferences.write("username", loginResult.getUsername());
-
-                    updateUiWithUser(loginResult);
-                    navigateToHome();
+                    onLoginSuccess(loginResult);
                 }
             }
         });
+    }
 
+    private void attachEventListeners() {
         TextWatcher afterTextChangedListener = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // ignore
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // ignore
             }
 
             @Override
@@ -137,73 +142,29 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-
-    private void updateUiWithUser(LoginResult loginResult) {
-        String welcome = getString(R.string.welcome) + loginResult.getUsername();
-        // TODO : initiate successful logged in experience
-        if (getApplicationContext() != null) {
-            Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private void showLoginFailed(@StringRes Integer errorCode) {
-        if (errorCode == 401) {
-            builder.setTitle(R.string.login_alert_title).setMessage(R.string.login_unauthorized);
-        } else if (errorCode == 404) {
-            builder.setTitle(R.string.login_alert_title) .setMessage(R.string.login_server_unreachable);
-        } else {
-            builder.setTitle(R.string.login_alert_title) .setMessage(R.string.login_generic_error);
-        }
-        builder.setNegativeButton("OK", new DialogInterface.OnClickListener(){
-            @Override
-            public void onClick(DialogInterface dialog, int which){
-                dialog.cancel();
-            }
-        });
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-
-    private void navigateToHome() {
+    private void onLoginSuccess(LoginResult loginResult) {
+        //TODO: save credentials for use in sync
+        encryptedPreferences.write("username", loginResult.getUsername());
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }
 
-     /**
-     * Data validation state of the login form.
-     */
-    public static class LoginFormState {
-        @Nullable
-        private Integer usernameError;
-        @Nullable
-        private Integer passwordError;
-        private boolean isDataValid;
-
-        public LoginFormState(@Nullable Integer usernameError, @Nullable Integer passwordError) {
-            this.usernameError = usernameError;
-            this.passwordError = passwordError;
-            this.isDataValid = false;
+    private void showLoginFailed(@StringRes Integer errorCode) {
+        if (errorCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
+            builder.setTitle(R.string.login_alert_title).setMessage(R.string.login_unauthorized);
+        } else if (errorCode == HttpURLConnection.HTTP_NOT_FOUND) {
+            builder.setTitle(R.string.login_alert_title).setMessage(R.string.login_server_unreachable);
+        } else {
+            builder.setTitle(R.string.login_alert_title).setMessage(R.string.login_generic_error);
         }
-
-        public LoginFormState(boolean isDataValid) {
-            this.usernameError = null;
-            this.passwordError = null;
-            this.isDataValid = isDataValid;
-        }
-
-        @Nullable
-        public Integer getUsernameError() {
-            return usernameError;
-        }
-
-        @Nullable
-        public Integer getPasswordError() {
-            return passwordError;
-        }
-
-        public boolean isDataValid() {
-            return isDataValid;
-        }
+        builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }

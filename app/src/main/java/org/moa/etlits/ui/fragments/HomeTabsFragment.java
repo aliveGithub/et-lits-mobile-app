@@ -25,7 +25,7 @@ import androidx.fragment.app.Fragment;
 
 public class HomeTabsFragment extends Fragment {
     private Fragment activeFragment;
-    private Fragment dashboardFragment;
+    private Fragment homeFragment;
     private Fragment syncFragment;
     private Fragment moveFragment;
     private Fragment animalsFragment;
@@ -45,7 +45,7 @@ public class HomeTabsFragment extends Fragment {
         BottomNavigationView bottomNavigationView = v.findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.navigation_btm_home) {
-                loadFragment(dashboardFragment);
+                loadFragment(homeFragment);
                 return true;
             } else if(item.getItemId() == R.id.navigation_sync) {
                 loadFragment(syncFragment);
@@ -62,15 +62,14 @@ public class HomeTabsFragment extends Fragment {
         });
 
         // Initialize fragments
-        dashboardFragment = new HomeFragment();
+        homeFragment = new HomeFragment();
         syncFragment = new SyncFragment();
         moveFragment = new MoveFragment();
         animalsFragment = new AnimalsFragment();
-        activeFragment = dashboardFragment;
+        activeFragment = homeFragment;
 
 
-        // Load the default fragment (HomeChildFragment)
-        getChildFragmentManager().beginTransaction().add(R.id.home_fragment_container, dashboardFragment, "home").commit();
+        getChildFragmentManager().beginTransaction().add(R.id.home_fragment_container, homeFragment, "home").commit();
         getChildFragmentManager().beginTransaction().add(R.id.home_fragment_container, syncFragment, "sync").hide(syncFragment).commit();
         getChildFragmentManager().beginTransaction().add(R.id.home_fragment_container, animalsFragment, "animals").hide(animalsFragment).commit();
         getChildFragmentManager().beginTransaction().add(R.id.home_fragment_container, moveFragment, "move").hide(moveFragment).commit();

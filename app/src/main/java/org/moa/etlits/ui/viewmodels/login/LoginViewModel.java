@@ -4,7 +4,7 @@ import org.moa.etlits.R;
 import org.moa.etlits.api.RetrofitUtil;
 import org.moa.etlits.api.services.AuthService;
 import org.moa.etlits.data.repositories.LoginRepository;
-import org.moa.etlits.ui.activities.LoginActivity;
+import org.moa.etlits.ui.validation.LoginFormState;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -16,7 +16,7 @@ import retrofit2.Response;
 
 public class LoginViewModel extends ViewModel {
 
-    private MutableLiveData<LoginActivity.LoginFormState> loginFormState = new MutableLiveData<>();
+    private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
     private LoginRepository loginRepository;
 
@@ -27,7 +27,7 @@ public class LoginViewModel extends ViewModel {
         RetrofitUtil.clearCookies();
     }
 
-    public LiveData<LoginActivity.LoginFormState> getLoginFormState() {
+    public LiveData<LoginFormState> getLoginFormState() {
         return loginFormState;
     }
 
@@ -65,11 +65,11 @@ public class LoginViewModel extends ViewModel {
 
     public void loginDataChanged(String username, String password) {
         if (!isUserNameValid(username)) {
-            loginFormState.setValue(new LoginActivity.LoginFormState(R.string.invalid_username, null));
+            loginFormState.setValue(new LoginFormState(R.string.invalid_username, null));
         } else if (!isPasswordValid(password)) {
-            loginFormState.setValue(new LoginActivity.LoginFormState(null, R.string.invalid_password));
+            loginFormState.setValue(new LoginFormState(null, R.string.invalid_password));
         } else {
-            loginFormState.setValue(new LoginActivity.LoginFormState(true));
+            loginFormState.setValue(new LoginFormState(true));
         }
     }
 
