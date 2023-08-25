@@ -62,7 +62,7 @@ public class HomeTabsFragment extends Fragment {
         });
 
         // Initialize fragments
-        dashboardFragment = new DashboardFragment();
+        dashboardFragment = new HomeFragment();
         syncFragment = new SyncFragment();
         moveFragment = new MoveFragment();
         animalsFragment = new AnimalsFragment();
