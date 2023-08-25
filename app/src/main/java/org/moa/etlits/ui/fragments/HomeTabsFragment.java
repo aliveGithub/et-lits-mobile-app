@@ -23,7 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
-public class HomeFragment extends Fragment {
+public class HomeTabsFragment extends Fragment {
     private Fragment activeFragment;
     private Fragment dashboardFragment;
     private Fragment syncFragment;
@@ -35,7 +35,7 @@ public class HomeFragment extends Fragment {
     private EncryptedPreferences encryptedPreferences;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_home, container, false);
+        View v = inflater.inflate(R.layout.fragment_home_tabs, container, false);
         initializeBottomNavigation(v);
         return v;
     }

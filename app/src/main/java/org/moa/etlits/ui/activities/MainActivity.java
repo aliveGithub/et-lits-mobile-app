@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import org.moa.etlits.R;
-import org.moa.etlits.ui.fragments.HomeFragment;
+import org.moa.etlits.ui.fragments.HomeTabsFragment;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, new HomeFragment())
+                .add(R.id.container, new HomeTabsFragment())
                 .commit();
     }
 
