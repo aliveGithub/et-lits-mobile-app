@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_btm_home"
+        android:title="@string/menu_home"
+        android:icon="@drawable/ic_home" />
+    <item
+        android:id="@+id/navigation_sync"
+        android:title="@string/menu_sync"
+        android:icon="@drawable/ic_sync" />
+    <item
+        android:id="@+id/navigation_animals"
+        android:title="@string/menu_animals"
+        android:icon="@drawable/ic_animal" />
+    <item
+        android:id="@+id/navigation_move"
+        android:title="@string/menu_move"
+        android:icon="@drawable/ic_move" />
+</menu>

@@ -45,10 +45,7 @@ public class AnimalListActivity extends AppCompatActivity implements AnimalListA
         animalViewModel.getAllAnimals().observe(this , animals -> {
             adapter.submitList(animals);
         });
-
-
     }
-
 
     @Override
     public void onAnimalClick(int position) {

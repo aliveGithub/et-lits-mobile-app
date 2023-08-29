@@ -10,14 +10,14 @@ import android.view.ViewGroup;
 
 import org.moa.etlits.R;
 
-public class HomeFragment extends Fragment {
-    public HomeFragment() {
+public class MoveFragment extends Fragment {
+
+    public MoveFragment() {
 
     }
-
-     public static HomeFragment newInstance() {
-        HomeFragment fragment = new HomeFragment();
-        return fragment;
+    public static MoveFragment newInstance() {
+        MoveFragment fragment = new MoveFragment();
+       return fragment;
     }
 
     @Override
@@ -29,6 +29,6 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        return inflater.inflate(R.layout.fragment_move, container, false);
     }
 }

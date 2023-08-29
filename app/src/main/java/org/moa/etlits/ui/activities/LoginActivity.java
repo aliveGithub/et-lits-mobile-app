@@ -1,85 +1,70 @@
-package org.moa.etlits.ui.fragments;
+package org.moa.etlits.ui.activities;
 
-import android.content.Context;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.moa.etlits.R;
-import org.moa.etlits.databinding.FragmentLoginBinding;
-import org.moa.etlits.ui.activities.MainActivity;
-import org.moa.etlits.ui.viewmodels.login.LoginResult;
-import org.moa.etlits.ui.viewmodels.login.LoginViewModel;
-import org.moa.etlits.ui.viewmodels.login.LoginViewModelFactory;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import android.app.AlertDialog;
 
 import com.google.android.material.textfield.TextInputLayout;
 
+import org.moa.etlits.R;
+import org.moa.etlits.databinding.ActivityLoginBinding;
+import org.moa.etlits.ui.validation.LoginFormState;
+import org.moa.etlits.ui.viewmodels.login.LoginResult;
+import org.moa.etlits.ui.viewmodels.login.LoginViewModel;
+import org.moa.etlits.ui.viewmodels.login.LoginViewModelFactory;
+import org.moa.etlits.utils.EncryptedPreferences;
+
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import java.net.HttpURLConnection;
 
-public class LoginFragment extends Fragment {
-
+public class LoginActivity extends AppCompatActivity {
     private LoginViewModel loginViewModel;
-    private FragmentLoginBinding binding;
-
+    private ActivityLoginBinding binding;
     private AlertDialog.Builder builder;
 
-    @Nullable
+    private EditText usernameEditText;
+    private EditText passwordEditText;
+    private Button loginButton;
+    private ProgressBar loadingProgressBar;
+    private TextInputLayout passwordLayout;
+
+    private EncryptedPreferences encryptedPreferences;
+
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-
-        binding = FragmentLoginBinding.inflate(inflater, container, false);
-        return binding.getRoot();
-
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        usernameEditText = binding.username;
+        passwordEditText = binding.password;
+        loginButton = binding.login;
+        loadingProgressBar = binding.loading;
+        passwordLayout = binding.passwordLayout;
+        builder = new AlertDialog.Builder(LoginActivity.this);
+        encryptedPreferences = new EncryptedPreferences(LoginActivity.this);
+        initViewModels();
+        attachEventListeners();
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        loginViewModel = new ViewModelProvider(getActivity(), new LoginViewModelFactory())
+    private void initViewModels() {
+        loginViewModel = new ViewModelProvider(LoginActivity.this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
-        loginViewModel.getLoginResult().observe(getViewLifecycleOwner(), new Observer<LoginResult>() {
-            @Override
-            public void onChanged(LoginResult result) {
-                if (result != null && result.isLoggedIn()) {
-                    navigateToHome();
-                }
-            }
-        });
-
-        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
-
-        builder = new AlertDialog.Builder(getActivity());
-        final EditText usernameEditText = binding.username;
-        final EditText passwordEditText = binding.password;
-        final Button loginButton = binding.login;
-        final ProgressBar loadingProgressBar = binding.loading;
-        final TextInputLayout passwordLayout = binding.passwordLayout;
-
-        loginViewModel.getLoginFormState().observe(getViewLifecycleOwner(), new Observer<LoginFormState>() {
+        loginViewModel.getLoginFormState().observe(LoginActivity.this, new Observer<LoginFormState>() {
             @Override
             public void onChanged(@Nullable LoginFormState loginFormState) {
                 if (loginFormState == null) {
@@ -96,7 +81,7 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        loginViewModel.getLoginResult().observe(getViewLifecycleOwner(), new Observer<LoginResult>() {
+        loginViewModel.getLoginResult().observe(LoginActivity.this, new Observer<LoginResult>() {
             @Override
             public void onChanged(@Nullable LoginResult loginResult) {
                 if (loginResult == null) {
@@ -107,20 +92,20 @@ public class LoginFragment extends Fragment {
                     showLoginFailed(loginResult.getError());
                 }
                 if (loginResult.getLoginStatus().equals(LoginResult.LoginStatus.SUCCESS)) {
-                    updateUiWithUser(loginResult);
+                    onLoginSuccess(loginResult);
                 }
             }
         });
+    }
 
+    private void attachEventListeners() {
         TextWatcher afterTextChangedListener = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // ignore
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // ignore
             }
 
             @Override
@@ -137,7 +122,6 @@ public class LoginFragment extends Fragment {
         usernameEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -158,50 +142,29 @@ public class LoginFragment extends Fragment {
         });
     }
 
-    private void updateUiWithUser(LoginResult loginResult) {
-        String welcome = getString(R.string.welcome) + loginResult.getUsername();
-        // TODO : initiate successful logged in experience
-        if (getContext() != null && getContext().getApplicationContext() != null) {
-            Toast.makeText(getContext().getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
-        }
+    private void onLoginSuccess(LoginResult loginResult) {
+        //TODO: save credentials for use in sync
+        encryptedPreferences.write("username", loginResult.getUsername());
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void showLoginFailed(@StringRes Integer errorCode) {
-        if (errorCode == 401) {
+        if (errorCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
             builder.setTitle(R.string.login_alert_title).setMessage(R.string.login_unauthorized);
-        } else if (errorCode == 404) {
-            builder.setTitle(R.string.login_alert_title) .setMessage(R.string.login_server_unreachable);
+        } else if (errorCode == HttpURLConnection.HTTP_NOT_FOUND) {
+            builder.setTitle(R.string.login_alert_title).setMessage(R.string.login_server_unreachable);
         } else {
-            builder.setTitle(R.string.login_alert_title) .setMessage(R.string.login_generic_error);
+            builder.setTitle(R.string.login_alert_title).setMessage(R.string.login_generic_error);
         }
-        builder.setNegativeButton("OK", new DialogInterface.OnClickListener(){
+        builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which){
+            public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
         });
-         AlertDialog alert = builder.create();
-         alert.show();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        ((MainActivity) getActivity()).disableDrawer();
-    }
-
-    private void navigateToHome() {
-        FragmentManager fm = this.getParentFragmentManager();
-        if (fm != null) {
-            fm.beginTransaction()
-                    .replace(R.id.container, new HomeFragment())
-                    .commit();
-        }
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }

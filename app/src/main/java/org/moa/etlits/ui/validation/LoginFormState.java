@@ -1,4 +1,4 @@
-package org.moa.etlits.ui.fragments;
+package org.moa.etlits.ui.validation;
 
 import androidx.annotation.Nullable;
 
@@ -25,16 +25,16 @@ public class LoginFormState {
     }
 
     @Nullable
-    Integer getUsernameError() {
+    public Integer getUsernameError() {
         return usernameError;
     }
 
     @Nullable
-    Integer getPasswordError() {
+    public Integer getPasswordError() {
         return passwordError;
     }
 
-    boolean isDataValid() {
+    public boolean isDataValid() {
         return isDataValid;
     }
 }

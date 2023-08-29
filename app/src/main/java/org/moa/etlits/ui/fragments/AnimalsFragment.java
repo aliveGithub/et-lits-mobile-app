@@ -10,13 +10,13 @@ import android.view.ViewGroup;
 
 import org.moa.etlits.R;
 
-public class HomeFragment extends Fragment {
-    public HomeFragment() {
+public class AnimalsFragment extends Fragment {
 
+    public AnimalsFragment() {
     }
 
-     public static HomeFragment newInstance() {
-        HomeFragment fragment = new HomeFragment();
+  public static AnimalsFragment newInstance() {
+        AnimalsFragment fragment = new AnimalsFragment();
         return fragment;
     }
 
@@ -29,6 +29,6 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        return inflater.inflate(R.layout.fragment_animals, container, false);
     }
 }

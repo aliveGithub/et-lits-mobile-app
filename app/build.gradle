@@ -6,6 +6,11 @@ def buildTime() {
     return df.format(new Date())
 }
 
+buildscript {
+    repositories {
+    }
+}
+
 plugins {
     id 'com.android.application'
     id 'com.google.firebase.appdistribution'
@@ -17,7 +22,7 @@ android {
 
     defaultConfig {
         applicationId "org.moa.etlits"
-        minSdk 21
+        minSdk 23
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -101,4 +106,8 @@ dependencies {
 
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))
     implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
+
+    implementation "androidx.security:security-crypto:1.0.0"
+
+    implementation "androidx.preference:preference:1.2.1"
 }

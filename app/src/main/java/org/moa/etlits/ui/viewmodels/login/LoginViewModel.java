@@ -4,7 +4,7 @@ import org.moa.etlits.R;
 import org.moa.etlits.api.RetrofitUtil;
 import org.moa.etlits.api.services.AuthService;
 import org.moa.etlits.data.repositories.LoginRepository;
-import org.moa.etlits.ui.fragments.LoginFormState;
+import org.moa.etlits.ui.validation.LoginFormState;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -20,10 +20,11 @@ public class LoginViewModel extends ViewModel {
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
     private LoginRepository loginRepository;
 
+
     private AuthService authService;
     LoginViewModel(LoginRepository loginRepository) {
         this.loginRepository = loginRepository;
-
+        RetrofitUtil.clearCookies();
     }
 
     public LiveData<LoginFormState> getLoginFormState() {
@@ -59,7 +60,6 @@ public class LoginViewModel extends ViewModel {
 
     public void logout() {
         loginResult.setValue(null);
-        RetrofitUtil.clearCookies();
         //TODO: clear shared prefs
     }
 
