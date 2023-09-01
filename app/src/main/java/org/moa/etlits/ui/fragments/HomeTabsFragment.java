@@ -13,6 +13,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 import org.moa.etlits.R;
+import org.moa.etlits.ui.activities.SyncActivity;
 import org.moa.etlits.ui.activities.AnimalListActivity;
 import org.moa.etlits.ui.activities.LoginActivity;
 import org.moa.etlits.ui.activities.MainActivity;
@@ -48,7 +49,8 @@ public class HomeTabsFragment extends Fragment {
                 loadFragment(homeFragment);
                 return true;
             } else if(item.getItemId() == R.id.navigation_sync) {
-                loadFragment(syncFragment);
+                Intent intent = new Intent(getActivity(), SyncActivity.class);
+                startActivity(intent);
                 return true;
             } else if (item.getItemId() == R.id.navigation_move) {
                 loadFragment(moveFragment);

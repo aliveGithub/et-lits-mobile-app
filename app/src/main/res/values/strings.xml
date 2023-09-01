@@ -19,6 +19,16 @@
     <string name="login_generic_error">Login failed.</string>
     <string name="sign_out_confirmation_prompt">Do you want to sign out?</string>
     <string name="no_internet_connection">No internet connection. Please connect to wi-fi or mobile data.</string>
+    <!--Sync-->
+    <string name="sync_init_dialog_title">Data Initialization</string>
+    <string name="sync_init_dialog_msg">To get started, the app needs to download the necessary data.</string>
+    <string name="sync_init_dialog_msg_resume">Data initialization has not finished. The app needs to complete data download.</string>
+    <string name="sync_start_data_download">Start Data Download</string>
+    <string name="sync_resume_data_download">Resume Data Download</string>
+    <string name="sync_view_last_attempt">View Last Attempt</string>
+    <string name="sync_exit_app">Exit App</string>
+    <string name="title_data_sync">Data Sync</string>
+    <string name="btn_sync_start">Start</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="menu_sync">Sync</string>

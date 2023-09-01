@@ -64,7 +64,7 @@ public class RetrofitUtil {
         return retrofit.create(clazz);
     }
 
-    public static ConfigService createCofigService() {
+    public static ConfigService createConfigService() {
         return createAPI(ConfigService.class);
     }
 

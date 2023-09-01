@@ -22,6 +22,7 @@ import org.moa.etlits.ui.validation.LoginFormState;
 import org.moa.etlits.ui.viewmodels.login.LoginResult;
 import org.moa.etlits.ui.viewmodels.login.LoginViewModel;
 import org.moa.etlits.ui.viewmodels.login.LoginViewModelFactory;
+import org.moa.etlits.utils.Constants;
 import org.moa.etlits.utils.EncryptedPreferences;
 import org.moa.etlits.utils.NetworkUtil;
 
@@ -151,8 +152,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void onLoginSuccess(LoginResult loginResult) {
-        //TODO: save credentials for use in sync
-        encryptedPreferences.write("username", loginResult.getUsername());
+        encryptedPreferences.write(Constants.USERNAME, loginResult.getUsername());
+        encryptedPreferences.write(Constants.PASSWORD, loginResult.getPassword());
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         finish();

@@ -1,6 +1,8 @@
 package org.moa.etlits.data.dao;
 
 import org.moa.etlits.data.models.Animal;
+import org.moa.etlits.data.models.CategoryValue;
+import org.moa.etlits.data.models.SyncLog;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -14,10 +16,10 @@ import android.content.Context;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Animal.class}, version = 1)
+@Database(entities = {Animal.class, SyncLog.class, CategoryValue.class}, version = 1)
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
-    private static final String DATABASE_NAME = "animals_database";
+    private static final String DATABASE_NAME = "et_lits_database";
     private static AppDatabase INSTANCE;
 
     private static final int NUMBER_OF_THREADS = 4;
@@ -57,4 +59,7 @@ public abstract class AppDatabase extends RoomDatabase {
         }
     };
     public abstract AnimalDao animalDao();
+    public abstract SyncLogDao syncLogDao();
+
+    public abstract CategoryValueDao categoryValueDao();
 }
