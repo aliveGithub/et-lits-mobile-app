@@ -18,5 +18,12 @@ limitations under the License. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
     </style>
 
-
+    <style name="TextAppearance.DialogTitle" parent="">
+        <item name="android:textSize">16sp</item>
+        <item name="android:color">@color/black</item>
+    </style>
+    <style name="TextAppearance.DialogMessage" parent="">
+        <item name="android:textSize">14sp</item>
+        <item name="android:color">@color/black</item>
+    </style>
 </resources>

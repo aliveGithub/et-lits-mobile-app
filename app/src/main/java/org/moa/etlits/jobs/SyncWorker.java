@@ -84,9 +84,9 @@ public class SyncWorker extends Worker {
 
 
 
-                syncLog.setStatus(Constants.SyncStatus.COMPLETED.toString());
+               // syncLog.setStatus(Constants.SyncStatus.COMPLETED.toString());
 
-                syncLogRepository.update(syncLog);
+                //syncLogRepository.update(syncLog);
 
                 return Result.success();
             } else {

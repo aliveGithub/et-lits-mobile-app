@@ -75,7 +75,8 @@ public class MainActivity extends AppCompatActivity {
 
         negativeButton.setText(R.string.sync_exit_app);
         negativeButton.setOnClickListener(v -> {
-            customDialog.dismiss();
+            finishAffinity();
+            System.exit(0);
         });
 
         title.setText(R.string.sync_init_dialog_title);

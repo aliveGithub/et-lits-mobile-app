@@ -40,4 +40,7 @@
     <string name="menu_about">About</string>
     <string name="menu_logout">Logout</string>
     <string name="menu_move">Move</string>
+    <string name="sync_info_text">During data synchronization, the mobile app downloads from the ET-LITS web application the data to be stored locally for repeated and offline use. Changes done on the mobile app are sent back to the ET-LITS web application for final validation and permanent storage. Until then, locally stored data is not officially recognized. Some data can be changed via the ET-LITS website. If this data is not refreshed on your device, then your changes that rely on it may be rejected during data sync. Locally stored changes may also get lost due to device damage or unexpected data storage issues. Data synchronization must be done as often as possible, immediately the internet connection is available.</string>
+    <string name="sync_history_icon_txt">History</string>
+    <string name="sync_view_details">View Details</string>
 </resources>

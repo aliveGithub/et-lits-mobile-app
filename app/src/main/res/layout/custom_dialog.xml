@@ -9,33 +9,38 @@
         android:id="@+id/dialog_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Custom Dialog" />
+        android:textAppearance="@style/TextAppearance.DialogTitle"/>
 
     <TextView
         android:id="@+id/dialog_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="This is a custom dialog message." />
+        android:textAppearance="@style/TextAppearance.DialogMessage"/>
 
     <Button
         android:id="@+id/positive_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Positive" />
+        android:textColor="@color/colorPrimary"
+        android:background="@color/white"
+        android:backgroundTint="@color/white"
+        />
     <Button
         android:id="@+id/neutral_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Negative" />
+        android:background="@color/white"
+        android:backgroundTint="@color/white"
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/negative_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Negative" />
-
+        android:background="@color/white"
+        android:backgroundTint="@color/white" />
 </LinearLayout>
