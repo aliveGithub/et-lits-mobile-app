@@ -38,7 +38,7 @@ public class SyncLogRepository {
         });
     }
 
-    public LiveData<SyncLog>loadById(long syncLogId){
+    public LiveData<SyncLog>loadById(String syncLogId){
         return syncLogDao.loadById(syncLogId);
     }
 
@@ -46,7 +46,7 @@ public class SyncLogRepository {
         return syncLogDao.loadByType(type);
     }
 
-    public SyncLog getSyncLog(String type) {
-        return syncLogDao.getSyncLog(type);
+    public SyncLog getSyncLogById(String type) {
+        return syncLogDao.getSyncLogById(type);
     }
 }

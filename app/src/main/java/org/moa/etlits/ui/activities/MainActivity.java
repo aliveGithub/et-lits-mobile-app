@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import org.moa.etlits.R;
-import org.moa.etlits.data.models.SyncLog;
 import org.moa.etlits.ui.fragments.HomeTabsFragment;
 import org.moa.etlits.ui.viewmodels.HomeViewModel;
 import org.moa.etlits.utils.Constants;
@@ -22,14 +21,11 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 
 public class MainActivity extends AppCompatActivity {
-
     private HomeViewModel homeViewModel;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
 
-    private AlertDialog.Builder builder;
-
-       @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -50,12 +46,12 @@ public class MainActivity extends AppCompatActivity {
 
                if (syncLog == null) {
                    Log.i("MainActivity", "Sync not created" );
-                   showDataInitDialog(false);
+                   showDataInitDialog(null);
                    homeViewModel.setInitDialogShown(true);
                } else {
                    if (Constants.SyncStatus.IN_PROGRESS.toString().equals(syncLog.getStatus())
                    && !homeViewModel.getInitDialogShown()) {
-                       showDataInitDialog(true);
+                       showDataInitDialog(syncLog.getId());
                    }
 
                    Log.i("MainActivity", "Sync created" );
@@ -63,10 +59,11 @@ public class MainActivity extends AppCompatActivity {
            });
     }
 
-    private void showDataInitDialog(boolean isResuming) {
+    private void showDataInitDialog(String syncLogId) {
         final Dialog customDialog = new Dialog(this);
         customDialog.setContentView(R.layout.custom_dialog);
         customDialog.setCancelable(false);
+
         TextView title = customDialog.findViewById(R.id.dialog_title);
         Button positiveButton = customDialog.findViewById(R.id.positive_button);
         TextView message = customDialog.findViewById(R.id.dialog_message);
@@ -80,11 +77,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         title.setText(R.string.sync_init_dialog_title);
-        if (isResuming) {
+        if (syncLogId != null) {
             message.setText(R.string.sync_init_dialog_msg_resume);
             positiveButton.setText(R.string.sync_resume_data_download);
             positiveButton.setOnClickListener(v -> {
                 Intent intent = new Intent(MainActivity.this, SyncActivity.class);
+                intent.putExtra("syncLogId", syncLogId);
+                intent.putExtra("syncType", Constants.SyncType.CONFIG_DATA.toString());
                 startActivity(intent);
                 customDialog.dismiss();
             });
@@ -98,14 +97,8 @@ public class MainActivity extends AppCompatActivity {
             message.setText(R.string.sync_init_dialog_msg);
             positiveButton.setText(R.string.sync_start_data_download);
             positiveButton.setOnClickListener(v -> {
-                long timestamp = System.currentTimeMillis()/1000;
-                SyncLog newSyncLog = new SyncLog();
-                newSyncLog.setLastSync(timestamp);
-                newSyncLog.setType(Constants.SyncType.CONFIG_DATA.toString());
-                newSyncLog.setStatus(Constants.SyncStatus.IN_PROGRESS.toString());
-                homeViewModel.insert(newSyncLog);
-
                 Intent intent = new Intent(MainActivity.this, SyncActivity.class);
+                intent.putExtra("syncType", Constants.SyncType.CONFIG_DATA.toString());
                 startActivity(intent);
                 customDialog.dismiss();
             });

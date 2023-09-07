@@ -6,41 +6,48 @@ import android.util.Log;
 import org.moa.etlits.utils.Constants;
 import org.moa.etlits.utils.EncryptedPreferences;
 
+import java.util.List;
+
+import androidx.lifecycle.LiveData;
 import androidx.work.Data;
 import androidx.work.ExistingWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
+import androidx.work.Operation;
+import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 import okhttp3.Credentials;
 
 public class SyncWorkManager {
 
-    public static void startSync(Context context) {
+    public static void startSync(Context context, String syncLogId, String syncType) {
         Data.Builder inputBuilder = new Data.Builder();
 
-        String authorization = getAuthorizationHeader(context);
+        EncryptedPreferences encryptedPreferences = new EncryptedPreferences(context);
+        String username = encryptedPreferences.read(Constants.USERNAME);
+        String password = encryptedPreferences.read(Constants.PASSWORD);
+        String authorization = null;
+        if (username != null && password != null) {
+            authorization = Credentials.basic(username, password);
+        }
         if (authorization != null) {
             inputBuilder.putString("authorization", authorization);
         }
+        inputBuilder.putString("syncLogId", syncLogId);
+        inputBuilder.putString("syncType", syncType);
+        inputBuilder.putString("username", username);
 
         Data inputData = inputBuilder.build();
         OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(SyncWorker.class)
+                .addTag(syncType)
                 .setInputData(inputData)
                 .build();
 
 
         WorkManager.getInstance(context)
-                .enqueueUniqueWork(Constants.SyncType.CONFIG_DATA.toString(), ExistingWorkPolicy.KEEP, workRequest);
+                .enqueueUniqueWork(syncType, ExistingWorkPolicy.KEEP, workRequest);
+
 
 
     }
 
-    private static String getAuthorizationHeader(Context context) {
-        EncryptedPreferences encryptedPreferences = new EncryptedPreferences(context);
-        String username = encryptedPreferences.read(Constants.USERNAME);
-        String password = encryptedPreferences.read(Constants.PASSWORD);
-        if (username != null && password != null) {
-            return Credentials.basic(username, password);
-        }
-        return null;
-    }
 }

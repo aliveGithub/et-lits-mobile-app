@@ -25,11 +25,13 @@ public interface SyncLogDao {
     LiveData<List<SyncLog>> getAllSyncLogs();
 
     @Query("SELECT * FROM sync_logs where id=:logId")
-    LiveData<SyncLog> loadById(long logId);
+    LiveData<SyncLog> loadById(String logId);
 
     @Query("SELECT * FROM sync_logs where type=:type")
     LiveData<SyncLog> loadByType(String type);
 
-    @Query("SELECT * FROM sync_logs where type=:type")
-    SyncLog getSyncLog(String type);
+    @Query("SELECT * FROM sync_logs where id=:logId")
+    SyncLog getSyncLogById(String logId);
+
+
 }

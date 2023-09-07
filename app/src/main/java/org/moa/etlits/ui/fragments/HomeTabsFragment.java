@@ -17,6 +17,7 @@ import org.moa.etlits.ui.activities.SyncActivity;
 import org.moa.etlits.ui.activities.AnimalListActivity;
 import org.moa.etlits.ui.activities.LoginActivity;
 import org.moa.etlits.ui.activities.MainActivity;
+import org.moa.etlits.utils.Constants;
 import org.moa.etlits.utils.EncryptedPreferences;
 
 import androidx.annotation.NonNull;
@@ -50,6 +51,7 @@ public class HomeTabsFragment extends Fragment {
                 return true;
             } else if(item.getItemId() == R.id.navigation_sync) {
                 Intent intent = new Intent(getActivity(), SyncActivity.class);
+                intent.putExtra("syncType", Constants.SyncType.ALL_DATA.toString());
                 startActivity(intent);
                 return true;
             } else if (item.getItemId() == R.id.navigation_move) {
