@@ -1,10 +1,10 @@
 package org.moa.etlits.ui.activities;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -72,15 +72,15 @@ public class SyncActivity extends AppCompatActivity {
         recordsToSend = findViewById(R.id.tv_records_count);
         syncedBy = findViewById(R.id.tv_last_sync_user);
 
-        /*
+
         internetConnectionCheck = new InternetConnectionChecker((ConnectivityManager)getApplication().getSystemService(Context.CONNECTIVITY_SERVICE));
         internetConnectionCheck.observe(this, isConnected -> {
             if (isConnected) {
-                Log.i("internetConnectionCheck", " ..... connected" );
-            }else{
-                Log.i("internetConnectionCheck", " ..... disconnected" );
+                internetStatus.setVisibility(View.INVISIBLE);
+            } else {
+                internetStatus.setVisibility(View.VISIBLE);
             }
-        });*/
+        });
 
         String syncLogId = getIntent().getStringExtra("syncLogId");
         String syncType = getIntent().getStringExtra("syncType") != null

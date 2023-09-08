@@ -19,16 +19,21 @@ public final class InternetConnectionChecker extends LiveData<Boolean> {
     private ConnectivityManager connectivityManager;
 
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     protected void onActive() {
         super.onActive();
         if (this.connectivityManager != null && this.networkCallback != null) {
+            try {
+                connectivityManager.unregisterNetworkCallback(this.networkCallback);
+            } catch (Exception e) {
+                Log.w("InternetConnectionChecker", "NetworkCallback not registered or already unregistered");
+            }
             NetworkRequest.Builder builder = new NetworkRequest.Builder();
-            this.connectivityManager.registerNetworkCallback(builder.addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET).build(), (ConnectivityManager.NetworkCallback)this.networkCallback);
+            builder.addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR);
+            builder.addTransportType(NetworkCapabilities.TRANSPORT_WIFI);
+            this.connectivityManager.registerNetworkCallback(builder.build(), (ConnectivityManager.NetworkCallback)this.networkCallback);
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     protected void onInactive() {
         super.onInactive();
         if (this.connectivityManager != null && this.networkCallback != null) {
@@ -42,19 +47,18 @@ public final class InternetConnectionChecker extends LiveData<Boolean> {
         this.networkCallback = new ConnectivityManager.NetworkCallback() {
             public void onAvailable(@NotNull Network network) {
                 super.onAvailable(network);
-                Log.d("ContentValues", "onAvailable: Network " + network + " is Available");
+                Log.d("InternetConnectionChecker", "onAvailable: Network " + network + " is Available");
                 InternetConnectionChecker.this.postValue(true);
             }
 
-            @RequiresApi(Build.VERSION_CODES.M)
-            public void onCapabilitiesChanged(@NotNull Network network, @NotNull NetworkCapabilities networkCapabilities) {
+           public void onCapabilitiesChanged(@NotNull Network network, @NotNull NetworkCapabilities networkCapabilities) {
                 boolean isInternet = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
-                Log.d("ContentValues", "networkCapabilities: " + network + ' ' + networkCapabilities);
+                Log.d("InternetConnectionChecker", "networkCapabilities: " + network + ' ' + networkCapabilities);
                 boolean isValidated = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED);
                 if (isValidated) {
-                    Log.d("ContentValues", "hasCapability: " + network + ' ' + networkCapabilities);
+                    Log.d("InternetConnectionChecker", "hasCapability: " + network + ' ' + networkCapabilities);
                 } else {
-                    Log.d("ContentValues", "Network has No Connection Capability: " + network + ' ' + networkCapabilities);
+                    Log.d("InternetConnectionChecker", "Network has No Connection Capability: " + network + ' ' + networkCapabilities);
                 }
 
                 InternetConnectionChecker.this.postValue(isInternet && isValidated);
@@ -62,7 +66,7 @@ public final class InternetConnectionChecker extends LiveData<Boolean> {
 
             public void onLost(@NotNull Network network) {
                 super.onLost(network);
-                Log.d("ContentValues", "onLost: " + network + " Network Lost");
+                Log.d("InternetConnectionChecker", "onLost: " + network + " Network Lost");
                 InternetConnectionChecker.this.postValue(false);
             }
         };

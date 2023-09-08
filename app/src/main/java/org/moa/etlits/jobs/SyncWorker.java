@@ -2,8 +2,6 @@ package org.moa.etlits.jobs;
 
 import android.app.Application;
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 
 import org.moa.etlits.api.RetrofitUtil;
