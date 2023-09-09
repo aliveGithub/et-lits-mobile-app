@@ -4,8 +4,10 @@ import android.app.Application;
 
 import org.moa.etlits.data.dao.SyncLogDao;
 import org.moa.etlits.data.dao.AppDatabase;
+import org.moa.etlits.data.models.SyncError;
 import org.moa.etlits.data.models.SyncLog;
 import org.moa.etlits.data.models.SyncLog;
+import org.moa.etlits.data.models.SyncLogWithErrors;
 
 import java.util.List;
 
@@ -32,6 +34,12 @@ public class SyncLogRepository {
         });
     }
 
+    public void insert(SyncError error) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            syncLogDao.insert(error);
+        });
+    }
+
     public void update(SyncLog syncLog) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             syncLogDao.update(syncLog);
@@ -48,5 +56,9 @@ public class SyncLogRepository {
 
     public SyncLog getSyncLogById(String type) {
         return syncLogDao.getSyncLogById(type);
+    }
+
+    public LiveData<SyncLogWithErrors> getSyncLogWithErrors(String logId) {
+        return syncLogDao.getSyncLogWithErrors(logId);
     }
 }

@@ -7,8 +7,10 @@ import org.moa.etlits.utils.Constants;
 import org.moa.etlits.utils.EncryptedPreferences;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import androidx.lifecycle.LiveData;
+import androidx.work.BackoffPolicy;
 import androidx.work.Data;
 import androidx.work.ExistingWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
@@ -21,13 +23,12 @@ public class SyncWorkManager {
 
     public static void startSync(Context context, String syncLogId, String syncType) {
         Data.Builder inputBuilder = new Data.Builder();
-
         EncryptedPreferences encryptedPreferences = new EncryptedPreferences(context);
         String username = encryptedPreferences.read(Constants.USERNAME);
         String password = encryptedPreferences.read(Constants.PASSWORD);
         String authorization = null;
         if (username != null && password != null) {
-            authorization = Credentials.basic(username, password);
+            authorization = Credentials.basic(username +"xxx", password);
         }
         if (authorization != null) {
             inputBuilder.putString("authorization", authorization);
@@ -38,6 +39,11 @@ public class SyncWorkManager {
 
         Data inputData = inputBuilder.build();
         OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(SyncWorker.class)
+                .setBackoffCriteria(
+                        BackoffPolicy.LINEAR,
+                        30,
+                        TimeUnit.SECONDS
+                )
                 .addTag(syncType)
                 .setInputData(inputData)
                 .build();
@@ -45,9 +51,5 @@ public class SyncWorkManager {
 
         WorkManager.getInstance(context)
                 .enqueueUniqueWork(syncType, ExistingWorkPolicy.KEEP, workRequest);
-
-
-
     }
-
 }

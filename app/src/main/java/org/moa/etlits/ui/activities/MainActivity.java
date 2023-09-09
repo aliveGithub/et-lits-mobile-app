@@ -1,6 +1,5 @@
 package org.moa.etlits.ui.activities;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         drawerLayout = findViewById(R.id.drawer_layout);
-
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close);
         drawerLayout.addDrawerListener(drawerToggle);
 
@@ -43,9 +41,7 @@ public class MainActivity extends AppCompatActivity {
            homeViewModel = new ViewModelProvider(MainActivity.this, new HomeViewModel.HomeViewModelFactory(getApplication()))
                    .get(HomeViewModel.class);
            homeViewModel.getConfigDataSyncLog().observe(this, syncLog -> {
-
                if (syncLog == null) {
-                   Log.i("MainActivity", "Sync not created" );
                    showDataInitDialog(null);
                    homeViewModel.setInitDialogShown(true);
                } else {
@@ -53,8 +49,6 @@ public class MainActivity extends AppCompatActivity {
                    && !homeViewModel.getInitDialogShown()) {
                        showDataInitDialog(syncLog.getId());
                    }
-
-                   Log.i("MainActivity", "Sync created" );
                }
            });
     }

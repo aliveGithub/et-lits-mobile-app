@@ -3,6 +3,7 @@ package org.moa.etlits.ui.viewmodels;
 import android.app.Application;
 
 import org.moa.etlits.data.models.SyncLog;
+import org.moa.etlits.data.models.SyncLogWithErrors;
 import org.moa.etlits.data.repositories.SyncLogRepository;
 
 import androidx.lifecycle.AndroidViewModel;
@@ -13,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 public class SyncViewModel extends AndroidViewModel {
     private MutableLiveData<Boolean> isInternetAvailable = new MutableLiveData<>(true);
-    private LiveData<SyncLog> currentSyncLog;
+    private LiveData<SyncLogWithErrors> currentSyncLog;
     private MutableLiveData<String> currentSyncId = new MutableLiveData<>(null);
     private MutableLiveData<Boolean> syncRunning = new MutableLiveData<>(false);
     private SyncLogRepository syncLogRepository;
@@ -21,12 +22,12 @@ public class SyncViewModel extends AndroidViewModel {
     public SyncViewModel(Application application, String syncLogId) {
         super(application);
         syncLogRepository = new SyncLogRepository(application);
-        currentSyncLog = syncLogRepository.loadById(syncLogId);
+        currentSyncLog = syncLogRepository.getSyncLogWithErrors(syncLogId);
     }
 
 
     public void loadSyncLogById(String syncLogId) {
-        currentSyncLog = syncLogRepository.loadById(syncLogId);
+        currentSyncLog = syncLogRepository.getSyncLogWithErrors(syncLogId);
     }
 
     public void insert(SyncLog syncLog) {
@@ -42,7 +43,7 @@ public class SyncViewModel extends AndroidViewModel {
         this.isInternetAvailable = isInternetAvailable;
     }
 
-    public LiveData<SyncLog> getCurrentSyncLog() {
+    public LiveData<SyncLogWithErrors> getCurrentSyncLog() {
         return currentSyncLog;
     }
 

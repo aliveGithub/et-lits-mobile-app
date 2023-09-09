@@ -12,10 +12,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.moa.etlits.R;
+import org.moa.etlits.data.models.SyncError;
 import org.moa.etlits.data.models.SyncLog;
+import org.moa.etlits.data.models.SyncLogWithErrors;
 import org.moa.etlits.jobs.SyncWorkManager;
 import org.moa.etlits.ui.viewmodels.SyncViewModel;
 import org.moa.etlits.utils.Constants;
@@ -50,6 +53,8 @@ public class SyncActivity extends AppCompatActivity {
 
     private Button startSync;
 
+    private ProgressBar loadingSpinner;
+
     private SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault());
 
     private InternetConnectionChecker internetConnectionCheck;
@@ -71,6 +76,7 @@ public class SyncActivity extends AppCompatActivity {
         internetStatus = findViewById(R.id.tv_network_status);
         recordsToSend = findViewById(R.id.tv_records_count);
         syncedBy = findViewById(R.id.tv_last_sync_user);
+        loadingSpinner = findViewById(R.id.pb_loading);
 
 
         internetConnectionCheck = new InternetConnectionChecker((ConnectivityManager)getApplication().getSystemService(Context.CONNECTIVITY_SERVICE));
@@ -97,9 +103,6 @@ public class SyncActivity extends AppCompatActivity {
 
         updateUI(null);
 
-
-
-
         startSync.setOnClickListener(v -> {
             if (!syncViewModel.getSyncRunning()) {
                 if (syncLogId == null && syncViewModel.getCurrentSyncId().getValue() == null) {
@@ -121,7 +124,7 @@ public class SyncActivity extends AppCompatActivity {
                 WorkManager.getInstance(this).getWorkInfosByTagLiveData(syncType).observe(this, workInfos -> {
                     if (hasRunningWork(workInfos)) {
                         syncViewModel.setSyncRunning(true);
-
+                        loadingSpinner.setVisibility(View.VISIBLE);
                         GradientDrawable border = new GradientDrawable();
                         border.setColor(ContextCompat.getColor(this, R.color.white));
                         border.setStroke(5, ContextCompat.getColor(this, R.color.colorPrimary));
@@ -131,6 +134,7 @@ public class SyncActivity extends AppCompatActivity {
                         startSync.setText(R.string.btn_sync_stop);
                     } else {
                         syncViewModel.setSyncRunning(false);
+                        loadingSpinner.setVisibility(View.GONE);
                         startSync.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
                         startSync.setTextColor(ContextCompat.getColor(this, R.color.white));
                         startSync.setText(R.string.btn_sync_start);
@@ -153,23 +157,30 @@ public class SyncActivity extends AppCompatActivity {
         return false;
     }
 
-    private void updateUI(SyncLog syncLog) {
+    private void updateUI(SyncLogWithErrors log) {
         Log.i("Sync", "Updating UI ....................");
-        if (syncLog != null) {
+        if (log != null && log.syncLog != null) {
             syncedBy.setVisibility(View.VISIBLE);
             lastSync.setVisibility(View.VISIBLE);
 
-            statusTextView.setText(syncLog.getStatus());
-            if (syncLog.getLastSync() != null) {
-                lastSync.setText(getString(R.string.sync_date, dateFormat.format(syncLog.getLastSync())));
+            statusTextView.setText(log.syncLog.getStatus());
+            if (log.syncLog.getLastSync() != null) {
+                lastSync.setText(getString(R.string.sync_date, dateFormat.format(log.syncLog.getLastSync())));
             }
-            recordsToSend.setText(String.valueOf(syncLog.getRecordsToSend()));
-            syncedBy.setText(getString(R.string.synced_by, syncLog.getSyncedBy() != null ? syncLog.getSyncedBy() : ""));
+            recordsToSend.setText(String.valueOf(log.syncLog.getRecordsToSend()));
+            syncedBy.setText(getString(R.string.synced_by, log.syncLog.getSyncedBy() != null ? log.syncLog.getSyncedBy() : ""));
+            if (log.errors != null) {
+                for (SyncError error : log.errors) {
+                    Log.i("SyncError", error.getErrorKey());
+                }
+
+            }
         } else {
             Log.i("Sync", "SyncLog is null ....................");
             syncedBy.setVisibility(View.GONE);
             lastSync.setVisibility(View.GONE);
         }
+
     }
 
     @Override

@@ -11,12 +11,15 @@ import org.moa.etlits.api.response.EntryType;
 import org.moa.etlits.api.response.ValueType;
 import org.moa.etlits.api.services.ConfigService;
 import org.moa.etlits.data.models.CategoryValue;
+import org.moa.etlits.data.models.SyncError;
 import org.moa.etlits.data.models.SyncLog;
 import org.moa.etlits.data.repositories.CategoryValueRepository;
 import org.moa.etlits.data.repositories.SyncLogRepository;
 import org.moa.etlits.utils.Constants;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.UnknownHostException;
 import java.util.Date;
 
 import androidx.annotation.NonNull;
@@ -30,6 +33,7 @@ public class SyncWorker extends Worker {
     private ConfigService configService;
     private CategoryValueRepository categoryValueRepository;
     private SyncLogRepository syncLogRepository;
+
     public SyncWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
     }
@@ -55,11 +59,11 @@ public class SyncWorker extends Worker {
             }
         }
 
-        return new SyncResult(true, 0, received, 0, 0);
+        return new SyncResult(true, 0, received, 0, "");
     }
 
     private SyncResult fetchAndSaveConfigData() throws IOException {
-        ConfigService configService = RetrofitUtil.createConfigService();
+        configService = RetrofitUtil.createConfigService();
         String authorization = getInputData().getString("authorization");
 
         Call<ConfigResponse> call = configService.getConfigData(authorization);
@@ -70,7 +74,7 @@ public class SyncWorker extends Worker {
             ConfigResponse configResponse = response.body();
             return saveConfigData(configResponse);
         } else {
-            return new SyncResult(response.isSuccessful(), 0, 0, 0, response.code());
+            return new SyncResult(response.isSuccessful(), 0, 0, 0, String.valueOf(response.code()));
         }
     }
 
@@ -78,13 +82,14 @@ public class SyncWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
+        SyncLog syncLog = null;
         try {
             String syncType = getInputData().getString("syncType");
             String syncLogId = getInputData().getString("syncLogId");
             String username = getInputData().getString("username");
 
             syncLogRepository = new SyncLogRepository((Application) getApplicationContext());
-            SyncLog syncLog = syncLogRepository.getSyncLogById(syncLogId);
+            syncLog = syncLogRepository.getSyncLogById(syncLogId);
             syncLog.setStatus(Constants.SyncStatus.IN_PROGRESS.toString());
             syncLog.setLastSync(new Date());
             syncLog.setSyncedBy(username);
@@ -93,14 +98,16 @@ public class SyncWorker extends Worker {
             Thread.sleep(10000);
 
             if (Constants.SyncType.CONFIG_DATA.toString().equals(syncType)) {
-                SyncResult configSynResult = fetchAndSaveConfigData();
-                if (configSynResult.isSuccessful) {
+                SyncResult configSyncResult = fetchAndSaveConfigData();
+                if (configSyncResult.isSuccessful) {
                     syncLog.setStatus(Constants.SyncStatus.COMPLETED.toString());
-                    syncLog.setRecordsReceived(configSynResult.recordsReceived);
+                    syncLog.setRecordsReceived(configSyncResult.recordsReceived);
                     syncLogRepository.update(syncLog);
                     return Result.success();
                 } else {
                     syncLog.setStatus(Constants.SyncStatus.FAILED.toString());
+                    SyncError error = new SyncError(syncLog.getId(), configSyncResult.errorCode, "");
+                    syncLogRepository.insert(error);
                     syncLogRepository.update(syncLog);
                     return Result.failure();
                 }
@@ -110,23 +117,39 @@ public class SyncWorker extends Worker {
                 return Result.success();
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            return Result.retry();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        } catch (UnknownHostException e) {
+            if (getRunAttemptCount() <= 3) {
+                return Result.retry();
+            } else {
+                SyncError error = new SyncError(syncLog.getId(), String.valueOf(HttpURLConnection.HTTP_NOT_FOUND), "Server cannot be reached.");
+                syncLogRepository.insert(error);
+                syncLog.setStatus(Constants.SyncStatus.FAILED.toString());
+                syncLogRepository.update(syncLog);
+                return Result.failure();
+            }
+        } catch (Exception e) {
+            if (getRunAttemptCount() <= 3) {
+                return Result.retry();
+            } else {
+                SyncError error = new SyncError(syncLog.getId(), String.valueOf(Constants.UNKNOWN_SYNC_ERROR), "Unknown sync error.");
+                syncLogRepository.insert(error);
+                syncLog.setStatus(Constants.SyncStatus.FAILED.toString());
+                syncLogRepository.update(syncLog);
+                return Result.failure();
+            }
+
         }
     }
 
     private class SyncResult {
-       private int recordsSent;
+        private int recordsSent;
         private int recordsReceived;
         private int recordsNotSent;
-        private int errorCode;
+        private String errorCode;
         private boolean isSuccessful;
 
 
-        public SyncResult(boolean isSuccessful, int recordsSent, int recordsReceived, int recordsNotSent, int errorCode) {
+        public SyncResult(boolean isSuccessful, int recordsSent, int recordsReceived, int recordsNotSent, String errorCode) {
             this.isSuccessful = isSuccessful;
             this.recordsSent = recordsSent;
             this.recordsReceived = recordsReceived;
