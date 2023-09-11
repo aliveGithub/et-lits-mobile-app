@@ -28,7 +28,7 @@ public class SyncWorkManager {
         String password = encryptedPreferences.read(Constants.PASSWORD);
         String authorization = null;
         if (username != null && password != null) {
-            authorization = Credentials.basic(username +"xxx", password);
+            authorization = Credentials.basic(username, password);
         }
         if (authorization != null) {
             inputBuilder.putString("authorization", authorization);

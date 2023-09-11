@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -20,11 +21,13 @@ import org.moa.etlits.data.models.SyncError;
 import org.moa.etlits.data.models.SyncLog;
 import org.moa.etlits.data.models.SyncLogWithErrors;
 import org.moa.etlits.jobs.SyncWorkManager;
+import org.moa.etlits.ui.adapters.SyncErrorAdapter;
 import org.moa.etlits.ui.viewmodels.SyncViewModel;
 import org.moa.etlits.utils.Constants;
 import org.moa.etlits.utils.InternetConnectionChecker;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -59,6 +62,16 @@ public class SyncActivity extends AppCompatActivity {
 
     private InternetConnectionChecker internetConnectionCheck;
 
+    private TextView recordsSent;
+
+    private TextView recordsNotSent;
+
+    private TextView recordsReceived;
+
+    private ListView errorsList;
+
+    private SyncErrorAdapter syncErrorAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +90,13 @@ public class SyncActivity extends AppCompatActivity {
         recordsToSend = findViewById(R.id.tv_records_count);
         syncedBy = findViewById(R.id.tv_last_sync_user);
         loadingSpinner = findViewById(R.id.pb_loading);
+        recordsSent = findViewById(R.id.tv_records_sent);
+        recordsNotSent = findViewById(R.id.tv_records_not_sent);
+        recordsReceived = findViewById(R.id.tv_records_received);
+        errorsList = findViewById(R.id.lst_errors);
 
+        syncErrorAdapter = new SyncErrorAdapter(this, new ArrayList<>());
+        errorsList.setAdapter(syncErrorAdapter);
 
         internetConnectionCheck = new InternetConnectionChecker((ConnectivityManager)getApplication().getSystemService(Context.CONNECTIVITY_SERVICE));
         internetConnectionCheck.observe(this, isConnected -> {
@@ -158,7 +177,7 @@ public class SyncActivity extends AppCompatActivity {
     }
 
     private void updateUI(SyncLogWithErrors log) {
-        Log.i("Sync", "Updating UI ....................");
+        Log.d("Sync", "Updating UI ....................");
         if (log != null && log.syncLog != null) {
             syncedBy.setVisibility(View.VISIBLE);
             lastSync.setVisibility(View.VISIBLE);
@@ -169,16 +188,30 @@ public class SyncActivity extends AppCompatActivity {
             }
             recordsToSend.setText(String.valueOf(log.syncLog.getRecordsToSend()));
             syncedBy.setText(getString(R.string.synced_by, log.syncLog.getSyncedBy() != null ? log.syncLog.getSyncedBy() : ""));
-            if (log.errors != null) {
-                for (SyncError error : log.errors) {
-                    Log.i("SyncError", error.getErrorKey());
-                }
 
+            recordsSent.setText(getString(R.string.sync_records_sent, String.valueOf(log.syncLog.getRecordsSent())));
+            recordsNotSent.setText(getString(R.string.sync_records_not_sent, String.valueOf(log.syncLog.getRecordsNotSent())));
+            recordsReceived.setText(getString(R.string.sync_records_received, String.valueOf(log.syncLog.getRecordsReceived())));
+
+            syncErrorAdapter.clear();
+            syncErrorAdapter.addAll();
+
+            if (log.errors != null) {
+                syncErrorAdapter.clear();
+                Log.d("Sync", "Errors...................." + log.errors.size());
+                syncErrorAdapter.addAll(log.errors);
+                syncErrorAdapter.notifyDataSetChanged();
+                /*for (SyncError error : log.errors) {
+                    Log.i("SyncError", error.getErrorKey());
+                }*/
             }
         } else {
-            Log.i("Sync", "SyncLog is null ....................");
+            Log.d("Sync", "SyncLog is null ....................");
             syncedBy.setVisibility(View.GONE);
             lastSync.setVisibility(View.GONE);
+            recordsSent.setText(getString(R.string.sync_records_sent, String.valueOf(0)));
+            recordsNotSent.setText(getString(R.string.sync_records_not_sent, String.valueOf(0)));
+            recordsReceived.setText(getString(R.string.sync_records_received, String.valueOf(0)));
         }
 
     }

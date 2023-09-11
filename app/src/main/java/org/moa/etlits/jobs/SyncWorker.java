@@ -70,7 +70,7 @@ public class SyncWorker extends Worker {
         Response<ConfigResponse> response = call.execute();
 
         if (response.isSuccessful()) {
-            Log.i("SyncWorker", "Success");
+            Log.d("SyncWorker", "Success");
             ConfigResponse configResponse = response.body();
             return saveConfigData(configResponse);
         } else {
@@ -97,25 +97,36 @@ public class SyncWorker extends Worker {
 
             Thread.sleep(10000);
 
-            if (Constants.SyncType.CONFIG_DATA.toString().equals(syncType)) {
-                SyncResult configSyncResult = fetchAndSaveConfigData();
-                if (configSyncResult.isSuccessful) {
-                    syncLog.setStatus(Constants.SyncStatus.COMPLETED.toString());
-                    syncLog.setRecordsReceived(configSyncResult.recordsReceived);
-                    syncLogRepository.update(syncLog);
-                    return Result.success();
-                } else {
-                    syncLog.setStatus(Constants.SyncStatus.FAILED.toString());
-                    SyncError error = new SyncError(syncLog.getId(), configSyncResult.errorCode, "");
-                    syncLogRepository.insert(error);
-                    syncLogRepository.update(syncLog);
-                    return Result.failure();
-                }
-            } else {
+            //  if (Constants.SyncType.CONFIG_DATA.toString().equals(syncType)) {
+            SyncResult configSyncResult = fetchAndSaveConfigData();
+            if (configSyncResult.isSuccessful) {
                 syncLog.setStatus(Constants.SyncStatus.COMPLETED.toString());
+                syncLog.setRecordsReceived(configSyncResult.recordsReceived);
                 syncLogRepository.update(syncLog);
+
+                //add dummy errors
+                syncLogRepository.insert(new SyncError(syncLog.getId(), "404", ""));
+                syncLogRepository.insert(new SyncError(syncLog.getId(), "405", ""));
+                syncLogRepository.insert(new SyncError(syncLog.getId(), "406", ""));
+                syncLogRepository.insert(new SyncError(syncLog.getId(), "407", ""));
+                syncLogRepository.insert(new SyncError(syncLog.getId(), "408", ""));
+                syncLogRepository.insert(new SyncError(syncLog.getId(), "409", ""));
+                syncLogRepository.insert(new SyncError(syncLog.getId(), "410", ""));
+                syncLogRepository.insert(new SyncError(syncLog.getId(), "412", ""));
+                syncLogRepository.insert(new SyncError(syncLog.getId(), "413", ""));
+                syncLogRepository.insert(new SyncError(syncLog.getId(), "414", ""));
+
+
                 return Result.success();
+            } else {
+                syncLog.setStatus(Constants.SyncStatus.FAILED.toString());
+                SyncError error = new SyncError(syncLog.getId(), configSyncResult.errorCode, "");
+                syncLogRepository.insert(error);
+                syncLogRepository.update(syncLog);
+                return Result.failure();
             }
+            //TODO: for syncType is ALL_DATA submit animal records
+
 
         } catch (UnknownHostException e) {
             if (getRunAttemptCount() <= 3) {

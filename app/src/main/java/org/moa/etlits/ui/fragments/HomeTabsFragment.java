@@ -99,7 +99,8 @@ public class HomeTabsFragment extends Fragment {
         builder.setPositiveButton("Sign Out", new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialog, int which){
-                encryptedPreferences.remove("username");
+                encryptedPreferences.remove(Constants.USERNAME);
+                encryptedPreferences.remove(Constants.PASSWORD);
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 startActivity(intent);
                 getActivity().finish();
