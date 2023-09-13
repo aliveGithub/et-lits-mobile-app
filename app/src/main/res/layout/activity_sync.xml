@@ -73,7 +73,7 @@
                     android:id="@+id/tv_status"
                     android:layout_width="99dp"
                     android:layout_height="19dp"
-                    android:text="NOT STARTED"
+                    android:text="@string/sync_status_not_started"
                     android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

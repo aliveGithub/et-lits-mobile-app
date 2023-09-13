@@ -47,6 +47,11 @@
     <string name="sync_error_404">ET-LITS server cannot be reached.</string>
     <string name="sync_error_401">Authentication error occured.</string>
     <string name="sync_error_generic">Sync failed. Unknown sync error.</string>
+    <string name="sync_status_not_started">Not Started</string>
+    <string name="sync_status_initializing">Initializing</string>
+    <string name="sync_status_in_progress">In Progress</string>
+    <string name="sync_status_completed">Completed</string>
+    <string name="sync_status_failed">Failed</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import org.moa.etlits.R;
+import org.moa.etlits.data.models.SyncLog;
 import org.moa.etlits.ui.fragments.HomeTabsFragment;
 import org.moa.etlits.ui.viewmodels.HomeViewModel;
 import org.moa.etlits.utils.Constants;
@@ -45,12 +46,16 @@ public class MainActivity extends AppCompatActivity {
                    showDataInitDialog(null);
                    homeViewModel.setInitDialogShown(true);
                } else {
-                   if (Constants.SyncStatus.IN_PROGRESS.toString().equals(syncLog.getStatus())
+                   if (workInProgress(syncLog)
                    && !homeViewModel.getInitDialogShown()) {
                        showDataInitDialog(syncLog.getId());
                    }
                }
            });
+    }
+
+    private boolean workInProgress(SyncLog syncLog) {
+        return !Constants.SyncStatus.COMPLETED.toString().equals(syncLog.getStatus());
     }
 
     private void showDataInitDialog(String syncLogId) {

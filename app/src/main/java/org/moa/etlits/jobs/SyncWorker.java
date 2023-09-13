@@ -58,14 +58,14 @@ public class SyncWorker extends Worker {
                 }
             }
         }
-
+        //TODO: save - objectUnmovable
+        //TODO: save - objectDetail
         return new SyncResult(true, 0, received, 0, "");
     }
 
     private SyncResult fetchAndSaveConfigData() throws IOException {
-        configService = RetrofitUtil.createConfigService();
         String authorization = getInputData().getString("authorization");
-
+        configService = RetrofitUtil.createConfigService();
         Call<ConfigResponse> call = configService.getConfigData(authorization);
         Response<ConfigResponse> response = call.execute();
 
@@ -74,7 +74,7 @@ public class SyncWorker extends Worker {
             ConfigResponse configResponse = response.body();
             return saveConfigData(configResponse);
         } else {
-            return new SyncResult(response.isSuccessful(), 0, 0, 0, String.valueOf(response.code()));
+            return new SyncResult(!response.isSuccessful(), 0, 0, 0, String.valueOf(response.code()));
         }
     }
 
@@ -125,11 +125,8 @@ public class SyncWorker extends Worker {
                 syncLogRepository.update(syncLog);
                 return Result.failure();
             }
-            //TODO: for syncType is ALL_DATA submit animal records
-
-
         } catch (UnknownHostException e) {
-            if (getRunAttemptCount() <= 3) {
+            if (getRunAttemptCount() < 3) {
                 return Result.retry();
             } else {
                 SyncError error = new SyncError(syncLog.getId(), String.valueOf(HttpURLConnection.HTTP_NOT_FOUND), "Server cannot be reached.");
@@ -139,7 +136,7 @@ public class SyncWorker extends Worker {
                 return Result.failure();
             }
         } catch (Exception e) {
-            if (getRunAttemptCount() <= 3) {
+            if (getRunAttemptCount() < 3) {
                 return Result.retry();
             } else {
                 SyncError error = new SyncError(syncLog.getId(), String.valueOf(Constants.UNKNOWN_SYNC_ERROR), "Unknown sync error.");

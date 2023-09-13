@@ -7,6 +7,7 @@ public class Constants {
     }
 
     public enum SyncStatus {
+        INITIALIZING,
         IN_PROGRESS,
         STOPPED,
         COMPLETED,

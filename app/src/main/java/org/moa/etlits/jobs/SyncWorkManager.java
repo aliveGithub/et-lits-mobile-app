@@ -26,16 +26,14 @@ public class SyncWorkManager {
         EncryptedPreferences encryptedPreferences = new EncryptedPreferences(context);
         String username = encryptedPreferences.read(Constants.USERNAME);
         String password = encryptedPreferences.read(Constants.PASSWORD);
-        String authorization = null;
-        if (username != null && password != null) {
-            authorization = Credentials.basic(username, password);
-        }
-        if (authorization != null) {
-            inputBuilder.putString("authorization", authorization);
-        }
+
         inputBuilder.putString("syncLogId", syncLogId);
         inputBuilder.putString("syncType", syncType);
-        inputBuilder.putString("username", username);
+
+        if (username != null && password != null) {
+            inputBuilder.putString("authorization", Credentials.basic(username, password));
+            inputBuilder.putString("username", username);
+        }
 
         Data inputData = inputBuilder.build();
         OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(SyncWorker.class)

@@ -19,6 +19,8 @@ public class SyncViewModel extends AndroidViewModel {
     private MutableLiveData<Boolean> syncRunning = new MutableLiveData<>(false);
     private SyncLogRepository syncLogRepository;
 
+    private MutableLiveData<Boolean> syncStarted = new MutableLiveData<>(false);
+
     public SyncViewModel(Application application, String syncLogId) {
         super(application);
         syncLogRepository = new SyncLogRepository(application);
@@ -61,6 +63,14 @@ public class SyncViewModel extends AndroidViewModel {
 
     public void setSyncRunning(Boolean syncRunning) {
         this.syncRunning.setValue(syncRunning);
+    }
+
+    public Boolean getSyncStarted() {
+        return syncStarted.getValue();
+    }
+
+    public void setSyncStarted(Boolean syncStarted) {
+        this.syncStarted.setValue(syncStarted);
     }
 
     public static class SyncViewModelFactory implements ViewModelProvider.Factory {

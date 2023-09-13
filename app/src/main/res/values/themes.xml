@@ -5,5 +5,7 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
-    <style name="Theme.LITSMobileApp" parent="Base.Theme.LITS" />
+    <style name="Theme.LITSMobileApp" parent="Base.Theme.LITS">
+        <item name="android:fontFamily">@font/inter_regular</item>
+    </style>
 </resources>
