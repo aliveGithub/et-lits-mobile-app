@@ -37,6 +37,10 @@ public class SyncViewModel extends AndroidViewModel {
         loadSyncLogById(syncLog.getId());
     }
 
+    public void update(SyncLog syncLog) {
+        syncLogRepository.update(syncLog);
+    }
+
     public MutableLiveData<Boolean> getIsInternetAvailable() {
         return isInternetAvailable;
     }

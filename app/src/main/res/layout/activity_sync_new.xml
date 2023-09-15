@@ -16,6 +16,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:gravity="bottom"
             android:orientation="vertical"
             android:padding="16dp">
@@ -32,60 +33,78 @@
                     android:gravity="center"
                     android:orientation="horizontal">
 
-                    <ImageView
-                        android:id="@+id/img_mobile"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="16dp"
-                        android:layout_weight="3"
-                        app:srcCompat="@drawable/ic_mobile_phone" />
-
-                    <ImageView
-                        android:id="@+id/img_stop"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="16dp"
-                        android:layout_weight="4"
-                        app:srcCompat="@drawable/ic_data_transfer" />
-
-
-                    <ImageView
-                        android:id="@+id/img_server"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="4"
-                        app:srcCompat="@drawable/ic_desktop_tower_fill" />
-
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/tv_records_count"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="262"></TextView>
+                            android:text="3737733"></TextView>
 
                         <TextView
+                            android:id="@+id/tv_records"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="records"></TextView>
                     </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/img_mobile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="16dp"
+                        android:layout_weight="2"
+                        app:srcCompat="@drawable/ic_mobile_phone" />
+
+                    <ImageView
+                        android:id="@+id/img_stop"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="16dp"
+                        android:layout_weight="2"
+                        app:srcCompat="@drawable/ic_data_transfer" />
+
+                    <ImageView
+                        android:id="@+id/img_server"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        app:srcCompat="@drawable/ic_desktop_tower_fill" />
+
 
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
 
-                <TextView
-                    android:id="@+id/tv_network_status"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/no_internet_connection_short"
-                    android:visibility="visible" />
+                    android:layout_weight="1"
+                    android:orientation="horizontal"></LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/tv_network_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/no_internet_connection_short"
+                        android:layout_gravity="start"
+                        android:visibility="visible" />
+                </LinearLayout>
+
+
 
             </LinearLayout>
 
@@ -94,6 +113,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -107,6 +127,14 @@
                 android:text="@string/btn_sync_start"
                 android:textColor="@color/white" />
 
+            <ProgressBar
+                android:id="@+id/pb_loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:elevation="10dp"
+                android:visibility="invisible" />
+
         </LinearLayout>
 
 
@@ -115,7 +143,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_top_corners"
             android:orientation="horizontal"
-            android:padding="@dimen/big_padding">
+            android:padding="@dimen/small_padding">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -123,47 +151,50 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/tv_sync_status_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/very_small_padding"
+                    android:singleLine="true"
+                    android:text="@string/sync_status"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/tv_last_sync2"
-                        android:layout_width="0dp"
+                        android:id="@+id/tv_last_sync"
+                        android:layout_width="160dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:singleLine="true"
-                        android:text="12 Jan 2023, 12:00"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        android:padding="@dimen/very_small_padding"
+                        android:visibility="invisible"/>
 
                     <TextView
-                        android:id="@+id/textView2"
-                        android:layout_width="0dp"
+                        android:id="@+id/tv_status"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:layout_weight="1"
                         android:singleLine="true"
-                        android:text="Success"
+                        android:text="@string/sync_status_not_started"
+                        android:padding="@dimen/very_small_padding"
                         android:textColor="@color/white" />
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tv_sync_status_label2"
+                    android:id="@+id/tv_stopped_by_user"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:text="Sync Status"
-                    android:textAllCaps="true"
+                    android:text="@string/sync_stopped_by_user"
                     android:textColor="@color/white"
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Stopped by user"
-                    android:textColor="@color/white" />
+                    android:padding="@dimen/very_small_padding"
+                    android:visibility="gone"/>
             </LinearLayout>
 
             <LinearLayout
@@ -173,64 +204,70 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/img_history2"
+                    android:id="@+id/img_history"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/ic_history" />
 
                 <TextView
-                    android:id="@+id/tv_history2"
+                    android:id="@+id/tv_history"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="@dimen/very_small_padding"
                     android:text="@string/sync_history_icon_txt"
                     android:textColor="@color/white" />
             </LinearLayout>
-
-
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:background="@color/light_gray"
+            android:padding="@dimen/big_padding">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="24dp"
-                android:orientation="vertical">
+                android:padding="8dp"
+                android:orientation="vertical"
+                android:background="@drawable/rounded_corners">
 
                 <TextView
                     android:id="@+id/tv_update_details"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/sync_update_details" />
-
-                <TextView
-                    android:id="@+id/tv_records_received"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/sync_records_received" />
-
-                <TextView
-                    android:id="@+id/tv_records_not_sent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/sync_records_not_sent" />
-
-                <TextView
-                    android:id="@+id/tv_records_sent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/sync_records_sent" />
-
+                    android:text="@string/sync_update_details"
+                    android:padding="@dimen/very_small_padding"/>
 
                 <View
                     android:id="@+id/vw_line1"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/light_gray" />
+                    android:background="@color/light_gray"
+                    android:padding="@dimen/very_small_padding"/>
+
+                <TextView
+                    android:id="@+id/tv_records_received"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sync_records_received"
+                    android:padding="@dimen/very_small_padding"/>
+
+                <TextView
+                    android:id="@+id/tv_records_not_sent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sync_records_not_sent"
+                    android:padding="@dimen/very_small_padding"/>
+
+                <TextView
+                    android:id="@+id/tv_records_sent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sync_records_sent"
+                    android:padding="@dimen/very_small_padding"/>
 
 
             </LinearLayout>
@@ -238,13 +275,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="24dp"
-                android:orientation="vertical">
-
-                <ListView
-                    android:id="@+id/lst_errors"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                android:padding="8dp"
+                android:orientation="vertical"
+                android:layout_marginTop="24dp"
+                app:cardCornerRadius="15dp"
+                android:background="@drawable/rounded_corners">
 
                 <TextView
                     android:id="@+id/tv_errors_title"
@@ -258,9 +293,15 @@
                     android:layout_height="1dp"
                     android:background="@color/light_gray" />
 
-            </LinearLayout>
-        </LinearLayout>
+                <ListView
+                    android:id="@+id/lst_errors"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp" />
 
+            </LinearLayout>
+
+
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>

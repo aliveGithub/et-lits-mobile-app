@@ -121,7 +121,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/img_history" />
 
                 <TextView
-                    android:id="@+id/tv_last_sync_user"
+                    android:id="@+id/tv_stopped_by_user"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"

@@ -63,12 +63,12 @@ public class SyncWorker extends Worker {
         return new SyncResult(true, 0, received, 0, "");
     }
 
-    private SyncResult fetchAndSaveConfigData() throws IOException {
+    private SyncResult fetchAndSaveConfigData() throws IOException, SyncStoppedException {
         String authorization = getInputData().getString("authorization");
         configService = RetrofitUtil.createConfigService();
         Call<ConfigResponse> call = configService.getConfigData(authorization);
         Response<ConfigResponse> response = call.execute();
-
+        checkSyncStatus();
         if (response.isSuccessful()) {
             Log.d("SyncWorker", "Success");
             ConfigResponse configResponse = response.body();
@@ -78,75 +78,85 @@ public class SyncWorker extends Worker {
         }
     }
 
+    private void checkSyncStatus() throws SyncStoppedException {
+        if (isStopped()) {
+            throw new SyncStoppedException();
+        }
+    }
 
     @NonNull
     @Override
     public Result doWork() {
-        SyncLog syncLog = null;
+
         try {
-            String syncType = getInputData().getString("syncType");
-            String syncLogId = getInputData().getString("syncLogId");
-            String username = getInputData().getString("username");
-
             syncLogRepository = new SyncLogRepository((Application) getApplicationContext());
-            syncLog = syncLogRepository.getSyncLogById(syncLogId);
-            syncLog.setStatus(Constants.SyncStatus.IN_PROGRESS.toString());
-            syncLog.setLastSync(new Date());
-            syncLog.setSyncedBy(username);
-            syncLogRepository.update(syncLog);
+            updateSyncStatus(Constants.SyncStatus.IN_PROGRESS.toString(), null);
 
-            Thread.sleep(10000);
+             Thread.sleep(5000);
 
-            //  if (Constants.SyncType.CONFIG_DATA.toString().equals(syncType)) {
             SyncResult configSyncResult = fetchAndSaveConfigData();
             if (configSyncResult.isSuccessful) {
-                syncLog.setStatus(Constants.SyncStatus.COMPLETED.toString());
-                syncLog.setRecordsReceived(configSyncResult.recordsReceived);
-                syncLogRepository.update(syncLog);
-
-                //add dummy errors
-                syncLogRepository.insert(new SyncError(syncLog.getId(), "404", ""));
-                syncLogRepository.insert(new SyncError(syncLog.getId(), "405", ""));
-                syncLogRepository.insert(new SyncError(syncLog.getId(), "406", ""));
-                syncLogRepository.insert(new SyncError(syncLog.getId(), "407", ""));
-                syncLogRepository.insert(new SyncError(syncLog.getId(), "408", ""));
-                syncLogRepository.insert(new SyncError(syncLog.getId(), "409", ""));
-                syncLogRepository.insert(new SyncError(syncLog.getId(), "410", ""));
-                syncLogRepository.insert(new SyncError(syncLog.getId(), "412", ""));
-                syncLogRepository.insert(new SyncError(syncLog.getId(), "413", ""));
-                syncLogRepository.insert(new SyncError(syncLog.getId(), "414", ""));
-
-
+                updateSyncStatus(Constants.SyncStatus.COMPLETED.toString(), configSyncResult);
                 return Result.success();
             } else {
-                syncLog.setStatus(Constants.SyncStatus.FAILED.toString());
-                SyncError error = new SyncError(syncLog.getId(), configSyncResult.errorCode, "");
-                syncLogRepository.insert(error);
-                syncLogRepository.update(syncLog);
+                logError(configSyncResult.errorCode, "");
                 return Result.failure();
             }
+        } catch (SyncStoppedException e) {
+            updateSyncStatus(Constants.SyncStatus.STOPPED.toString(), null);
+            return Result.failure();
         } catch (UnknownHostException e) {
             if (getRunAttemptCount() < 3) {
                 return Result.retry();
             } else {
-                SyncError error = new SyncError(syncLog.getId(), String.valueOf(HttpURLConnection.HTTP_NOT_FOUND), "Server cannot be reached.");
-                syncLogRepository.insert(error);
-                syncLog.setStatus(Constants.SyncStatus.FAILED.toString());
-                syncLogRepository.update(syncLog);
+                logError(String.valueOf(HttpURLConnection.HTTP_NOT_FOUND), "Server cannot be reached.");
                 return Result.failure();
             }
         } catch (Exception e) {
             if (getRunAttemptCount() < 3) {
                 return Result.retry();
             } else {
-                SyncError error = new SyncError(syncLog.getId(), String.valueOf(Constants.UNKNOWN_SYNC_ERROR), "Unknown sync error.");
-                syncLogRepository.insert(error);
-                syncLog.setStatus(Constants.SyncStatus.FAILED.toString());
-                syncLogRepository.update(syncLog);
+                logError(Constants.UNKNOWN_SYNC_ERROR, "Unknown sync error.");
                 return Result.failure();
             }
-
         }
+    }
+
+    private void logError(String errorCode, String errorMessage){
+        String syncLogId = getInputData().getString("syncLogId");
+        SyncError error = new SyncError(syncLogId, errorCode, errorMessage);
+        syncLogRepository.insert(error);
+        updateSyncStatus(Constants.SyncStatus.FAILED.toString(), null);
+    }
+
+    private void updateSyncStatus(String status, SyncResult syncResult){
+        String syncLogId = getInputData().getString("syncLogId");
+        SyncLog syncLog = syncLogRepository.getSyncLogById(syncLogId);
+        String username = getInputData().getString("username");
+        if (status.equals(Constants.SyncStatus.IN_PROGRESS.toString())){
+            syncLog.setLastSync(new Date());
+            syncLog.setSyncedBy(username);
+        }
+        if (syncResult != null) {
+            syncLog.setRecordsSent(syncResult.recordsSent);
+            syncLog.setRecordsReceived(syncResult.recordsReceived);
+            syncLog.setRecordsNotSent(syncResult.recordsNotSent);
+        }
+
+        //add dummy errors
+      /*  syncLogRepository.insert(new SyncError(syncLogId, "404", ""));
+        syncLogRepository.insert(new SyncError(syncLogId, "405", ""));
+        syncLogRepository.insert(new SyncError(syncLogId, "406", ""));
+        syncLogRepository.insert(new SyncError(syncLogId, "407", ""));
+        syncLogRepository.insert(new SyncError(syncLogId, "408", ""));
+        syncLogRepository.insert(new SyncError(syncLogId, "409", ""));
+        syncLogRepository.insert(new SyncError(syncLogId, "410", ""));
+        syncLogRepository.insert(new SyncError(syncLogId, "412", ""));
+        syncLogRepository.insert(new SyncError(syncLogId, "413", ""));
+        syncLogRepository.insert(new SyncError(syncLogId, "414", ""));*/
+
+        syncLog.setStatus(status);
+        syncLogRepository.update(syncLog);
     }
 
     private class SyncResult {

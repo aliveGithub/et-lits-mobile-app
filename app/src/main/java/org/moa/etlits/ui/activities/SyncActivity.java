@@ -49,7 +49,7 @@ public class SyncActivity extends AppCompatActivity {
 
     private TextView recordsToSend;
 
-    private TextView syncedBy;
+    private TextView stoppedByUser;
 
     private SyncViewModel syncViewModel;
 
@@ -74,7 +74,7 @@ public class SyncActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sync);
+        setContentView(R.layout.activity_sync_new);
 
         String syncLogId = getIntent().getStringExtra("syncLogId");
         String syncType = getIntent().getStringExtra("syncType") != null
@@ -104,7 +104,7 @@ public class SyncActivity extends AppCompatActivity {
         lastSync = findViewById(R.id.tv_last_sync);
         internetStatus = findViewById(R.id.tv_network_status);
         recordsToSend = findViewById(R.id.tv_records_count);
-        syncedBy = findViewById(R.id.tv_last_sync_user);
+        stoppedByUser = findViewById(R.id.tv_stopped_by_user);
         loadingSpinner = findViewById(R.id.pb_loading);
         recordsSent = findViewById(R.id.tv_records_sent);
         recordsNotSent = findViewById(R.id.tv_records_not_sent);
@@ -126,6 +126,8 @@ public class SyncActivity extends AppCompatActivity {
         updateUI(null);
     }
 
+
+
     private void initViewModels(String syncLogId, String syncType) {
         syncViewModel = new ViewModelProvider((ViewModelStoreOwner) this, (ViewModelProvider.Factory) new SyncViewModel.SyncViewModelFactory(getApplication(), syncLogId)).get(SyncViewModel.class);
         if (syncLogId != null) {
@@ -142,6 +144,12 @@ public class SyncActivity extends AppCompatActivity {
                 startSync(syncLogId, syncType);
                 trackWorkStatus(syncType);
             } else {
+                if (syncViewModel.getCurrentSyncLog().getValue() != null
+                        && syncViewModel.getCurrentSyncLog().getValue().syncLog != null) {
+                    syncViewModel.getCurrentSyncLog().getValue().syncLog.setStatus(Constants.SyncStatus.STOPPING.toString());
+                    syncViewModel.update(syncViewModel.getCurrentSyncLog().getValue().syncLog);
+                }
+
                 WorkManager.getInstance(this).cancelAllWorkByTag(syncType);
             }
         });
@@ -180,7 +188,7 @@ public class SyncActivity extends AppCompatActivity {
                 startSync.setText(R.string.btn_sync_stop);
             } else {
                 syncViewModel.setSyncRunning(false);
-                loadingSpinner.setVisibility(View.GONE);
+                loadingSpinner.setVisibility(View.INVISIBLE);
                 startSync.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
                 startSync.setTextColor(ContextCompat.getColor(this, R.color.white));
                 startSync.setText(R.string.btn_sync_start);
@@ -199,21 +207,22 @@ public class SyncActivity extends AppCompatActivity {
     }
 
     private void updateUI(SyncLogWithErrors log) {
-        Log.d("Sync", "Updating UI ....................");
         if (log != null && log.syncLog != null) {
-            syncedBy.setVisibility(View.VISIBLE);
             lastSync.setVisibility(View.VISIBLE);
-
             statusTextView.setText(getStatusMessage(log.syncLog.getStatus()));
             if (log.syncLog.getLastSync() != null) {
                 lastSync.setText(getString(R.string.sync_date, dateFormat.format(log.syncLog.getLastSync())));
             }
             recordsToSend.setText(String.valueOf(log.syncLog.getRecordsToSend()));
-            syncedBy.setText(getString(R.string.synced_by, log.syncLog.getSyncedBy() != null ? log.syncLog.getSyncedBy() : ""));
-
             recordsSent.setText(getString(R.string.sync_records_sent, String.valueOf(log.syncLog.getRecordsSent())));
             recordsNotSent.setText(getString(R.string.sync_records_not_sent, String.valueOf(log.syncLog.getRecordsNotSent())));
             recordsReceived.setText(getString(R.string.sync_records_received, String.valueOf(log.syncLog.getRecordsReceived())));
+
+            if (Constants.SyncStatus.STOPPED.toString().equals(log.syncLog.getStatus())) {
+                stoppedByUser.setVisibility(View.VISIBLE);
+            } else {
+                stoppedByUser.setVisibility(View.GONE);
+            }
 
             syncErrorAdapter.clear();
             if (log.errors != null) {
@@ -222,9 +231,8 @@ public class SyncActivity extends AppCompatActivity {
                 syncErrorAdapter.notifyDataSetChanged();
             }
         } else {
-            Log.d("Sync", "SyncLog is null ....................");
-            syncedBy.setVisibility(View.GONE);
-            lastSync.setVisibility(View.GONE);
+            stoppedByUser.setVisibility(View.GONE);
+            lastSync.setVisibility(View.INVISIBLE);
             recordsSent.setText(getString(R.string.sync_records_sent, String.valueOf(0)));
             recordsNotSent.setText(getString(R.string.sync_records_not_sent, String.valueOf(0)));
             recordsReceived.setText(getString(R.string.sync_records_received, String.valueOf(0)));
@@ -240,6 +248,10 @@ public class SyncActivity extends AppCompatActivity {
             return getString(R.string.sync_status_completed);
         } else if (Constants.SyncStatus.FAILED.toString().equals(status)) {
             return getString(R.string.sync_status_failed);
+        } else if (Constants.SyncStatus.STOPPING.toString().equals(status)) {
+            return getString(R.string.sync_status_stopping);
+        } else if (Constants.SyncStatus.STOPPED.toString().equals(status)) {
+            return getString(R.string.sync_status_stopped);
         } else {
             return getString(R.string.sync_status_not_started);
         }
