@@ -19,7 +19,7 @@
     <string name="login_generic_error">Login failed.</string>
     <string name="sign_out_confirmation_prompt">Do you want to sign out?</string>
     <string name="no_internet_connection">No internet connection. Please connect to wi-fi or mobile data.</string>
-    <string name="no_internet_connection_short">No internet.</string>
+    <string name="no_internet_connection_short">No internet</string>
     <!--Sync-->
     <string name="sync_init_dialog_title">Data Initialization</string>
     <string name="sync_init_dialog_msg">To get started, the app needs to download the necessary data.</string>
@@ -38,6 +38,7 @@
     <string name="sync_init_dialog_exit_yes">YES, STOP &amp; EXIT THE APP</string>
     <string name="sync_init_dialog_exit_msg">Initial data download is in progress. Do you want to stop and exit the app?</string>
     <string name="sync_info_text">During data synchronization, the mobile app downloads from the ET-LITS web application the data to be stored locally for repeated and offline use. Changes done on the mobile app are sent back to the ET-LITS web application for final validation and permanent storage. Until then, locally stored data is not officially recognized. Some data can be changed via the ET-LITS website. If this data is not refreshed on your device, then your changes that rely on it may be rejected during data sync. Locally stored changes may also get lost due to device damage or unexpected data storage issues. Data synchronization must be done as often as possible, immediately the internet connection is available.</string>
+    <string name="sync_records">records</string>
     <string name="sync_history_icon_txt">History</string>
     <string name="sync_view_details">View Details</string>
     <string name="sync_update_details">Update Details</string>
@@ -70,5 +71,6 @@
     <string name="menu_move">Move</string>
     <string name="sync_stopped_by_user">Stopped by user</string>
     <string name="sync_status">Sync Status</string>
+    <string name="sync_data_may_be_stale">Data may be stale</string>
 
 </resources>

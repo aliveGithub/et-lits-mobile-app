@@ -67,6 +67,8 @@ public class SyncActivity extends AppCompatActivity {
 
     private TextView recordsReceived;
 
+    private TextView staleData;
+
     private ListView errorsList;
 
     private SyncErrorAdapter syncErrorAdapter;
@@ -109,6 +111,7 @@ public class SyncActivity extends AppCompatActivity {
         recordsSent = findViewById(R.id.tv_records_sent);
         recordsNotSent = findViewById(R.id.tv_records_not_sent);
         recordsReceived = findViewById(R.id.tv_records_received);
+        staleData = findViewById(R.id.tv_stale_data);
         errorsList = findViewById(R.id.lst_errors);
 
         syncErrorAdapter = new SyncErrorAdapter(this, new ArrayList<>());
