@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import org.moa.etlits.R;
 import org.moa.etlits.data.models.SyncLog;
+import org.moa.etlits.data.models.SyncLogCount;
 import org.moa.etlits.ui.fragments.HomeTabsFragment;
 import org.moa.etlits.ui.viewmodels.HomeViewModel;
 import org.moa.etlits.utils.Constants;
@@ -41,24 +42,29 @@ public class MainActivity extends AppCompatActivity {
 
            homeViewModel = new ViewModelProvider(MainActivity.this, new HomeViewModel.HomeViewModelFactory(getApplication()))
                    .get(HomeViewModel.class);
-           homeViewModel.getConfigDataSyncLog().observe(this, syncLog -> {
-               if (syncLog == null) {
-                   showDataInitDialog(null);
-                   homeViewModel.setInitDialogShown(true);
-               } else {
-                   if (workInProgress(syncLog)
-                   && !homeViewModel.getInitDialogShown()) {
-                       showDataInitDialog(syncLog.getId());
+           homeViewModel.getLogsCountByStatus().observe(this, countObject -> {
+               if (countObject != null) {
+                   boolean hasSuccess = false;
+                   boolean syncAttempted = false;
+                   for (SyncLogCount syncLogCount : countObject) {
+                       if (Constants.SyncStatus.COMPLETED.toString().equals(syncLogCount.status)
+                       && syncLogCount.logCount > 0) {
+                           hasSuccess = true;
+                       }
+                       if (syncLogCount.logCount > 0) {
+                           syncAttempted = true;
+                       }
+                   }
+
+                   if (!hasSuccess) {
+                       showDataInitDialog(syncAttempted);
+                       homeViewModel.setInitDialogShown(true);
                    }
                }
            });
     }
 
-    private boolean workInProgress(SyncLog syncLog) {
-        return !Constants.SyncStatus.COMPLETED.toString().equals(syncLog.getStatus());
-    }
-
-    private void showDataInitDialog(String syncLogId) {
+   private void showDataInitDialog(boolean syncAttempted) {
         final Dialog customDialog = new Dialog(this);
         customDialog.setContentView(R.layout.custom_dialog);
         customDialog.setCancelable(false);
@@ -76,13 +82,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         title.setText(R.string.sync_init_dialog_title);
-        if (syncLogId != null) {
+        if (syncAttempted) {
             message.setText(R.string.sync_init_dialog_msg_resume);
             positiveButton.setText(R.string.sync_resume_data_download);
             positiveButton.setOnClickListener(v -> {
                 Intent intent = new Intent(MainActivity.this, SyncActivity.class);
-                intent.putExtra("syncLogId", syncLogId);
-                intent.putExtra("syncType", Constants.SyncType.CONFIG_DATA.toString());
+                intent.putExtra("syncType", Constants.SyncType.ALL_DATA.toString());
+                intent.putExtra("startSync", true);
                 startActivity(intent);
                 customDialog.dismiss();
             });
@@ -97,7 +103,8 @@ public class MainActivity extends AppCompatActivity {
             positiveButton.setText(R.string.sync_start_data_download);
             positiveButton.setOnClickListener(v -> {
                 Intent intent = new Intent(MainActivity.this, SyncActivity.class);
-                intent.putExtra("syncType", Constants.SyncType.CONFIG_DATA.toString());
+                intent.putExtra("syncType", Constants.SyncType.ALL_DATA.toString());
+                intent.putExtra("startSync", true);
                 startActivity(intent);
                 customDialog.dismiss();
             });

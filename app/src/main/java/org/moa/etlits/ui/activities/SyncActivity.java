@@ -78,18 +78,18 @@ public class SyncActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sync_new);
 
-        String syncLogId = getIntent().getStringExtra("syncLogId");
+
         String syncType = getIntent().getStringExtra("syncType") != null
                 ? getIntent().getStringExtra("syncType")
                 : Constants.SyncType.ALL_DATA.toString();
+        Boolean startSync = getIntent().getBooleanExtra("startSync", false);
 
         initViews();
-        initViewModels(syncLogId, syncType);
-        addEventListeners(syncLogId, syncType);
+        initViewModels(null, syncType);
+        addEventListeners(null, syncType);
 
-        if (Constants.SyncType.CONFIG_DATA.toString().equals(syncType)
-        && savedInstanceState == null) {
-            startSync(syncLogId, syncType);
+        if (startSync  && savedInstanceState == null) {
+            startSync(syncType);
             trackWorkStatus(syncType);
         }
     }
@@ -144,7 +144,7 @@ public class SyncActivity extends AppCompatActivity {
     private void addEventListeners(String syncLogId, String syncType) {
         startSync.setOnClickListener(v -> {
             if (!syncViewModel.getSyncRunning()) {
-                startSync(syncLogId, syncType);
+                startSync(syncType);
                 trackWorkStatus(syncType);
             } else {
                 if (syncViewModel.getCurrentSyncLog().getValue() != null
@@ -158,8 +158,8 @@ public class SyncActivity extends AppCompatActivity {
         });
     }
 
-    private void startSync(String syncLogId, String syncType) {
-        if (syncLogId == null && syncViewModel.getCurrentSyncId().getValue() == null) {
+    private void startSync(String syncType) {
+      //  if (syncLogId == null && syncViewModel.getCurrentSyncId().getValue() == null) {
             String newSyncLogId = UUID.randomUUID().toString();
             SyncLog newSyncLog = new SyncLog(newSyncLogId,
                     new Date(),
@@ -172,7 +172,7 @@ public class SyncActivity extends AppCompatActivity {
             syncViewModel.getCurrentSyncLog().observe(this, syncLog -> {
                 updateUI(syncLog);
             });
-        }
+     //   }
 
         SyncWorkManager.startSync(this, syncViewModel.getCurrentSyncId().getValue(), syncType);
     }

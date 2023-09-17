@@ -7,6 +7,7 @@ import org.moa.etlits.data.dao.AppDatabase;
 import org.moa.etlits.data.models.SyncError;
 import org.moa.etlits.data.models.SyncLog;
 import org.moa.etlits.data.models.SyncLog;
+import org.moa.etlits.data.models.SyncLogCount;
 import org.moa.etlits.data.models.SyncLogWithErrors;
 
 import java.util.List;
@@ -54,11 +55,17 @@ public class SyncLogRepository {
         return syncLogDao.loadByType(type);
     }
 
+
+
     public SyncLog getSyncLogById(String type) {
         return syncLogDao.getSyncLogById(type);
     }
 
     public LiveData<SyncLogWithErrors> getSyncLogWithErrors(String logId) {
         return syncLogDao.getSyncLogWithErrors(logId);
+    }
+
+    public LiveData<List<SyncLogCount>>countByStatus(){
+        return syncLogDao.countByStatus();
     }
 }
