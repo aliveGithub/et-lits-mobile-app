@@ -141,10 +141,9 @@ public class SyncWorker extends Worker {
             syncLog.setRecordsSent(syncResult.recordsSent);
             syncLog.setRecordsReceived(syncResult.recordsReceived);
             syncLog.setRecordsNotSent(syncResult.recordsNotSent);
-        }
 
-        //add dummy errors
-      /*  syncLogRepository.insert(new SyncError(syncLogId, "404", ""));
+            //add dummy errors
+       syncLogRepository.insert(new SyncError(syncLogId, "404", ""));
         syncLogRepository.insert(new SyncError(syncLogId, "405", ""));
         syncLogRepository.insert(new SyncError(syncLogId, "406", ""));
         syncLogRepository.insert(new SyncError(syncLogId, "407", ""));
@@ -153,7 +152,10 @@ public class SyncWorker extends Worker {
         syncLogRepository.insert(new SyncError(syncLogId, "410", ""));
         syncLogRepository.insert(new SyncError(syncLogId, "412", ""));
         syncLogRepository.insert(new SyncError(syncLogId, "413", ""));
-        syncLogRepository.insert(new SyncError(syncLogId, "414", ""));*/
+        syncLogRepository.insert(new SyncError(syncLogId, "414", ""));
+        }
+
+
 
         syncLog.setStatus(status);
         syncLogRepository.update(syncLog);
