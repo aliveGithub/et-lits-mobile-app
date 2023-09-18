@@ -3,6 +3,7 @@ package org.moa.etlits.ui.activities;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -20,12 +21,12 @@ import android.widget.TextView;
 
 import org.moa.etlits.R;
 import org.moa.etlits.data.models.SyncLog;
-import org.moa.etlits.data.models.SyncLogCount;
 import org.moa.etlits.data.models.SyncLogWithErrors;
 import org.moa.etlits.jobs.SyncWorkManager;
 import org.moa.etlits.ui.adapters.SyncErrorAdapter;
 import org.moa.etlits.ui.viewmodels.SyncViewModel;
 import org.moa.etlits.utils.Constants;
+import org.moa.etlits.utils.DateUtils;
 import org.moa.etlits.utils.InternetConnectionChecker;
 
 import java.text.SimpleDateFormat;
@@ -39,9 +40,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
+
 
 public class SyncActivity extends AppCompatActivity {
     private TextView statusTextView;
@@ -62,7 +63,6 @@ public class SyncActivity extends AppCompatActivity {
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault());
 
-    private InternetConnectionChecker internetConnectionCheck;
 
     private TextView recordsSent;
 
@@ -75,18 +75,19 @@ public class SyncActivity extends AppCompatActivity {
     private ListView errorsList;
 
     private SyncErrorAdapter syncErrorAdapter;
+    private SharedPreferences sharedPreferences = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sync_new);
-        Boolean startSync = getIntent().getBooleanExtra("startSync", false);
-
         initViews();
         initViewModels();
         addEventListeners();
+        sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES, MODE_PRIVATE);
 
-        if (startSync  && savedInstanceState == null) {
+        boolean startSync = getIntent().getBooleanExtra("startSync", false);
+        if (startSync && savedInstanceState == null) {
             startSync();
             trackWorkStatus();
         }
@@ -115,12 +116,12 @@ public class SyncActivity extends AppCompatActivity {
         recordsNotSent = findViewById(R.id.tv_records_not_sent);
         recordsReceived = findViewById(R.id.tv_records_received);
         staleData = findViewById(R.id.tv_stale_data);
-        errorsList = findViewById(R.id.lst_errors);
 
+        errorsList = findViewById(R.id.lst_errors);
         syncErrorAdapter = new SyncErrorAdapter(this, new ArrayList<>());
         errorsList.setAdapter(syncErrorAdapter);
 
-        internetConnectionCheck = new InternetConnectionChecker((ConnectivityManager)getApplication().getSystemService(Context.CONNECTIVITY_SERVICE));
+        InternetConnectionChecker internetConnectionCheck = new InternetConnectionChecker((ConnectivityManager) getApplication().getSystemService(Context.CONNECTIVITY_SERVICE));
         internetConnectionCheck.observe(this, isConnected -> {
             if (isConnected) {
                 internetStatus.setVisibility(View.INVISIBLE);
@@ -130,16 +131,12 @@ public class SyncActivity extends AppCompatActivity {
         });
 
         updateUI(null);
-        updateSyncButton(false);
     }
 
 
-
     private void initViewModels() {
-        syncViewModel = new ViewModelProvider((ViewModelStoreOwner) this, (ViewModelProvider.Factory) new SyncViewModel.SyncViewModelFactory(getApplication())).get(SyncViewModel.class);
-        syncViewModel.getSyncLog().observe(this, syncLog -> {
-                updateUI(syncLog);
-        });
+        syncViewModel = new ViewModelProvider(this, new SyncViewModel.SyncViewModelFactory(getApplication())).get(SyncViewModel.class);
+        syncViewModel.getSyncLog().observe(this, this::updateUI);
     }
 
     private void addEventListeners() {
@@ -160,19 +157,15 @@ public class SyncActivity extends AppCompatActivity {
     }
 
     private void startSync() {
-         String newSyncLogId = UUID.randomUUID().toString();
-            SyncLog newSyncLog = new SyncLog(newSyncLogId,
-                    new Date(),
-                    Constants.SyncType.ALL_DATA.toString(),
-                    Constants.SyncStatus.INITIALIZING.toString());
+        String newSyncLogId = UUID.randomUUID().toString();
+        SyncLog newSyncLog = new SyncLog(newSyncLogId,
+                new Date(),
+                Constants.SyncType.ALL_DATA.toString(),
+                Constants.SyncStatus.INITIALIZING.toString());
 
-            syncViewModel.setCurrentSyncId(newSyncLogId);
-            syncViewModel.insert(newSyncLog);
-
-            syncViewModel.getSyncLog().observe(this, syncLog -> {
-                updateUI(syncLog);
-            });
-
+        syncViewModel.setCurrentSyncId(newSyncLogId);
+        syncViewModel.insert(newSyncLog);
+        syncViewModel.getSyncLog().observe(this, syncLog -> updateUI(syncLog));
 
         SyncWorkManager.startSync(this, syncViewModel.getCurrentSyncId().getValue(), Constants.SyncType.ALL_DATA.toString());
     }
@@ -202,6 +195,7 @@ public class SyncActivity extends AppCompatActivity {
             startSync.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
         }
     }
+
     private void trackWorkStatus() {
         WorkManager.getInstance(this).getWorkInfosByTagLiveData(Constants.SyncType.ALL_DATA.toString()).observe(this, workInfos -> {
             if (hasRunningWork(workInfos)) {
@@ -228,16 +222,11 @@ public class SyncActivity extends AppCompatActivity {
 
     private void updateUI(SyncLogWithErrors log) {
         if (log != null && log.syncLog != null) {
-
             lastSync.setVisibility(View.VISIBLE);
             statusTextView.setText(getStatusMessage(log.syncLog.getStatus()));
             if (log.syncLog.getLastSync() != null) {
                 lastSync.setText(getString(R.string.sync_date, dateFormat.format(log.syncLog.getLastSync())));
             }
-            recordsToSend.setText(String.valueOf(log.syncLog.getRecordsToSend()));
-            recordsSent.setText(getString(R.string.sync_records_sent, String.valueOf(log.syncLog.getRecordsSent())));
-            recordsNotSent.setText(getString(R.string.sync_records_not_sent, String.valueOf(log.syncLog.getRecordsNotSent())));
-            recordsReceived.setText(getString(R.string.sync_records_received, String.valueOf(log.syncLog.getRecordsReceived())));
 
             if (Constants.SyncStatus.STOPPED.toString().equals(log.syncLog.getStatus())) {
                 stoppedByUser.setVisibility(View.VISIBLE);
@@ -245,24 +234,39 @@ public class SyncActivity extends AppCompatActivity {
                 stoppedByUser.setVisibility(View.GONE);
             }
 
+            recordsToSend.setText(String.valueOf(log.syncLog.getRecordsToSend()));
+            recordsSent.setText(getString(R.string.sync_records_sent, String.valueOf(log.syncLog.getRecordsSent())));
+            recordsNotSent.setText(getString(R.string.sync_records_not_sent, String.valueOf(log.syncLog.getRecordsNotSent())));
+            recordsReceived.setText(getString(R.string.sync_records_received, String.valueOf(log.syncLog.getRecordsReceived())));
+
+            long daysSinceLastSync = DateUtils.daysBetweenDates(log.syncLog.getLastSync(), new Date());
+            if (daysSinceLastSync > 5) {
+                staleData.setVisibility(View.VISIBLE);
+            } else {
+                staleData.setVisibility(View.GONE);
+            }
+
             syncErrorAdapter.clear();
             if (log.errors != null) {
-                Log.d("Sync", "Errors...................." + log.errors.size());
                 syncErrorAdapter.addAll(log.errors);
                 syncErrorAdapter.notifyDataSetChanged();
             }
+            updateSyncButton(syncViewModel.getSyncRunning());
         } else {
+            staleData.setVisibility(View.GONE);
             stoppedByUser.setVisibility(View.GONE);
             lastSync.setVisibility(View.INVISIBLE);
             recordsSent.setText(getString(R.string.sync_records_sent, String.valueOf(0)));
             recordsNotSent.setText(getString(R.string.sync_records_not_sent, String.valueOf(0)));
             recordsReceived.setText(getString(R.string.sync_records_received, String.valueOf(0)));
+            updateSyncButton(false);
         }
     }
 
+
     private String getStatusMessage(String status) {
-        if(Constants.SyncStatus.INITIALIZING.toString().equals(status)) {
-               return getString(R.string.sync_status_initializing);
+        if (Constants.SyncStatus.INITIALIZING.toString().equals(status)) {
+            return getString(R.string.sync_status_initializing);
         } else if (Constants.SyncStatus.IN_PROGRESS.toString().equals(status)) {
             return getString(R.string.sync_status_in_progress);
         } else if (Constants.SyncStatus.SUCCESSFUL.toString().equals(status)) {
@@ -288,20 +292,8 @@ public class SyncActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            SyncLogWithErrors log = syncViewModel.getSyncLog().getValue();
-            List<SyncLogCount> logsByStatus = syncViewModel.getLogsCountByStatus().getValue();
-            boolean hasSuccess = false;
-            if (logsByStatus != null) {
-                   for (SyncLogCount syncLogCount : logsByStatus) {
-                    if (Constants.SyncStatus.SUCCESSFUL.toString().equals(syncLogCount.status)
-                            && syncLogCount.logCount > 0) {
-                        hasSuccess = true;
-                    }
-                }
-            }
-
-            if (log !=null && log.syncLog != null && !hasSuccess
-                    &&  !Constants.SyncStatus.SUCCESSFUL.toString().equals(log.syncLog.getStatus())) {
+            boolean hasInitialized = sharedPreferences.getBoolean(Constants.HAS_INITIALIZED, false);
+            if (syncViewModel.getSyncRunning() && !hasInitialized) {
                 showDataInitDialog();
             } else {
                 SyncActivity.super.onBackPressed();
@@ -339,9 +331,7 @@ public class SyncActivity extends AppCompatActivity {
         });
 
         positiveButton.setText(R.string.sync_init_dialog_exit_no);
-        positiveButton.setOnClickListener(v -> {
-            customDialog.dismiss();
-        });
+        positiveButton.setOnClickListener(v -> customDialog.dismiss());
 
         customDialog.show();
     }

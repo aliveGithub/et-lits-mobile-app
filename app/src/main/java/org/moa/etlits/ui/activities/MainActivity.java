@@ -2,6 +2,7 @@ package org.moa.etlits.ui.activities;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,11 +10,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import org.moa.etlits.R;
-import org.moa.etlits.data.models.SyncLogCount;
 import org.moa.etlits.ui.fragments.HomeTabsFragment;
 import org.moa.etlits.ui.viewmodels.HomeViewModel;
 import org.moa.etlits.utils.Constants;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -21,48 +22,40 @@ import androidx.lifecycle.ViewModelProvider;
 
 public class MainActivity extends AppCompatActivity {
     private HomeViewModel homeViewModel;
-    private DrawerLayout drawerLayout;
+
     private ActionBarDrawerToggle drawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        drawerLayout = findViewById(R.id.drawer_layout);
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close);
         drawerLayout.addDrawerListener(drawerToggle);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+        }
+
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, new HomeTabsFragment())
                 .commit();
 
-           homeViewModel = new ViewModelProvider(MainActivity.this, new HomeViewModel.HomeViewModelFactory(getApplication()))
-                   .get(HomeViewModel.class);
-           homeViewModel.getLogsCountByStatus().observe(this, countObject -> {
-               if (countObject != null) {
-                   boolean hasSuccess = false;
-                   boolean syncAttempted = false;
-                   for (SyncLogCount syncLogCount : countObject) {
-                       if (Constants.SyncStatus.SUCCESSFUL.toString().equals(syncLogCount.status)
-                       && syncLogCount.logCount > 0) {
-                           hasSuccess = true;
-                       }
-                       if (syncLogCount.logCount > 0) {
-                           syncAttempted = true;
-                       }
-                   }
+        homeViewModel = new ViewModelProvider(MainActivity.this, new HomeViewModel.HomeViewModelFactory(getApplication()))
+                .get(HomeViewModel.class);
 
-                   if (!hasSuccess) {
-                       showDataInitDialog(syncAttempted);
-                       homeViewModel.setInitDialogShown(true);
-                   }
-               }
-           });
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES, MODE_PRIVATE);
+        boolean hasInitialized = sharedPreferences.getBoolean(Constants.HAS_INITIALIZED, false);
+        if (!hasInitialized) {
+            boolean initialSyncStarted = sharedPreferences.getBoolean(Constants.INITIAL_SYNC_STARTED, false);
+            showDataInitDialog(initialSyncStarted);
+            homeViewModel.setInitDialogShown(true);
+        }
     }
 
-   private void showDataInitDialog(boolean syncAttempted) {
+    private void showDataInitDialog(boolean syncAttempted) {
         final Dialog customDialog = new Dialog(this);
         customDialog.setContentView(R.layout.custom_dialog);
         customDialog.setCancelable(false);
@@ -91,11 +84,10 @@ public class MainActivity extends AppCompatActivity {
                 customDialog.dismiss();
             });
 
-            neutralButton.setVisibility(View.VISIBLE);
-            neutralButton.setText(R.string.sync_view_last_attempt);
-            neutralButton.setOnClickListener(v -> {
-                customDialog.dismiss();
-            });
+            neutralButton.setVisibility(View.GONE);
+            //neutralButton.setVisibility(View.VISIBLE);
+           // neutralButton.setText(R.string.sync_view_last_attempt);
+           // neutralButton.setOnClickListener(v -> customDialog.dismiss());
         } else {
             message.setText(R.string.sync_init_dialog_msg);
             positiveButton.setText(R.string.sync_start_data_download);

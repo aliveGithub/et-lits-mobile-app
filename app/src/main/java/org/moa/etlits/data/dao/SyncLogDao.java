@@ -1,10 +1,8 @@
 package org.moa.etlits.data.dao;
 
 
-import org.moa.etlits.data.models.Animal;
 import org.moa.etlits.data.models.SyncError;
 import org.moa.etlits.data.models.SyncLog;
-import org.moa.etlits.data.models.SyncLogCount;
 import org.moa.etlits.data.models.SyncLogWithErrors;
 
 import java.util.List;
@@ -47,8 +45,4 @@ public interface SyncLogDao {
     @Transaction
     @Query("SELECT * FROM sync_logs ORDER BY last_sync DESC LIMIT 1")
     LiveData<SyncLogWithErrors> getLastSyncLogWithErrors();
-
-   @Query("SELECT status, count(*) as logCount FROM sync_logs group by status")
-    LiveData<List<SyncLogCount>> countByStatus();
-
 }

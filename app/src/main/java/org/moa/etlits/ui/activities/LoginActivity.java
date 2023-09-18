@@ -58,6 +58,9 @@ public class LoginActivity extends AppCompatActivity {
         passwordLayout = binding.passwordLayout;
         builder = new AlertDialog.Builder(LoginActivity.this);
         encryptedPreferences = new EncryptedPreferences(LoginActivity.this);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
         initViewModels();
         attachEventListeners();
     }

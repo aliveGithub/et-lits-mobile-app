@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import androidx.annotation.NonNull;
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
@@ -25,7 +26,7 @@ public class RetrofitUtil {
 
     public static final ExecutorService callBackExecutors =
             Executors.newFixedThreadPool(4);
-    private static HashMap<String, List<Cookie>> cookieStore = new HashMap<>();
+    private static final HashMap<String, List<Cookie>> cookieStore = new HashMap<>();
 
     private static OkHttpClient createHttpClient() {
         if (HTTP_CLIENT == null) {
@@ -35,14 +36,15 @@ public class RetrofitUtil {
         return HTTP_CLIENT.newBuilder()
                .cookieJar(new CookieJar() {
                     @Override
-                    public void saveFromResponse(HttpUrl httpUrl, List<Cookie> cookies) {
+                    public void saveFromResponse(@NonNull HttpUrl httpUrl, @NonNull List<Cookie> cookies) {
                         cookieStore.put(httpUrl.host(), cookies);
                     }
 
+                    @NonNull
                     @Override
-                    public List<Cookie> loadForRequest(HttpUrl httpUrl) {
+                    public List<Cookie> loadForRequest(@NonNull HttpUrl httpUrl) {
                         List<Cookie> cookies = cookieStore.get(httpUrl.host());
-                        return cookies != null ? cookies : new ArrayList<Cookie>();
+                        return cookies != null ? cookies : new ArrayList<>();
                     }
                 })
                .build();

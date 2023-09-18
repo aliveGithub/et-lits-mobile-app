@@ -2,6 +2,7 @@ package org.moa.etlits.jobs;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import org.moa.etlits.api.RetrofitUtil;
 import org.moa.etlits.api.response.CatalogType;
@@ -31,17 +32,19 @@ import retrofit2.Response;
 
 public class SyncWorker extends Worker {
 
-    private ConfigService configService;
+    private final ConfigService configService;
     private final CategoryValueRepository categoryValueRepository;
     private SyncLogRepository syncLogRepository;
 
     private final EncryptedPreferences encryptedPreferences;
+    private final SharedPreferences sharedPreferences;
 
     public SyncWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
         encryptedPreferences = new EncryptedPreferences(context);
         configService = RetrofitUtil.createConfigService();
         categoryValueRepository = new CategoryValueRepository((Application) getApplicationContext());
+        sharedPreferences = context.getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE);
     }
 
     private SyncResult saveConfigData(ConfigResponse configResponse) {
@@ -100,6 +103,11 @@ public class SyncWorker extends Worker {
             SyncResult configSyncResult = fetchAndSaveConfigData();
             if (configSyncResult.isSuccessful) {
                 updateSyncStatus(Constants.SyncStatus.SUCCESSFUL.toString(), configSyncResult);
+
+                if (!sharedPreferences.getBoolean(Constants.HAS_INITIALIZED, false)) {
+                    sharedPreferences.edit().putBoolean(Constants.HAS_INITIALIZED, true).apply();
+                }
+
                 return Result.success();
             } else {
                 logError(configSyncResult.errorCode, "");
@@ -149,6 +157,10 @@ public class SyncWorker extends Worker {
 
         syncLog.setStatus(status);
         syncLogRepository.update(syncLog);
+
+        if (!sharedPreferences.getBoolean(Constants.INITIAL_SYNC_STARTED, false)) {
+            sharedPreferences.edit().putBoolean(Constants.INITIAL_SYNC_STARTED, true).apply();
+        }
     }
 
     private class SyncResult {
