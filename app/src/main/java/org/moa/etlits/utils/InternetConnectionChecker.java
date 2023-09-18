@@ -1,7 +1,5 @@
 package org.moa.etlits.utils;
 
-import android.app.Application;
-import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -13,8 +11,8 @@ import org.jetbrains.annotations.NotNull;
 import androidx.lifecycle.LiveData;
 
 public final class InternetConnectionChecker extends LiveData<Boolean> {
-    private ConnectivityManager.NetworkCallback networkCallback;
-    private ConnectivityManager connectivityManager;
+    private final ConnectivityManager.NetworkCallback networkCallback;
+    private final ConnectivityManager connectivityManager;
 
 
     protected void onActive() {
@@ -28,14 +26,14 @@ public final class InternetConnectionChecker extends LiveData<Boolean> {
             NetworkRequest.Builder builder = new NetworkRequest.Builder();
             builder.addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR);
             builder.addTransportType(NetworkCapabilities.TRANSPORT_WIFI);
-            this.connectivityManager.registerNetworkCallback(builder.build(), (ConnectivityManager.NetworkCallback)this.networkCallback);
+            this.connectivityManager.registerNetworkCallback(builder.build(), this.networkCallback);
         }
     }
 
     protected void onInactive() {
         super.onInactive();
         if (this.connectivityManager != null && this.networkCallback != null) {
-            this.connectivityManager.unregisterNetworkCallback((ConnectivityManager.NetworkCallback)this.networkCallback);
+            this.connectivityManager.unregisterNetworkCallback(this.networkCallback);
         }
     }
 
@@ -68,9 +66,5 @@ public final class InternetConnectionChecker extends LiveData<Boolean> {
                 InternetConnectionChecker.this.postValue(false);
             }
         };
-    }
-
-    public InternetConnectionChecker(@NotNull Application appContext) {
-      this.connectivityManager = (ConnectivityManager)appContext.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 }

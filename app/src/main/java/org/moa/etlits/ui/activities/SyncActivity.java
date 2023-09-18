@@ -9,7 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -55,14 +54,9 @@ public class SyncActivity extends AppCompatActivity {
 
     private TextView stoppedByUser;
 
-    private SyncViewModel syncViewModel;
-
     private Button startSync;
 
     private ProgressBar loadingSpinner;
-
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault());
-
 
     private TextView recordsSent;
 
@@ -74,8 +68,10 @@ public class SyncActivity extends AppCompatActivity {
 
     private ListView errorsList;
 
+    private SyncViewModel syncViewModel;
     private SyncErrorAdapter syncErrorAdapter;
     private SharedPreferences sharedPreferences = null;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,17 +90,7 @@ public class SyncActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(R.string.title_data_sync);
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            final Drawable upArrow = ContextCompat.getDrawable(this, androidx.appcompat.R.drawable.abc_ic_ab_back_material);
-            if (upArrow != null) {
-                upArrow.setColorFilter(getResources().getColor(R.color.colorPrimaryDark, getTheme()), PorterDuff.Mode.SRC_ATOP);
-                actionBar.setHomeAsUpIndicator(upArrow);
-            }
-        }
-
+        setUpActionBar();
         startSync = findViewById(R.id.btn_sync);
         statusTextView = findViewById(R.id.tv_status);
         lastSync = findViewById(R.id.tv_last_sync);
@@ -116,8 +102,8 @@ public class SyncActivity extends AppCompatActivity {
         recordsNotSent = findViewById(R.id.tv_records_not_sent);
         recordsReceived = findViewById(R.id.tv_records_received);
         staleData = findViewById(R.id.tv_stale_data);
-
         errorsList = findViewById(R.id.lst_errors);
+
         syncErrorAdapter = new SyncErrorAdapter(this, new ArrayList<>());
         errorsList.setAdapter(syncErrorAdapter);
 
@@ -133,6 +119,18 @@ public class SyncActivity extends AppCompatActivity {
         updateUI(null);
     }
 
+    private void setUpActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(R.string.title_data_sync);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            final Drawable upArrow = ContextCompat.getDrawable(this, androidx.appcompat.R.drawable.abc_ic_ab_back_material);
+            if (upArrow != null) {
+                upArrow.setColorFilter(getResources().getColor(R.color.colorPrimaryDark, getTheme()), PorterDuff.Mode.SRC_ATOP);
+                actionBar.setHomeAsUpIndicator(upArrow);
+            }
+        }
+    }
 
     private void initViewModels() {
         syncViewModel = new ViewModelProvider(this, new SyncViewModel.SyncViewModelFactory(getApplication())).get(SyncViewModel.class);
@@ -171,29 +169,16 @@ public class SyncActivity extends AppCompatActivity {
     }
 
     private void updateSyncButton(boolean isRunning) {
-        if (isRunning) {
-            GradientDrawable border = new GradientDrawable();
-            border.setColor(ContextCompat.getColor(this, R.color.white));
-            border.setStroke(5, ContextCompat.getColor(this, R.color.colorPrimary));
-            border.setCornerRadius(50);
-            startSync.setBackground(border);
+        GradientDrawable border = new GradientDrawable();
+        border.setColor(ContextCompat.getColor(this, isRunning ? R.color.white : R.color.colorPrimary));
+        border.setStroke(5, ContextCompat.getColor(this, R.color.colorPrimary));
+        border.setCornerRadius(50);
+        startSync.setBackground(border);
+        startSync.setTextColor(ContextCompat.getColor(this, isRunning ? R.color.colorPrimary : R.color.white));
+        startSync.setText(isRunning ? R.string.btn_sync_stop : R.string.btn_sync_start);
 
-            startSync.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
-            startSync.setText(R.string.btn_sync_stop);
-            Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_stop_bold);
-            startSync.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
-        } else {
-            GradientDrawable border = new GradientDrawable();
-            border.setColor(ContextCompat.getColor(this, R.color.colorPrimary));
-            border.setStroke(5, ContextCompat.getColor(this, R.color.colorPrimary));
-            border.setCornerRadius(50);
-            startSync.setBackground(border);
-
-            startSync.setTextColor(ContextCompat.getColor(this, R.color.white));
-            startSync.setText(R.string.btn_sync_start);
-            Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_play_bold);
-            startSync.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
-        }
+        Drawable drawable = ContextCompat.getDrawable(this, isRunning ? R.drawable.ic_stop_bold : R.drawable.ic_play_bold);
+        startSync.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
     }
 
     private void trackWorkStatus() {
@@ -222,17 +207,14 @@ public class SyncActivity extends AppCompatActivity {
 
     private void updateUI(SyncLogWithErrors log) {
         if (log != null && log.syncLog != null) {
-            lastSync.setVisibility(View.VISIBLE);
             statusTextView.setText(getStatusMessage(log.syncLog.getStatus()));
-            if (log.syncLog.getLastSync() != null) {
-                lastSync.setText(getString(R.string.sync_date, dateFormat.format(log.syncLog.getLastSync())));
-            }
 
-            if (Constants.SyncStatus.STOPPED.toString().equals(log.syncLog.getStatus())) {
-                stoppedByUser.setVisibility(View.VISIBLE);
-            } else {
-                stoppedByUser.setVisibility(View.GONE);
-            }
+            lastSync.setVisibility(View.VISIBLE);
+            String formattedDate = log.syncLog.getLastSync() == null ? "" : dateFormat.format(log.syncLog.getLastSync());
+            lastSync.setText(getString(R.string.sync_date,formattedDate));
+
+            boolean wasStopped =  Constants.SyncStatus.STOPPED.toString().equals(log.syncLog.getStatus());
+            stoppedByUser.setVisibility( wasStopped ? View.VISIBLE : View.GONE);
 
             recordsToSend.setText(String.valueOf(log.syncLog.getRecordsToSend()));
             recordsSent.setText(getString(R.string.sync_records_sent, String.valueOf(log.syncLog.getRecordsSent())));
@@ -240,29 +222,27 @@ public class SyncActivity extends AppCompatActivity {
             recordsReceived.setText(getString(R.string.sync_records_received, String.valueOf(log.syncLog.getRecordsReceived())));
 
             long daysSinceLastSync = DateUtils.daysBetweenDates(log.syncLog.getLastSync(), new Date());
-            if (daysSinceLastSync > 5) {
-                staleData.setVisibility(View.VISIBLE);
-            } else {
-                staleData.setVisibility(View.GONE);
-            }
+            staleData.setVisibility(daysSinceLastSync > 5 ? View.VISIBLE : View.GONE);
 
             syncErrorAdapter.clear();
             if (log.errors != null) {
                 syncErrorAdapter.addAll(log.errors);
                 syncErrorAdapter.notifyDataSetChanged();
             }
+
             updateSyncButton(syncViewModel.getSyncRunning());
         } else {
             staleData.setVisibility(View.GONE);
-            stoppedByUser.setVisibility(View.GONE);
+
             lastSync.setVisibility(View.INVISIBLE);
+            stoppedByUser.setVisibility(View.GONE);
+
             recordsSent.setText(getString(R.string.sync_records_sent, String.valueOf(0)));
             recordsNotSent.setText(getString(R.string.sync_records_not_sent, String.valueOf(0)));
             recordsReceived.setText(getString(R.string.sync_records_received, String.valueOf(0)));
             updateSyncButton(false);
         }
     }
-
 
     private String getStatusMessage(String status) {
         if (Constants.SyncStatus.INITIALIZING.toString().equals(status)) {
