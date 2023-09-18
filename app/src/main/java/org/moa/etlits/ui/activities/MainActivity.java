@@ -3,14 +3,12 @@ package org.moa.etlits.ui.activities;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import org.moa.etlits.R;
-import org.moa.etlits.data.models.SyncLog;
 import org.moa.etlits.data.models.SyncLogCount;
 import org.moa.etlits.ui.fragments.HomeTabsFragment;
 import org.moa.etlits.ui.viewmodels.HomeViewModel;
@@ -47,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
                    boolean hasSuccess = false;
                    boolean syncAttempted = false;
                    for (SyncLogCount syncLogCount : countObject) {
-                       if (Constants.SyncStatus.COMPLETED.toString().equals(syncLogCount.status)
+                       if (Constants.SyncStatus.SUCCESSFUL.toString().equals(syncLogCount.status)
                        && syncLogCount.logCount > 0) {
                            hasSuccess = true;
                        }

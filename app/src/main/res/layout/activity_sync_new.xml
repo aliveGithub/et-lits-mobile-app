@@ -120,13 +120,14 @@
 
             <Button
                 android:id="@+id/btn_sync"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
-                android:paddingLeft="32dp"
-                android:paddingRight="32dp"
+                android:padding="@dimen/small_padding"
                 android:text="@string/btn_sync_start"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:drawableLeft="@drawable/ic_play_bold"
+                android:fontFamily="@font/inter_bold"/>
 
             <ProgressBar
                 android:id="@+id/pb_loading"

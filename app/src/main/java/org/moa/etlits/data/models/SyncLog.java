@@ -37,8 +37,6 @@ public class SyncLog {
     @ColumnInfo(name = "records_received")
     private int recordsReceived;
     private int recordsNotSent;
-    @ColumnInfo(name = "synced_by")
-    private String syncedBy;
 
     public String getId() {
         return id;
@@ -94,14 +92,6 @@ public class SyncLog {
 
     public void setRecordsNotSent(int recordsNoSent) {
         this.recordsNotSent = recordsNoSent;
-    }
-
-    public String getSyncedBy() {
-        return syncedBy;
-    }
-
-    public void setSyncedBy(String syncedBy) {
-        this.syncedBy = syncedBy;
     }
 
     public int getRecordsToSend() {

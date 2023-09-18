@@ -44,6 +44,10 @@ public interface SyncLogDao {
     @Query("SELECT * FROM sync_logs where id=:logId")
     LiveData<SyncLogWithErrors> getSyncLogWithErrors(String logId);
 
+    @Transaction
+    @Query("SELECT * FROM sync_logs ORDER BY last_sync DESC LIMIT 1")
+    LiveData<SyncLogWithErrors> getLastSyncLogWithErrors();
+
    @Query("SELECT status, count(*) as logCount FROM sync_logs group by status")
     LiveData<List<SyncLogCount>> countByStatus();
 

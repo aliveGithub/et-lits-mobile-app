@@ -2,7 +2,6 @@ package org.moa.etlits.jobs;
 
 import android.app.Application;
 import android.content.Context;
-import android.util.Log;
 
 import org.moa.etlits.api.RetrofitUtil;
 import org.moa.etlits.api.response.CatalogType;
@@ -16,6 +15,7 @@ import org.moa.etlits.data.models.SyncLog;
 import org.moa.etlits.data.repositories.CategoryValueRepository;
 import org.moa.etlits.data.repositories.SyncLogRepository;
 import org.moa.etlits.utils.Constants;
+import org.moa.etlits.utils.EncryptedPreferences;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -25,24 +25,30 @@ import java.util.Date;
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
+import okhttp3.Credentials;
 import retrofit2.Call;
 import retrofit2.Response;
 
 public class SyncWorker extends Worker {
 
     private ConfigService configService;
-    private CategoryValueRepository categoryValueRepository;
+    private final CategoryValueRepository categoryValueRepository;
     private SyncLogRepository syncLogRepository;
+
+    private final EncryptedPreferences encryptedPreferences;
 
     public SyncWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
+        encryptedPreferences = new EncryptedPreferences(context);
+        configService = RetrofitUtil.createConfigService();
+        categoryValueRepository = new CategoryValueRepository((Application) getApplicationContext());
     }
 
     private SyncResult saveConfigData(ConfigResponse configResponse) {
         int received = 0;
         if (configResponse != null) {
             if (configResponse.getCatalogs() != null) {
-                categoryValueRepository = new CategoryValueRepository((Application) getApplicationContext());
+
                 for (CatalogType catalog : configResponse.getCatalogs()) {
                     for (EntryType entry : catalog.getEntry()) {
                         CategoryValue catValue = new CategoryValue();
@@ -64,17 +70,18 @@ public class SyncWorker extends Worker {
     }
 
     private SyncResult fetchAndSaveConfigData() throws IOException, SyncStoppedException {
-        String authorization = getInputData().getString("authorization");
-        configService = RetrofitUtil.createConfigService();
+        String username = encryptedPreferences.read(Constants.USERNAME);
+        String password = encryptedPreferences.read(Constants.PASSWORD);
+        String authorization = Credentials.basic(username, password);
+
         Call<ConfigResponse> call = configService.getConfigData(authorization);
         Response<ConfigResponse> response = call.execute();
         checkSyncStatus();
         if (response.isSuccessful()) {
-            Log.d("SyncWorker", "Success");
             ConfigResponse configResponse = response.body();
             return saveConfigData(configResponse);
         } else {
-            return new SyncResult(!response.isSuccessful(), 0, 0, 0, String.valueOf(response.code()));
+            return new SyncResult(false, 0, 0, 0, String.valueOf(response.code()));
         }
     }
 
@@ -87,16 +94,12 @@ public class SyncWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-
         try {
             syncLogRepository = new SyncLogRepository((Application) getApplicationContext());
             updateSyncStatus(Constants.SyncStatus.IN_PROGRESS.toString(), null);
-
-             Thread.sleep(5000);
-
             SyncResult configSyncResult = fetchAndSaveConfigData();
             if (configSyncResult.isSuccessful) {
-                updateSyncStatus(Constants.SyncStatus.COMPLETED.toString(), configSyncResult);
+                updateSyncStatus(Constants.SyncStatus.SUCCESSFUL.toString(), configSyncResult);
                 return Result.success();
             } else {
                 logError(configSyncResult.errorCode, "");
@@ -107,6 +110,7 @@ public class SyncWorker extends Worker {
             return Result.failure();
         } catch (UnknownHostException e) {
             if (getRunAttemptCount() < 3) {
+                logError(String.valueOf(HttpURLConnection.HTTP_NOT_FOUND), "Server cannot be reached.");
                 return Result.retry();
             } else {
                 logError(String.valueOf(HttpURLConnection.HTTP_NOT_FOUND), "Server cannot be reached.");
@@ -114,48 +118,34 @@ public class SyncWorker extends Worker {
             }
         } catch (Exception e) {
             if (getRunAttemptCount() < 3) {
+                logError(Constants.UNKNOWN_SYNC_ERROR, e.toString());
                 return Result.retry();
             } else {
-                logError(Constants.UNKNOWN_SYNC_ERROR, "Unknown sync error.");
+                logError(Constants.UNKNOWN_SYNC_ERROR, e.toString());
                 return Result.failure();
             }
         }
     }
 
-    private void logError(String errorCode, String errorMessage){
-        String syncLogId = getInputData().getString("syncLogId");
+    private void logError(String errorCode, String errorMessage) {
+        String syncLogId = getInputData().getString(Constants.SYNC_LOG_ID);
         SyncError error = new SyncError(syncLogId, errorCode, errorMessage);
         syncLogRepository.insert(error);
         updateSyncStatus(Constants.SyncStatus.FAILED.toString(), null);
     }
 
-    private void updateSyncStatus(String status, SyncResult syncResult){
-        String syncLogId = getInputData().getString("syncLogId");
+    private void updateSyncStatus(String status, SyncResult syncResult) {
+        String syncLogId = getInputData().getString(Constants.SYNC_LOG_ID);
         SyncLog syncLog = syncLogRepository.getSyncLogById(syncLogId);
-        String username = getInputData().getString("username");
-        if (status.equals(Constants.SyncStatus.IN_PROGRESS.toString())){
+        if (status.equals(Constants.SyncStatus.IN_PROGRESS.toString())) {
             syncLog.setLastSync(new Date());
-            syncLog.setSyncedBy(username);
         }
+
         if (syncResult != null) {
             syncLog.setRecordsSent(syncResult.recordsSent);
             syncLog.setRecordsReceived(syncResult.recordsReceived);
             syncLog.setRecordsNotSent(syncResult.recordsNotSent);
-
-            //add dummy errors
-       syncLogRepository.insert(new SyncError(syncLogId, "404", ""));
-        syncLogRepository.insert(new SyncError(syncLogId, "405", ""));
-        syncLogRepository.insert(new SyncError(syncLogId, "406", ""));
-        syncLogRepository.insert(new SyncError(syncLogId, "407", ""));
-        syncLogRepository.insert(new SyncError(syncLogId, "408", ""));
-        syncLogRepository.insert(new SyncError(syncLogId, "409", ""));
-        syncLogRepository.insert(new SyncError(syncLogId, "410", ""));
-        syncLogRepository.insert(new SyncError(syncLogId, "412", ""));
-        syncLogRepository.insert(new SyncError(syncLogId, "413", ""));
-        syncLogRepository.insert(new SyncError(syncLogId, "414", ""));
         }
-
-
 
         syncLog.setStatus(status);
         syncLogRepository.update(syncLog);
@@ -167,7 +157,6 @@ public class SyncWorker extends Worker {
         private int recordsNotSent;
         private String errorCode;
         private boolean isSuccessful;
-
 
         public SyncResult(boolean isSuccessful, int recordsSent, int recordsReceived, int recordsNotSent, String errorCode) {
             this.isSuccessful = isSuccessful;

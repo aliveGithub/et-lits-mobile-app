@@ -23,18 +23,7 @@ public class SyncWorkManager {
 
     public static void startSync(Context context, String syncLogId, String syncType) {
         Data.Builder inputBuilder = new Data.Builder();
-        EncryptedPreferences encryptedPreferences = new EncryptedPreferences(context);
-        String username = encryptedPreferences.read(Constants.USERNAME);
-        String password = encryptedPreferences.read(Constants.PASSWORD);
-
-        inputBuilder.putString("syncLogId", syncLogId);
-        inputBuilder.putString("syncType", syncType);
-
-        if (username != null && password != null) {
-            inputBuilder.putString("authorization", Credentials.basic(username, password));
-            inputBuilder.putString("username", username);
-        }
-
+        inputBuilder.putString(Constants.SYNC_LOG_ID, syncLogId);
         Data inputData = inputBuilder.build();
         OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(SyncWorker.class)
                 .setBackoffCriteria(

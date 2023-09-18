@@ -65,6 +65,10 @@ public class SyncLogRepository {
         return syncLogDao.getSyncLogWithErrors(logId);
     }
 
+    public LiveData<SyncLogWithErrors>  getLastSyncLog() {
+        return syncLogDao.getLastSyncLogWithErrors();
+    }
+
     public LiveData<List<SyncLogCount>>countByStatus(){
         return syncLogDao.countByStatus();
     }

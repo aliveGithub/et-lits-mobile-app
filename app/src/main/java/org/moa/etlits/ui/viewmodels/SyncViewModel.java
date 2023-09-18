@@ -3,8 +3,11 @@ package org.moa.etlits.ui.viewmodels;
 import android.app.Application;
 
 import org.moa.etlits.data.models.SyncLog;
+import org.moa.etlits.data.models.SyncLogCount;
 import org.moa.etlits.data.models.SyncLogWithErrors;
 import org.moa.etlits.data.repositories.SyncLogRepository;
+
+import java.util.List;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -14,22 +17,25 @@ import androidx.lifecycle.ViewModelProvider;
 
 public class SyncViewModel extends AndroidViewModel {
     private MutableLiveData<Boolean> isInternetAvailable = new MutableLiveData<>(true);
-    private LiveData<SyncLogWithErrors> currentSyncLog;
+    private LiveData<SyncLogWithErrors> syncLog; // last sync or current
     private MutableLiveData<String> currentSyncId = new MutableLiveData<>(null);
     private MutableLiveData<Boolean> syncRunning = new MutableLiveData<>(false);
+
+    private LiveData<List<SyncLogCount>> logsCountByStatus;
     private SyncLogRepository syncLogRepository;
 
     private MutableLiveData<Boolean> syncStarted = new MutableLiveData<>(false);
 
-    public SyncViewModel(Application application, String syncLogId) {
+    public SyncViewModel(Application application) {
         super(application);
         syncLogRepository = new SyncLogRepository(application);
-        currentSyncLog = syncLogRepository.getSyncLogWithErrors(syncLogId);
+        syncLog = syncLogRepository.getLastSyncLog();
+        logsCountByStatus = syncLogRepository.countByStatus();
     }
 
 
     public void loadSyncLogById(String syncLogId) {
-        currentSyncLog = syncLogRepository.getSyncLogWithErrors(syncLogId);
+        syncLog = syncLogRepository.getSyncLogWithErrors(syncLogId);
     }
 
     public void insert(SyncLog syncLog) {
@@ -49,8 +55,12 @@ public class SyncViewModel extends AndroidViewModel {
         this.isInternetAvailable = isInternetAvailable;
     }
 
-    public LiveData<SyncLogWithErrors> getCurrentSyncLog() {
-        return currentSyncLog;
+    public LiveData<SyncLogWithErrors> getSyncLog() {
+        return syncLog;
+    }
+
+    public LiveData<List<SyncLogCount>> getLogsCountByStatus() {
+        return logsCountByStatus;
     }
 
     public MutableLiveData<String> getCurrentSyncId() {
@@ -79,16 +89,14 @@ public class SyncViewModel extends AndroidViewModel {
 
     public static class SyncViewModelFactory implements ViewModelProvider.Factory {
         private Application application;
-        private String syncLogId;
 
-        public SyncViewModelFactory(Application application, String syncLogId) {
+        public SyncViewModelFactory(Application application) {
             this.application = application;
-            this. syncLogId = syncLogId;
         }
 
         @Override
         public <T extends ViewModel> T create(Class<T> modelClass) {
-            return (T) new SyncViewModel(application, syncLogId);
+            return (T) new SyncViewModel(application);
         }
     }
 }

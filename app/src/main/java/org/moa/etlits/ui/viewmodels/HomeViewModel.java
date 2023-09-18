@@ -23,7 +23,6 @@ public class HomeViewModel extends ViewModel{
     public HomeViewModel(Application application) {
         syncLogRepository = new SyncLogRepository(application);
         logsCountByStatus = syncLogRepository.countByStatus();
-
     }
 
     public LiveData<List<SyncLogCount>> getLogsCountByStatus() {

@@ -1,5 +1,7 @@
 package org.moa.etlits.ui.activities;
 
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -7,6 +9,7 @@ import org.moa.etlits.R;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 public class SyncInfoActivity extends AppCompatActivity {
 
@@ -18,6 +21,11 @@ public class SyncInfoActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setTitle(R.string.title_data_sync);
             actionBar.setDisplayHomeAsUpEnabled(true);
+            final Drawable upArrow = ContextCompat.getDrawable(this, androidx.appcompat.R.drawable.abc_ic_ab_back_material);
+            if (upArrow != null) {
+                upArrow.setColorFilter(getResources().getColor(R.color.colorPrimaryDark, getTheme()), PorterDuff.Mode.SRC_ATOP);
+                actionBar.setHomeAsUpIndicator(upArrow);
+            }
         }
     }
 

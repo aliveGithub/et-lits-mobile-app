@@ -3,6 +3,8 @@ package org.moa.etlits.ui.activities;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 
 import org.moa.etlits.R;
 import org.moa.etlits.data.models.SyncLog;
+import org.moa.etlits.data.models.SyncLogCount;
 import org.moa.etlits.data.models.SyncLogWithErrors;
 import org.moa.etlits.jobs.SyncWorkManager;
 import org.moa.etlits.ui.adapters.SyncErrorAdapter;
@@ -77,20 +80,15 @@ public class SyncActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sync_new);
-
-
-        String syncType = getIntent().getStringExtra("syncType") != null
-                ? getIntent().getStringExtra("syncType")
-                : Constants.SyncType.ALL_DATA.toString();
         Boolean startSync = getIntent().getBooleanExtra("startSync", false);
 
         initViews();
-        initViewModels(null, syncType);
-        addEventListeners(null, syncType);
+        initViewModels();
+        addEventListeners();
 
         if (startSync  && savedInstanceState == null) {
-            startSync(syncType);
-            trackWorkStatus(syncType);
+            startSync();
+            trackWorkStatus();
         }
     }
 
@@ -99,6 +97,11 @@ public class SyncActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setTitle(R.string.title_data_sync);
             actionBar.setDisplayHomeAsUpEnabled(true);
+            final Drawable upArrow = ContextCompat.getDrawable(this, androidx.appcompat.R.drawable.abc_ic_ab_back_material);
+            if (upArrow != null) {
+                upArrow.setColorFilter(getResources().getColor(R.color.colorPrimaryDark, getTheme()), PorterDuff.Mode.SRC_ATOP);
+                actionBar.setHomeAsUpIndicator(upArrow);
+            }
         }
 
         startSync = findViewById(R.id.btn_sync);
@@ -127,74 +130,88 @@ public class SyncActivity extends AppCompatActivity {
         });
 
         updateUI(null);
+        updateSyncButton(false);
     }
 
 
 
-    private void initViewModels(String syncLogId, String syncType) {
-        syncViewModel = new ViewModelProvider((ViewModelStoreOwner) this, (ViewModelProvider.Factory) new SyncViewModel.SyncViewModelFactory(getApplication(), syncLogId)).get(SyncViewModel.class);
-        if (syncLogId != null) {
-            syncViewModel.setCurrentSyncId(syncLogId);
-            syncViewModel.getCurrentSyncLog().observe(this, syncLog -> {
+    private void initViewModels() {
+        syncViewModel = new ViewModelProvider((ViewModelStoreOwner) this, (ViewModelProvider.Factory) new SyncViewModel.SyncViewModelFactory(getApplication())).get(SyncViewModel.class);
+        syncViewModel.getSyncLog().observe(this, syncLog -> {
                 updateUI(syncLog);
-            });
-        }
+        });
     }
 
-    private void addEventListeners(String syncLogId, String syncType) {
+    private void addEventListeners() {
         startSync.setOnClickListener(v -> {
             if (!syncViewModel.getSyncRunning()) {
-                startSync(syncType);
-                trackWorkStatus(syncType);
+                startSync();
+                trackWorkStatus();
             } else {
-                if (syncViewModel.getCurrentSyncLog().getValue() != null
-                        && syncViewModel.getCurrentSyncLog().getValue().syncLog != null) {
-                    syncViewModel.getCurrentSyncLog().getValue().syncLog.setStatus(Constants.SyncStatus.STOPPING.toString());
-                    syncViewModel.update(syncViewModel.getCurrentSyncLog().getValue().syncLog);
+                if (syncViewModel.getSyncLog().getValue() != null
+                        && syncViewModel.getSyncLog().getValue().syncLog != null) {
+                    syncViewModel.getSyncLog().getValue().syncLog.setStatus(Constants.SyncStatus.STOPPING.toString());
+                    syncViewModel.update(syncViewModel.getSyncLog().getValue().syncLog);
                 }
 
-                WorkManager.getInstance(this).cancelAllWorkByTag(syncType);
+                WorkManager.getInstance(this).cancelAllWorkByTag(Constants.SyncType.ALL_DATA.toString());
             }
         });
     }
 
-    private void startSync(String syncType) {
-      //  if (syncLogId == null && syncViewModel.getCurrentSyncId().getValue() == null) {
-            String newSyncLogId = UUID.randomUUID().toString();
+    private void startSync() {
+         String newSyncLogId = UUID.randomUUID().toString();
             SyncLog newSyncLog = new SyncLog(newSyncLogId,
                     new Date(),
-                    syncType,
+                    Constants.SyncType.ALL_DATA.toString(),
                     Constants.SyncStatus.INITIALIZING.toString());
 
             syncViewModel.setCurrentSyncId(newSyncLogId);
             syncViewModel.insert(newSyncLog);
 
-            syncViewModel.getCurrentSyncLog().observe(this, syncLog -> {
+            syncViewModel.getSyncLog().observe(this, syncLog -> {
                 updateUI(syncLog);
             });
-     //   }
 
-        SyncWorkManager.startSync(this, syncViewModel.getCurrentSyncId().getValue(), syncType);
+
+        SyncWorkManager.startSync(this, syncViewModel.getCurrentSyncId().getValue(), Constants.SyncType.ALL_DATA.toString());
     }
 
-    private void trackWorkStatus(String syncType) {
-        WorkManager.getInstance(this).getWorkInfosByTagLiveData(syncType).observe(this, workInfos -> {
+    private void updateSyncButton(boolean isRunning) {
+        if (isRunning) {
+            GradientDrawable border = new GradientDrawable();
+            border.setColor(ContextCompat.getColor(this, R.color.white));
+            border.setStroke(5, ContextCompat.getColor(this, R.color.colorPrimary));
+            border.setCornerRadius(50);
+            startSync.setBackground(border);
+
+            startSync.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
+            startSync.setText(R.string.btn_sync_stop);
+            Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_stop_bold);
+            startSync.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+        } else {
+            GradientDrawable border = new GradientDrawable();
+            border.setColor(ContextCompat.getColor(this, R.color.colorPrimary));
+            border.setStroke(5, ContextCompat.getColor(this, R.color.colorPrimary));
+            border.setCornerRadius(50);
+            startSync.setBackground(border);
+
+            startSync.setTextColor(ContextCompat.getColor(this, R.color.white));
+            startSync.setText(R.string.btn_sync_start);
+            Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_play_bold);
+            startSync.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+        }
+    }
+    private void trackWorkStatus() {
+        WorkManager.getInstance(this).getWorkInfosByTagLiveData(Constants.SyncType.ALL_DATA.toString()).observe(this, workInfos -> {
             if (hasRunningWork(workInfos)) {
                 syncViewModel.setSyncRunning(true);
                 loadingSpinner.setVisibility(View.VISIBLE);
-                GradientDrawable border = new GradientDrawable();
-                border.setColor(ContextCompat.getColor(this, R.color.white));
-                border.setStroke(5, ContextCompat.getColor(this, R.color.colorPrimary));
-                //border.setCornerRadius(30);
-                startSync.setBackground(border);
-                startSync.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
-                startSync.setText(R.string.btn_sync_stop);
+                updateSyncButton(true);
             } else {
                 syncViewModel.setSyncRunning(false);
                 loadingSpinner.setVisibility(View.INVISIBLE);
-                startSync.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
-                startSync.setTextColor(ContextCompat.getColor(this, R.color.white));
-                startSync.setText(R.string.btn_sync_start);
+                updateSyncButton(false);
             }
         });
     }
@@ -211,6 +228,7 @@ public class SyncActivity extends AppCompatActivity {
 
     private void updateUI(SyncLogWithErrors log) {
         if (log != null && log.syncLog != null) {
+
             lastSync.setVisibility(View.VISIBLE);
             statusTextView.setText(getStatusMessage(log.syncLog.getStatus()));
             if (log.syncLog.getLastSync() != null) {
@@ -247,7 +265,7 @@ public class SyncActivity extends AppCompatActivity {
                return getString(R.string.sync_status_initializing);
         } else if (Constants.SyncStatus.IN_PROGRESS.toString().equals(status)) {
             return getString(R.string.sync_status_in_progress);
-        } else if (Constants.SyncStatus.COMPLETED.toString().equals(status)) {
+        } else if (Constants.SyncStatus.SUCCESSFUL.toString().equals(status)) {
             return getString(R.string.sync_status_completed);
         } else if (Constants.SyncStatus.FAILED.toString().equals(status)) {
             return getString(R.string.sync_status_failed);
@@ -270,9 +288,20 @@ public class SyncActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            SyncLogWithErrors log = syncViewModel.getCurrentSyncLog().getValue();
-            if (log !=null && log.syncLog != null && Constants.SyncType.CONFIG_DATA.toString().equals(log.syncLog.getType())
-                    &&  !Constants.SyncStatus.COMPLETED.toString().equals(log.syncLog.getStatus())) {
+            SyncLogWithErrors log = syncViewModel.getSyncLog().getValue();
+            List<SyncLogCount> logsByStatus = syncViewModel.getLogsCountByStatus().getValue();
+            boolean hasSuccess = false;
+            if (logsByStatus != null) {
+                   for (SyncLogCount syncLogCount : logsByStatus) {
+                    if (Constants.SyncStatus.SUCCESSFUL.toString().equals(syncLogCount.status)
+                            && syncLogCount.logCount > 0) {
+                        hasSuccess = true;
+                    }
+                }
+            }
+
+            if (log !=null && log.syncLog != null && !hasSuccess
+                    &&  !Constants.SyncStatus.SUCCESSFUL.toString().equals(log.syncLog.getStatus())) {
                 showDataInitDialog();
             } else {
                 SyncActivity.super.onBackPressed();
