@@ -76,7 +76,7 @@ public class SyncActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sync_new);
+        setContentView(R.layout.activity_sync);
         initViews();
         initViewModels();
         addEventListeners();

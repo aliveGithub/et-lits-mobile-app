@@ -1,388 +1,308 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <ScrollView
-    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    tools:context=".ui.activities.SyncActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".ui.activities.SyncActivity">
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btn_sync"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:paddingLeft="32dp"
-            android:paddingRight="32dp"
-            android:text="@string/btn_sync_start"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/cv_sync_action"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cv_sync_status"
-            app:layout_constraintVertical_bias="0.3" />
-
-        <ProgressBar
-            android:id="@+id/pb_loading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:elevation="10dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cv_sync_action"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="130dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.445">
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="bottom"
+            android:orientation="vertical"
+            android:padding="48dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:background="@drawable/rounded_top_corners">
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/img_history"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.924"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.177"
-                    app:srcCompat="@drawable/ic_history" />
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:layout_marginRight="48dp">
 
-                <TextView
-                    android:id="@+id/tv_status"
-                    android:layout_width="99dp"
-                    android:layout_height="19dp"
-                    android:text="@string/sync_status_not_started"
-                    android:textColor="@color/white"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.542"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.095" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tv_last_sync"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="44dp"
-                    android:text="Date"
-                    android:textColor="@color/white"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.053"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/tv_sync_status_label" />
+                        <TextView
+                            android:id="@+id/tv_records_count"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/inter_bold"
+                            android:gravity="center"
+                            android:paddingRight="@dimen/big_padding"
+                            android:text="0"
+                            android:textColor="@color/colorPrimary"></TextView>
 
-                <TextView
-                    android:id="@+id/tv_sync_status_label"
-                    android:layout_width="106dp"
-                    android:layout_height="26dp"
-                    android:text="Sync Status"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.052"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.048" />
+                        <TextView
+                            android:id="@+id/tv_records"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingRight="@dimen/big_padding"
+                            android:gravity="center"
+                            android:text="@string/sync_records"
+                            android:textColor="@color/colorPrimary"></TextView>
+                    </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tv_history"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="@string/sync_history_icon_txt"
-                    android:textColor="@color/white"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.923"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/img_history" />
+                    <ImageView
+                        android:id="@+id/img_mobile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="16dp"
+                        android:layout_weight="2"
+                        app:srcCompat="@drawable/ic_mobile_phone" />
 
-                <TextView
-                    android:id="@+id/tv_stopped_by_user"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:text="@string/synced_by"
-                    android:textColor="@color/white"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.053"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_last_sync" />
+                    <ImageView
+                        android:id="@+id/img_stop"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="16dp"
+                        android:layout_weight="2"
+                        app:srcCompat="@drawable/ic_data_transfer" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <ImageView
+                        android:id="@+id/img_server"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        app:srcCompat="@drawable/ic_desktop_tower_fill" />
 
-        </androidx.cardview.widget.CardView>
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cv_sync_status"
-            android:layout_width="match_parent"
-            android:layout_height="130dp"
-            android:background="@color/colorPrimary"
-            app:cardBackgroundColor="@android:color/transparent"
-            app:cardCornerRadius="0dp"
-            app:cardElevation="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/cv_sync_action"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.227">
+                </LinearLayout>
+            </LinearLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="130dp">
-
-                <ImageView
-                    android:id="@+id/img_mobile"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/img_stop"
-                    app:layout_constraintHorizontal_bias="0.715"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.600"
-                    app:srcCompat="@drawable/ic_mobile_phone" />
-
-                <ImageView
-                    android:id="@+id/img_stop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/img_server"
-                    app:layout_constraintHorizontal_bias="0.811"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_data_transfer" />
-
-                <ImageView
-                    android:id="@+id/img_server"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.812"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_desktop_tower_fill" />
+                android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/tv_records_count"
+                    android:id="@+id/tv_stale_data"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0"
-                    android:textColor="@color/colorPrimary"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.111"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.459" />
-
-                <TextView
-                    android:id="@+id/tv_records"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="records"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.089"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.63" />
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/sync_data_may_be_stale"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/tv_network_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/no_internet_connection_short"
-                    android:visibility="invisible"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.788"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.936" />
+                    android:visibility="gone"
+                    android:layout_marginLeft="@dimen/big_padding"
+                    android:layout_toRightOf="@id/tv_stale_data"
+                    android:layout_centerInParent="true"/>
+            </RelativeLayout>
+        </LinearLayout>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.cardview.widget.CardView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cv_sync_details"
-            android:layout_width="409dp"
-            android:layout_height="0dp"
-            android:background="@color/colorPrimary"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cv_sync_action">
+            <Button
+                android:id="@+id/btn_sync"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:padding="@dimen/small_padding"
+                android:text="@string/btn_sync_start"
+                android:textColor="@color/white"
+                android:drawableLeft="@drawable/ic_play_bold"
+                android:fontFamily="@font/inter_bold"/>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <ProgressBar
+                android:id="@+id/pb_loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:elevation="10dp"
+                android:visibility="invisible" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_top_corners"
+            android:orientation="horizontal"
+            android:padding="@dimen/small_padding">
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/light_gray">
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cv_errors"
-                    android:layout_width="350dp"
-                    android:layout_height="100dp"
-                    app:cardCornerRadius="15dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/cv_sync_stats">
+                <TextView
+                    android:id="@+id/tv_sync_status_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/very_small_padding"
+                    android:singleLine="true"
+                    android:text="@string/sync_status"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/inter_bold"
+                    android:textSize="16sp" />
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="352dp"
-                        android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-                        <ListView
-                            android:id="@+id/lst_errors"
-                            android:layout_width="348dp"
-                            android:layout_height="63dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/tv_errors_title"
-                            app:layout_constraintVertical_bias="0.7" />
+                    <TextView
+                        android:id="@+id/tv_last_sync"
+                        android:layout_width="160dp"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:textColor="@color/white"
+                        android:padding="@dimen/very_small_padding"
+                        android:visibility="invisible"/>
 
-                        <TextView
-                            android:id="@+id/tv_errors_title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:text="@string/sync_errors"
-                            app:layout_constraintBottom_toTopOf="@+id/lst_errors"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.054"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.5" />
+                    <TextView
+                        android:id="@+id/tv_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:singleLine="true"
+                        android:text="@string/sync_status_not_started"
+                        android:padding="@dimen/very_small_padding"
+                        android:textColor="@color/white" />
+                </LinearLayout>
 
-                        <View
-                            android:id="@+id/vw_line2"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/light_gray"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.3"
-                            tools:layout_editor_absoluteX="0dp" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </androidx.cardview.widget.CardView>
+                <TextView
+                    android:id="@+id/tv_stopped_by_user"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sync_stopped_by_user"
+                    android:textColor="@color/white"
+                    android:padding="@dimen/very_small_padding"
+                    android:visibility="gone"/>
+            </LinearLayout>
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cv_sync_stats"
-                    android:layout_width="350dp"
-                    android:layout_height="130dp"
-                    android:layout_marginStart="1dp"
-                    android:layout_marginEnd="1dp"
-                    app:cardCornerRadius="15dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.091">
+            <LinearLayout
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:orientation="vertical">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.5">
+                <ImageView
+                    android:id="@+id/img_history"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_history" />
 
-                        <TextView
-                            android:id="@+id/tv_records_received"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/sync_records_received"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.059"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/tv_records_not_sent"
-                            app:layout_constraintVertical_bias="0.5" />
+                <TextView
+                    android:id="@+id/tv_history"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/very_small_padding"
+                    android:text="@string/sync_history_icon_txt"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+        </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/tv_records_not_sent"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/sync_records_not_sent"
-                            app:layout_constraintBottom_toTopOf="@+id/tv_records_received"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.059"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/tv_records_sent"
-                            app:layout_constraintVertical_bias="0.5" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:background="@color/light_gray"
+            android:padding="@dimen/big_padding">
 
-                        <TextView
-                            android:id="@+id/tv_update_details"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/sync_update_details"
-                            app:layout_constraintBottom_toTopOf="@+id/tv_records_sent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.061"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.5" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/small_padding"
+                android:orientation="vertical"
+                android:background="@drawable/rounded_corners">
 
-                        <TextView
-                            android:id="@+id/tv_records_sent"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/sync_records_sent"
-                            app:layout_constraintBottom_toTopOf="@+id/tv_records_not_sent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.056"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/tv_update_details"
-                            app:layout_constraintVertical_bias="0.5" />
+                <TextView
+                    android:id="@+id/tv_update_details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sync_update_details"
+                    android:padding="@dimen/very_small_padding"/>
 
-                        <View
-                            android:id="@+id/vw_line1"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/light_gray"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.25"
-                            tools:layout_editor_absoluteX="0dp" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </androidx.cardview.widget.CardView>
+                <View
+                    android:id="@+id/vw_line1"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/light_gray"
+                    android:padding="@dimen/very_small_padding"/>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/tv_records_received"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sync_records_received"
+                    android:padding="@dimen/very_small_padding"/>
 
-        </androidx.cardview.widget.CardView>
+                <TextView
+                    android:id="@+id/tv_records_not_sent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sync_records_not_sent"
+                    android:padding="@dimen/very_small_padding"/>
+
+                <TextView
+                    android:id="@+id/tv_records_sent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sync_records_sent"
+                    android:padding="@dimen/very_small_padding"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/small_padding"
+                android:orientation="vertical"
+                android:layout_marginTop="24dp"
+                app:cardCornerRadius="16dp"
+                android:background="@drawable/rounded_corners">
+                <TextView
+                    android:id="@+id/tv_errors_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/small_padding"
+                    android:text="@string/sync_errors" />
+
+                <View
+                    android:id="@+id/vw_line2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/light_gray" />
+
+                <ListView
+                    android:id="@+id/lst_errors"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp" />
+
+            </LinearLayout>
 
 
+        </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </ScrollView>
-
-</LinearLayout>
