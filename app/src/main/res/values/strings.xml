@@ -46,7 +46,7 @@
     <string name="sync_records_not_sent">Records not sent: %1$s</string>
     <string name="sync_records_received">Records received: %1$s</string>
     <string name="sync_errors">Errors</string>
-    <string name="sync_error_404">ET-LITS server cannot be reached.</string>
+    <string name="sync_error_server_unreachable">ET-LITS server cannot be reached.</string>
     <string name="sync_error_401">Authentication error occured.</string>
     <string name="sync_error_generic">Sync failed. Unknown sync error.</string>
     <string name="sync_status_not_started">Not Started</string>
