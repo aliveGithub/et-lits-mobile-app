@@ -37,7 +37,7 @@ public class SyncErrorAdapter extends ArrayAdapter<SyncError> {
     }
 
     public int getErrorMessage(String errorKey) {
-        if (String.valueOf(HttpURLConnection.HTTP_NOT_FOUND).equals(errorKey)) {
+        if (String.valueOf(Constants.SERVER_NOT_REACHABLE).equals(errorKey)) {
             return R.string.sync_error_404;
         } else if (String.valueOf(HttpURLConnection.HTTP_UNAUTHORIZED).equals(errorKey)) {
             return R.string.sync_error_401;

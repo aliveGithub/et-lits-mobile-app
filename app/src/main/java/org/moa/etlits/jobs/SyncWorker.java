@@ -118,10 +118,10 @@ public class SyncWorker extends Worker {
             return Result.failure();
         } catch (UnknownHostException e) {
             if (getRunAttemptCount() < 3) {
-                logError(String.valueOf(HttpURLConnection.HTTP_NOT_FOUND), "Server cannot be reached.");
+                logError(Constants.SERVER_NOT_REACHABLE, "Server cannot be reached.");
                 return Result.retry();
             } else {
-                logError(String.valueOf(HttpURLConnection.HTTP_NOT_FOUND), "Server cannot be reached.");
+                logError(Constants.SERVER_NOT_REACHABLE, "Server cannot be reached.");
                 return Result.failure();
             }
         } catch (Exception e) {
