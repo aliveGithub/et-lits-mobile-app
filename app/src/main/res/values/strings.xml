@@ -72,5 +72,6 @@
     <string name="sync_stopped_by_user">Stopped by user</string>
     <string name="sync_status">Sync Status</string>
     <string name="sync_data_may_be_stale">Data may be stale</string>
+    <string name="sync_info_close">Close</string>
 
 </resources>
