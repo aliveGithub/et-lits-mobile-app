@@ -45,7 +45,7 @@ public class LoginViewModel extends ViewModel {
             @Override
             public void onResponse(Call call, Response response) {
                 if (response.isSuccessful()) {
-                    loginResult.postValue(new LoginResult(username, LoginResult.LoginStatus.SUCCESS));
+                    loginResult.postValue(new LoginResult(username, password, LoginResult.LoginStatus.SUCCESS));
                 } else {
                     loginResult.postValue(new LoginResult(response.code(),LoginResult.LoginStatus.FAIL));
                 }

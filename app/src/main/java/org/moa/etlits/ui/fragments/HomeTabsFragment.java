@@ -13,9 +13,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 import org.moa.etlits.R;
+import org.moa.etlits.ui.activities.SyncActivity;
 import org.moa.etlits.ui.activities.AnimalListActivity;
 import org.moa.etlits.ui.activities.LoginActivity;
 import org.moa.etlits.ui.activities.MainActivity;
+import org.moa.etlits.utils.Constants;
 import org.moa.etlits.utils.EncryptedPreferences;
 
 import androidx.annotation.NonNull;
@@ -48,7 +50,9 @@ public class HomeTabsFragment extends Fragment {
                 loadFragment(homeFragment);
                 return true;
             } else if(item.getItemId() == R.id.navigation_sync) {
-                loadFragment(syncFragment);
+                Intent intent = new Intent(getActivity(), SyncActivity.class);
+                intent.putExtra("syncType", Constants.SyncType.ALL_DATA.toString());
+                startActivity(intent);
                 return true;
             } else if (item.getItemId() == R.id.navigation_move) {
                 loadFragment(moveFragment);
@@ -95,7 +99,8 @@ public class HomeTabsFragment extends Fragment {
         builder.setPositiveButton("Sign Out", new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialog, int which){
-                encryptedPreferences.remove("username");
+                encryptedPreferences.remove(Constants.USERNAME);
+                encryptedPreferences.remove(Constants.PASSWORD);
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 startActivity(intent);
                 getActivity().finish();

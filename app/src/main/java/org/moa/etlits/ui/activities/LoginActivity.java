@@ -22,7 +22,9 @@ import org.moa.etlits.ui.validation.LoginFormState;
 import org.moa.etlits.ui.viewmodels.login.LoginResult;
 import org.moa.etlits.ui.viewmodels.login.LoginViewModel;
 import org.moa.etlits.ui.viewmodels.login.LoginViewModelFactory;
+import org.moa.etlits.utils.Constants;
 import org.moa.etlits.utils.EncryptedPreferences;
+import org.moa.etlits.utils.NetworkUtil;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -56,6 +58,9 @@ public class LoginActivity extends AppCompatActivity {
         passwordLayout = binding.passwordLayout;
         builder = new AlertDialog.Builder(LoginActivity.this);
         encryptedPreferences = new EncryptedPreferences(LoginActivity.this);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
         initViewModels();
         attachEventListeners();
     }
@@ -89,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 loadingProgressBar.setVisibility(View.GONE);
                 if (loginResult.getLoginStatus().equals(LoginResult.LoginStatus.FAIL) && loginResult.getError() != null) {
-                    showLoginFailed(loginResult.getError());
+                    showLoginFailed(getMessage(loginResult.getError()));
                 }
                 if (loginResult.getLoginStatus().equals(LoginResult.LoginStatus.SUCCESS)) {
                     onLoginSuccess(loginResult);
@@ -125,8 +130,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    loginViewModel.login(usernameEditText.getText().toString().trim(),
-                            passwordEditText.getText().toString().trim());
+                    login();
                 }
                 return false;
             }
@@ -135,29 +139,41 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString().trim(),
-                        passwordEditText.getText().toString().trim());
+                login();
             }
         });
     }
 
+    private void login() {
+        if (NetworkUtil.isInternetConnected(LoginActivity.this)) {
+            loadingProgressBar.setVisibility(View.VISIBLE);
+            loginViewModel.login(usernameEditText.getText().toString().trim(),
+                    passwordEditText.getText().toString().trim());
+        } else {
+            showLoginFailed(getString(R.string.no_internet_connection));
+        }
+    }
+
     private void onLoginSuccess(LoginResult loginResult) {
-        //TODO: save credentials for use in sync
-        encryptedPreferences.write("username", loginResult.getUsername());
+        encryptedPreferences.write(Constants.USERNAME, loginResult.getUsername());
+        encryptedPreferences.write(Constants.PASSWORD, loginResult.getPassword());
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }
 
-    private void showLoginFailed(@StringRes Integer errorCode) {
+    private String getMessage(Integer errorCode) {
         if (errorCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
-            builder.setTitle(R.string.login_alert_title).setMessage(R.string.login_unauthorized);
+            return getString(R.string.login_unauthorized);
         } else if (errorCode == HttpURLConnection.HTTP_NOT_FOUND) {
-            builder.setTitle(R.string.login_alert_title).setMessage(R.string.login_server_unreachable);
+
+            return getString(R.string.login_server_unreachable);
         } else {
-            builder.setTitle(R.string.login_alert_title).setMessage(R.string.login_generic_error);
+            return getString(R.string.login_generic_error);
         }
+    }
+    private void showLoginFailed(String message) {
+        builder.setTitle(R.string.login_alert_title).setMessage(message);
         builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

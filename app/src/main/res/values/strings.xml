@@ -18,6 +18,46 @@
     <string name="login_server_unreachable">Server is unreachable.</string>
     <string name="login_generic_error">Login failed.</string>
     <string name="sign_out_confirmation_prompt">Do you want to sign out?</string>
+    <string name="no_internet_connection">No internet connection. Please connect to wi-fi or mobile data.</string>
+    <string name="no_internet_connection_short">No internet</string>
+    <!--Sync-->
+    <string name="sync_init_dialog_title">Data Initialization</string>
+    <string name="sync_init_dialog_msg">To get started, the app needs to download the necessary data.</string>
+    <string name="sync_init_dialog_msg_resume">Data initialization has not finished. The app needs to complete data download.</string>
+    <string name="sync_start_data_download">START DATA DOWNLOAD</string>
+    <string name="sync_resume_data_download">RESUME DATA DOWNLOAD</string>
+    <string name="sync_view_last_attempt">VIEW LAST ATTEMPT</string>
+    <string name="sync_exit_app">EXIT APP</string>
+    <string name="title_data_sync">Data Sync</string>
+    <string name="btn_sync_start">START</string>
+    <string name="btn_sync_stop">STOP</string>
+    <string name="sync_date">%1$s</string>
+    <string name="sync_stopped_msg">%1$s</string>
+    <string name="synced_by">Synced by: %1$s</string>
+    <string name="sync_init_dialog_exit_no">NO</string>
+    <string name="sync_init_dialog_exit_yes">YES, STOP &amp; EXIT THE APP</string>
+    <string name="sync_init_dialog_exit_msg">Initial data download is in progress. Do you want to stop and exit the app?</string>
+    <string name="sync_info_text">During data synchronization, the mobile app downloads from the ET-LITS web application the data to be stored locally for repeated and offline use. Changes done on the mobile app are sent back to the ET-LITS web application for final validation and permanent storage. Until then, locally stored data is not officially recognized. Some data can be changed via the ET-LITS website. If this data is not refreshed on your device, then your changes that rely on it may be rejected during data sync. Locally stored changes may also get lost due to device damage or unexpected data storage issues. Data synchronization must be done as often as possible, immediately the internet connection is available.</string>
+    <string name="sync_records">records</string>
+    <string name="sync_history_icon_txt">History</string>
+    <string name="sync_view_details">View Details</string>
+    <string name="sync_update_details">Update Details</string>
+    <string name="sync_records_sent">Records sent: %1$s</string>
+    <string name="sync_records_not_sent">Records not sent: %1$s</string>
+    <string name="sync_records_received">Records received: %1$s</string>
+    <string name="sync_errors">Errors</string>
+    <string name="sync_error_server_unreachable">ET-LITS server cannot be reached.</string>
+    <string name="sync_error_401">Authentication error occured.</string>
+    <string name="sync_error_generic">Sync failed. Unknown sync error.</string>
+    <string name="sync_status_not_started">Not Started</string>
+    <string name="sync_status_initializing">Initializing</string>
+    <string name="sync_status_in_progress">In Progress</string>
+    <string name="sync_status_completed">Success</string>
+    <string name="sync_status_stopping">Stopping</string>
+    <string name="sync_status_stopped">Stopped</string>
+    <string name="sync_status_failed">Failed</string>
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="menu_sync">Sync</string>
@@ -29,4 +69,9 @@
     <string name="menu_about">About</string>
     <string name="menu_logout">Logout</string>
     <string name="menu_move">Move</string>
+    <string name="sync_stopped_by_user">Stopped by user</string>
+    <string name="sync_status">Sync Status</string>
+    <string name="sync_data_may_be_stale">Data may be stale</string>
+    <string name="sync_info_close">Close</string>
+
 </resources>

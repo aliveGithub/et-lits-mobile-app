@@ -4,6 +4,7 @@ import java.util.Date;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "animals")
@@ -24,6 +25,7 @@ public class Animal {
     public Animal() {
     }
 
+    @Ignore
     public Animal(long id, String tag, String method, Date dateIdentification) {
         this.id = id;
         this.tag = tag;

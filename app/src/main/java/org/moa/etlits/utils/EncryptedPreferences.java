@@ -7,7 +7,7 @@ import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKeys;
 
 public class EncryptedPreferences {
-    private final String ENCRYPTED_FILE_NAME = "etlits_encrypted_prefs";
+    private final String ENCRYPTED_FILE_NAME = "et-lits-encrypted-prefs";
     private SharedPreferences mEncryptedSharedPref;
     public EncryptedPreferences(Context context) {
         try {

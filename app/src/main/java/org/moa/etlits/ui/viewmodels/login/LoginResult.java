@@ -11,13 +11,16 @@ public class LoginResult {
     @Nullable
     private String username;
 
+    private String password;
+
     @Nullable
     private LoginStatus loginStatus;
 
     @Nullable
     private Integer error;
-    public LoginResult(@Nullable String username, @Nullable LoginStatus loginStatus) {
+    public LoginResult(@Nullable String username, String password, @Nullable LoginStatus loginStatus) {
         this.username = username;
+        this.password = password;
         this.loginStatus = loginStatus;
     }
 
@@ -35,22 +38,17 @@ public class LoginResult {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     public LoginStatus getLoginStatus() {
         return loginStatus;
     }
 
-    public boolean isLoggedIn() {
-        return LoginStatus.SUCCESS.equals(loginStatus);
-    }
-    public void setLoginStatus(LoginStatus loginStatus) {
-        this.loginStatus = loginStatus;
+
+    public String getPassword() {
+        return password;
     }
 
-    public enum LoginStatus {
+   public enum LoginStatus {
         SUCCESS,
         FAIL
     }
