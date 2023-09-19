@@ -19,7 +19,6 @@ import org.moa.etlits.utils.Constants;
 import org.moa.etlits.utils.EncryptedPreferences;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.UnknownHostException;
 import java.util.Date;
 
@@ -118,10 +117,10 @@ public class SyncWorker extends Worker {
             return Result.failure();
         } catch (UnknownHostException e) {
             if (getRunAttemptCount() < 3) {
-                logError(Constants.SERVER_NOT_REACHABLE, "Server cannot be reached.");
+                logError(Constants.SERVER_UNREACHABLE, "Server cannot be reached.");
                 return Result.retry();
             } else {
-                logError(Constants.SERVER_NOT_REACHABLE, "Server cannot be reached.");
+                logError(Constants.SERVER_UNREACHABLE, "Server cannot be reached.");
                 return Result.failure();
             }
         } catch (Exception e) {

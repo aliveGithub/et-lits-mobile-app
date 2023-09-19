@@ -12,7 +12,7 @@ public class Constants {
      //sync error codes
     public static String UNKNOWN_SYNC_ERROR = "UNKNOWN_SYNC_ERROR";
 
-    public static String SERVER_NOT_REACHABLE = "SERVER_NOT_REACHABLE";
+    public static String SERVER_UNREACHABLE = "SERVER_UNREACHABLE";
 
     public enum SyncType {
         CONFIG_DATA,
