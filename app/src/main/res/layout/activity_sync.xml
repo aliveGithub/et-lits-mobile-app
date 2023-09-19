@@ -19,7 +19,7 @@
             android:layout_weight="1"
             android:gravity="bottom"
             android:orientation="vertical"
-            android:padding="48dp">
+            android:padding="@dimen/big_spacing">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -32,7 +32,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="horizontal"
-                    android:layout_marginRight="48dp">
+                    android:layout_marginRight="@dimen/big_spacing">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -64,7 +64,7 @@
                         android:id="@+id/img_mobile"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="16dp"
+                        android:layout_marginRight="@dimen/big_padding"
                         android:layout_weight="2"
                         app:srcCompat="@drawable/ic_mobile_phone" />
 
@@ -201,9 +201,9 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="48dp"
+                android:layout_width="@dimen/width_vertical_img_btn"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="@dimen/small_padding"
                 android:orientation="vertical">
 
                 <ImageView
@@ -279,7 +279,7 @@
                 android:padding="@dimen/small_padding"
                 android:orientation="vertical"
                 android:layout_marginTop="24dp"
-                app:cardCornerRadius="16dp"
+                app:cardCornerRadius="@dimen/big_padding"
                 android:background="@drawable/rounded_corners">
                 <TextView
                     android:id="@+id/tv_errors_title"
