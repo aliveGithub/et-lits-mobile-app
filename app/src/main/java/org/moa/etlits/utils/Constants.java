@@ -14,6 +14,9 @@ public class Constants {
 
     public static String SERVER_UNREACHABLE = "SERVER_UNREACHABLE";
 
+    //Unmovable types
+    public static String UNMOVABLE_ESTABLISHMENT = "ESTABLISHMENT";
+
     public enum SyncType {
         CONFIG_DATA,
         ALL_DATA

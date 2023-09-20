@@ -3,17 +3,21 @@ package org.moa.etlits.jobs;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import org.moa.etlits.api.RetrofitUtil;
 import org.moa.etlits.api.response.CatalogType;
 import org.moa.etlits.api.response.ConfigResponse;
 import org.moa.etlits.api.response.EntryType;
+import org.moa.etlits.api.response.TypeObjectUnmovable;
 import org.moa.etlits.api.response.ValueType;
 import org.moa.etlits.api.services.ConfigService;
 import org.moa.etlits.data.models.CategoryValue;
+import org.moa.etlits.data.models.Establishment;
 import org.moa.etlits.data.models.SyncError;
 import org.moa.etlits.data.models.SyncLog;
 import org.moa.etlits.data.repositories.CategoryValueRepository;
+import org.moa.etlits.data.repositories.EstablishmentRepository;
 import org.moa.etlits.data.repositories.SyncLogRepository;
 import org.moa.etlits.utils.Constants;
 import org.moa.etlits.utils.EncryptedPreferences;
@@ -23,6 +27,7 @@ import java.net.UnknownHostException;
 import java.util.Date;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 import okhttp3.Credentials;
@@ -35,6 +40,8 @@ public class SyncWorker extends Worker {
     private final CategoryValueRepository categoryValueRepository;
     private SyncLogRepository syncLogRepository;
 
+    private EstablishmentRepository establishmentRepository;
+
     private final EncryptedPreferences encryptedPreferences;
     private final SharedPreferences sharedPreferences;
 
@@ -43,14 +50,15 @@ public class SyncWorker extends Worker {
         encryptedPreferences = new EncryptedPreferences(context);
         configService = RetrofitUtil.createConfigService();
         categoryValueRepository = new CategoryValueRepository((Application) getApplicationContext());
+        establishmentRepository = new EstablishmentRepository((Application) getApplicationContext());
         sharedPreferences = context.getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE);
     }
 
     private SyncResult saveConfigData(ConfigResponse configResponse) {
         int received = 0;
         if (configResponse != null) {
-            if (configResponse.getCatalogs() != null) {
 
+            if (configResponse.getCatalogs() != null) {
                 for (CatalogType catalog : configResponse.getCatalogs()) {
                     for (EntryType entry : catalog.getEntry()) {
                         CategoryValue catValue = new CategoryValue();
@@ -65,13 +73,20 @@ public class SyncWorker extends Worker {
                     }
                 }
             }
+
+            if (configResponse.getObjectUnmovable() != null) {
+                for (TypeObjectUnmovable unmovable : configResponse.getObjectUnmovable()) {
+                    establishmentRepository.insert(unmovable);
+                    ++received;
+                }
+            }
         }
         //TODO: save - objectUnmovable
         //TODO: save - objectDetail
         return new SyncResult(true, 0, received, 0, "");
     }
 
-    private SyncResult fetchAndSaveConfigData() throws IOException, SyncStoppedException {
+     private SyncResult fetchAndSaveConfigData() throws IOException, SyncStoppedException {
         String username = encryptedPreferences.read(Constants.USERNAME);
         String password = encryptedPreferences.read(Constants.PASSWORD);
         String authorization = Credentials.basic(username, password);
@@ -124,6 +139,7 @@ public class SyncWorker extends Worker {
                 return Result.failure();
             }
         } catch (Exception e) {
+            e.printStackTrace();
             if (getRunAttemptCount() < 3) {
                 logError(Constants.UNKNOWN_SYNC_ERROR, e.toString());
                 return Result.retry();

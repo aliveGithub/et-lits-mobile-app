@@ -73,5 +73,6 @@
     <string name="sync_status">Sync Status</string>
     <string name="sync_data_may_be_stale">Data may be stale</string>
     <string name="sync_info_close">Close</string>
+    <string name="home_establishment_search">Establishment Search</string>
 
 </resources>
