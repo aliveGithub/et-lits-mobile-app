@@ -22,4 +22,7 @@ public interface EstablishmentDao {
 
     @Query("SELECT * FROM establishments")
     LiveData<List<Establishment>> getAll();
+
+    @Query("SELECT * FROM establishments WHERE code=:code LIMIT 1")
+    LiveData<Establishment> loadByCode(String code);
 }

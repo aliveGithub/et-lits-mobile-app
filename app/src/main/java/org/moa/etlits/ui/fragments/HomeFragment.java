@@ -1,26 +1,25 @@
 package org.moa.etlits.ui.fragments;
 
 import android.app.Application;
+import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Toast;
 
 import org.moa.etlits.R;
 import org.moa.etlits.data.repositories.EstablishmentRepository;
+import org.moa.etlits.ui.activities.EstablishmentSummaryActivity;
 import org.moa.etlits.ui.activities.MainActivity;
 import org.moa.etlits.ui.adapters.EstablishmentAdapter;
 
 import java.util.ArrayList;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 public class HomeFragment extends Fragment {
     private AutoCompleteTextView autoCompleteTextView;
@@ -55,7 +54,7 @@ public class HomeFragment extends Fragment {
 
         autoCompleteTextView.setAdapter(establishmentAdapter);;
         EstablishmentRepository establishmentRepository = new EstablishmentRepository((Application) getActivity().getApplicationContext());
-        establishmentRepository.getAll().observe((MainActivity) getActivity(), lst -> {
+        establishmentRepository.getAll().observe(getActivity(), lst -> {
             establishmentAdapter.clear();
             establishmentAdapter.addAll(lst);
             establishmentAdapter.notifyDataSetChanged();
@@ -65,7 +64,14 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getItemAtPosition(position).toString();
-                Toast.makeText(getActivity(), "Selected: " + selectedItem, Toast.LENGTH_SHORT).show();
+                if (selectedItem != null) {
+                    String code = selectedItem.split("-")[0];
+                    Intent intent = new Intent(getActivity(), EstablishmentSummaryActivity.class);
+                    intent.putExtra("code", code.trim());
+
+                    startActivity(intent);
+                }
+
             }
         });
 

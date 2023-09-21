@@ -76,7 +76,11 @@ public class Establishment {
     }
 
     public String getLatitude() {
-        return latitude;
+        if (latitude == null) {
+            return "";
+        }
+
+       return latitude;
     }
 
     public void setLatitude(String latitude) {
@@ -84,7 +88,10 @@ public class Establishment {
     }
 
     public String getLongitude() {
-        return longitude;
+       if (longitude == null) {
+            return "";
+       }
+       return longitude;
     }
 
     public void setLongitude(String longitude) {
@@ -92,6 +99,10 @@ public class Establishment {
     }
 
     public String getCity() {
+        if (city == null) {
+            return "";
+        }
+
         return city;
     }
 
@@ -100,6 +111,10 @@ public class Establishment {
     }
 
     public String getRegion() {
+        if (region == null) {
+            return "";
+        }
+
         return region;
     }
 
@@ -108,7 +123,10 @@ public class Establishment {
     }
 
     public String getWoreda() {
-        return woreda;
+        if (woreda == null) {
+            return "";
+        }
+       return woreda;
     }
 
     public void setWoreda(String woreda) {
@@ -116,6 +134,10 @@ public class Establishment {
     }
 
     public String getZone() {
+        if (zone == null) {
+            return "";
+        }
+
         return zone;
     }
 
@@ -157,5 +179,13 @@ public class Establishment {
 
     public String toString() {
         return code + " - " + name;
+    }
+
+    public String getPhysicalAddress() {
+      return (getCity() + " " + getWoreda() + " " + getZone() + " " + getRegion()).trim();
+    }
+
+    public String getLatLng() {
+        return (getLatitude() + " " + getLongitude()).trim();
     }
 }

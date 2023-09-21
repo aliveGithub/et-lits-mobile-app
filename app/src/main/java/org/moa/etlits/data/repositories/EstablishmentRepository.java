@@ -27,6 +27,10 @@ public class EstablishmentRepository {
         return establishments;
     }
 
+    public LiveData<Establishment> loadByCode(String code) {
+        return establishmentDao.loadByCode(code);
+    }
+
     public void insert(Establishment establishment) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             establishmentDao.insert(establishment);

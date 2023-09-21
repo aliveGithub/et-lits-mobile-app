@@ -74,5 +74,17 @@
     <string name="sync_data_may_be_stale">Data may be stale</string>
     <string name="sync_info_close">Close</string>
     <string name="home_establishment_search">Establishment Search</string>
+    <string name="establishment_title">Establishment</string>
+    <string name="establishment_summary_pic">PIC</string>
+    <string name="establishment_type">Type</string>
+    <string name="establishment_phone">Phone</string>
+    <string name="establishment_not_specified">not specified</string>
+    <string name="establishment_mobile">Mobile</string>
+    <string name="establishment_alternative_postal_address">Alternative Postal Address</string>
+    <string name="establishment_physical_address">Physical Address</string>
+    <string name="establishment_latitude_longitude">Latitude/Longitude</string>
+    <string name="establishment_name">Name</string>
+    <string name="establishment_email">Email</string>
+    <string name="establishment_use_by_default">Use By Default</string>
 
 </resources>
