@@ -1,14 +1,19 @@
 package org.moa.etlits.ui.activities;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.moa.etlits.R;
 import org.moa.etlits.data.repositories.EstablishmentRepository;
+import org.moa.etlits.utils.Constants;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +30,7 @@ public class EstablishmentSummaryActivity extends AppCompatActivity {
     private TextView mobile;
     private TextView email;
 
+    private Button setDefault;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,8 +46,19 @@ public class EstablishmentSummaryActivity extends AppCompatActivity {
         phone = findViewById(R.id.tv_phone);
         mobile = findViewById(R.id.tv_mobile);
         email = findViewById(R.id.tv_email);
+        setDefault = findViewById(R.id.btn_set_default);
 
         String code = getIntent().getStringExtra("code");
+
+        setDefault.setOnClickListener(v -> {
+            SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString(Constants.DEFAULT_ESTABLISHMENT, code);
+            editor.apply();
+            Toast.makeText(this, getString(R.string.establishment_set_default_msg, code), Toast.LENGTH_SHORT).show();
+        });
+
+
         EstablishmentRepository establishmentRepository = new EstablishmentRepository(this.getApplication());
         establishmentRepository.loadByCode(code).observe(this, establishment -> {
             if (establishment != null) {

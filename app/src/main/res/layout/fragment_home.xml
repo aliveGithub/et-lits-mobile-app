@@ -38,7 +38,8 @@
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:background="@drawable/green_rounded_border_white_bg_color"
-                android:text=""/>
+                android:text=""
+                android:hint="@string/establishment_search_hint"/>
 
         </LinearLayout>
 

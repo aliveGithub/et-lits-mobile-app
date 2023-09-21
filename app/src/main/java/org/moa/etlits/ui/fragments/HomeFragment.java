@@ -1,7 +1,9 @@
 package org.moa.etlits.ui.fragments;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import org.moa.etlits.data.repositories.EstablishmentRepository;
 import org.moa.etlits.ui.activities.EstablishmentSummaryActivity;
 import org.moa.etlits.ui.activities.MainActivity;
 import org.moa.etlits.ui.adapters.EstablishmentAdapter;
+import org.moa.etlits.utils.Constants;
 
 import java.util.ArrayList;
 
@@ -75,5 +78,11 @@ public class HomeFragment extends Fragment {
             }
         });
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        autoCompleteTextView.setText("");
     }
 }

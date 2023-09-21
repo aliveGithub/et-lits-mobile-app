@@ -86,5 +86,8 @@
     <string name="establishment_name">Name</string>
     <string name="establishment_email">Email</string>
     <string name="establishment_use_by_default">Use By Default</string>
+    <string name="selected_establishment">Selected Establishment</string>
+    <string name="establishment_set_default_msg">Default establishment has been set to: %1$s</string>
+    <string name="establishment_search_hint">EID Lookup</string>
 
 </resources>

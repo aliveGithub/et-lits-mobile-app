@@ -1,13 +1,16 @@
 package org.moa.etlits.ui.fragments;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
@@ -34,7 +37,11 @@ public class HomeTabsFragment extends Fragment {
 
     private AlertDialog.Builder builder;
 
+    private TextView selectedEstablishment;
+
     private EncryptedPreferences encryptedPreferences;
+
+    private SharedPreferences sharedPreferences;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home_tabs, container, false);
@@ -115,8 +122,11 @@ public class HomeTabsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         builder = new AlertDialog.Builder(getActivity());
-
+        selectedEstablishment = ((MainActivity) getActivity()).findViewById(R.id.tv_selected_establishment);
+        sharedPreferences = ((MainActivity) getActivity()).getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE);
         encryptedPreferences = new EncryptedPreferences(getActivity());
+
+
         NavigationView navigationView = ((MainActivity) getActivity()).findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -136,6 +146,14 @@ public class HomeTabsFragment extends Fragment {
                 return true;
             }
         });
+
+
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        String defaultEstablishment = sharedPreferences.getString(Constants.DEFAULT_ESTABLISHMENT, "");
+        selectedEstablishment.setText(defaultEstablishment);
     }
 }
 
