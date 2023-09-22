@@ -145,7 +145,12 @@
             android:layout_height="wrap_content"
             android:background="@drawable/sync_status_bg"
             android:orientation="horizontal"
-            android:padding="@dimen/small_padding">
+            android:paddingLeft="@dimen/small_padding"
+            android:paddingRight="@dimen/small_padding"
+            android:paddingTop="@dimen/small_padding"
+            android:padding="32dp"
+            android:layout_marginBottom="-20dp"
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -227,8 +232,25 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:background="@color/light_gray"
+            android:background="@drawable/sync_details_bg"
             android:padding="@dimen/big_padding">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/small_padding"
+                android:orientation="vertical"
+                android:visibility="gone">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Show Details"
+                    android:background="@drawable/rounded_border_white_bg"
+                    android:textColor="@color/colorPrimary"
+                    android:padding="@dimen/small_padding"
+                    android:layout_gravity="center_horizontal"
+                    android:fontFamily="@font/inter_bold"
+                    />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
