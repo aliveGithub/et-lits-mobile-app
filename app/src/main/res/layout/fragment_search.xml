@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="vertical"
+android:layout_margin="@dimen/big_padding"
+android:layout_centerInParent="true"
+tools:context=".ui.fragments.SearchFragment">
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/home_establishment_search"
+    android:textColor="@color/colorPrimaryDark"
+    android:padding="@dimen/big_padding"
+    android:background="@drawable/light_green_rounded_border_light_green_bg_color"
+    android:textStyle="bold"
+    android:layout_marginBottom="-10dp"
+    />
+<AutoCompleteTextView
+    android:id="@+id/acv_establishment_search"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:drawableStart="@drawable/ic_search"
+    android:padding="10dp"
+    android:drawablePadding="10dp"
+    android:inputType="text"
+    android:ellipsize="end"
+    android:singleLine="true"
+    android:background="@drawable/green_rounded_border_white_bg_color"
+    android:text=""
+    android:hint="@string/establishment_search_hint"/>
+
+</LinearLayout>

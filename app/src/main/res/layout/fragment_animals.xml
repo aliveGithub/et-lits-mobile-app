@@ -5,10 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragments.AnimalsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
+        android:id="@+id/animal_search_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Animals" />
-
+        android:orientation="vertical"
+        android:layout_margin="@dimen/big_padding">
+    </LinearLayout>
 </FrameLayout>

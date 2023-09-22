@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import org.moa.etlits.R;
 
 public class MoveFragment extends Fragment {
-
+    private Fragment searchFragment;
     public MoveFragment() {
 
     }
@@ -28,7 +28,9 @@ public class MoveFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_move, container, false);
+        View v = inflater.inflate(R.layout.fragment_move, container, false);
+        //searchFragment = new SearchFragment();
+        //getChildFragmentManager().beginTransaction().add(R.id.move_search_fragment, searchFragment, "search").commit();
+        return v;
     }
 }
