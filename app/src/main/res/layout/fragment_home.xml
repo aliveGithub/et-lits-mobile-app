@@ -23,31 +23,31 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:columnCount="2"
-            android:padding="16dp"
+            android:padding="@dimen/big_padding"
             android:alignmentMode="alignBounds"
             android:columnOrderPreserved="false">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_margin="@dimen/small_margin"
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
-                app:cardElevation="8dp"
-                app:cardCornerRadius="16dp">
+                app:cardElevation="@dimen/card_item_elevation"
+                app:cardCornerRadius="@dimen/card_item_corner_radius">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp"
+                    android:padding="@dimen/big_padding"
                     android:gravity="center_horizontal"
                     android:layout_gravity="center">
 
                     <ImageView
                         android:id="@+id/card_stakeholders"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="@dimen/card_item_icon_size"
+                        android:layout_height="@dimen/card_item_icon_size"
                         android:scaleType="centerCrop"
                         android:padding="@dimen/small_padding"
                         android:src="@drawable/ic_stakeholder" />
@@ -56,9 +56,9 @@
                         android:id="@+id/tv_stakeholders"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Stakeholders"
-                        android:textSize="16sp"
-                        android:paddingTop="8dp"
+                        android:text="@string/home_stakeholders"
+                        android:textSize="@dimen/font_size_bigger"
+                        android:paddingTop="@dimen/small_padding"
                         android:gravity="center"/>
 
                 </LinearLayout>
@@ -68,24 +68,24 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_margin="@dimen/small_margin"
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
-                app:cardElevation="8dp"
-                app:cardCornerRadius="16dp">
+                app:cardElevation="@dimen/card_item_elevation"
+                app:cardCornerRadius="@dimen/card_item_corner_radius">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp"
+                    android:padding="@dimen/big_padding"
                     android:gravity="center_horizontal"
                     android:layout_gravity="center">
 
                     <ImageView
                         android:id="@+id/card_documents"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="@dimen/card_item_icon_size"
+                        android:layout_height="@dimen/card_item_icon_size"
                         android:scaleType="centerCrop"
                         android:padding="@dimen/small_padding"
                         android:src="@drawable/ic_document" />
@@ -94,21 +94,15 @@
                         android:id="@+id/tv_documents"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Documents"
-                        android:textSize="16sp"
-                        android:paddingTop="8dp"
+                        android:text="@string/home_documents"
+                        android:textSize="@dimen/font_size_bigger"
+                        android:paddingTop="@dimen/small_padding"
                         android:gravity="center"/>
 
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
-
-
-
-
         </GridLayout>
-
-
     </LinearLayout>
     </ScrollView>
 </FrameLayout>

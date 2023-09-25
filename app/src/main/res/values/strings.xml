@@ -89,5 +89,12 @@
     <string name="selected_establishment">Selected Establishment</string>
     <string name="establishment_set_default_msg">Default establishment has been set to: %1$s</string>
     <string name="establishment_search_hint">EID Lookup</string>
+    <string name="home_stakeholders">Stakeholders</string>
+    <string name="home_documents">Documents</string>
+    <string name="animal_trace">Trace</string>
+    <string name="animals_trace">Trace</string>
+    <string name="animals_remove">Remove</string>
+    <string name="animals_health">Health</string>
+    <string name="animals_register_tag">Register/Tag</string>
 
 </resources>
