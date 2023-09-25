@@ -50,11 +50,13 @@ public class HomeTabsFragment extends Fragment {
     }
 
     private void initializeBottomNavigation(View v) {
+        getActivity().setTitle(R.string.menu_home);
 
         BottomNavigationView bottomNavigationView = v.findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.navigation_btm_home) {
                 loadFragment(homeFragment);
+                getActivity().setTitle(R.string.menu_home);
                 return true;
             } else if(item.getItemId() == R.id.navigation_sync) {
                 Intent intent = new Intent(getActivity(), SyncActivity.class);
@@ -63,9 +65,11 @@ public class HomeTabsFragment extends Fragment {
                 return true;
             } else if (item.getItemId() == R.id.navigation_move) {
                 loadFragment(moveFragment);
+                getActivity().setTitle(R.string.menu_move);
                 return true;
             } else if (item.getItemId() == R.id.navigation_animals) {
                 loadFragment(animalsFragment);
+                getActivity().setTitle(R.string.menu_animals);
                 return true;
             }
 
@@ -78,7 +82,6 @@ public class HomeTabsFragment extends Fragment {
         moveFragment = new MoveFragment();
         animalsFragment = new AnimalsFragment();
         activeFragment = homeFragment;
-
 
         getChildFragmentManager().beginTransaction().add(R.id.home_fragment_container, homeFragment, "home").commit();
         getChildFragmentManager().beginTransaction().add(R.id.home_fragment_container, syncFragment, "sync").hide(syncFragment).commit();
