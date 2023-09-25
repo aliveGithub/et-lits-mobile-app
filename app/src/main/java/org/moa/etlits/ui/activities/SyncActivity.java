@@ -195,6 +195,12 @@ public class SyncActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        trackWorkStatus();
+    }
+
     private boolean hasRunningWork(List<WorkInfo> workInfos) {
         for (WorkInfo w : workInfos) {
             if (!w.getState().isFinished()) {
