@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        tools:context=".ui.activities.EstablishmentSummaryActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/big_padding">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/establishment_summary_pic"
+            android:paddingBottom="@dimen/small_padding"></TextView>
+
+        <TextView
+            android:id="@+id/tv_pic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/black"
+            android:paddingBottom="@dimen/small_padding"></TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/establishment_type"
+            android:paddingBottom="@dimen/small_padding"></TextView>
+
+        <TextView
+            android:id="@+id/tv_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/black"
+            android:paddingBottom="@dimen/small_padding"></TextView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/establishment_name"
+            android:paddingBottom="@dimen/small_padding"></TextView>
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/black"
+            android:paddingBottom="@dimen/small_padding"></TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/establishment_latitude_longitude"
+            android:paddingBottom="@dimen/small_padding"></TextView>
+
+        <TextView
+            android:id="@+id/tv_lat_lng"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/black"
+            android:paddingBottom="@dimen/small_padding"></TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/establishment_physical_address"
+            android:paddingBottom="@dimen/small_padding"></TextView>
+
+        <TextView
+            android:id="@+id/tv_physical_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/black"
+            android:paddingBottom="@dimen/small_padding"></TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/establishment_alternative_postal_address"
+            android:paddingBottom="@dimen/small_padding"></TextView>
+
+        <TextView
+            android:id="@+id/tv_postal_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/black"
+            android:paddingBottom="@dimen/small_padding"></TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/establishment_phone"
+            android:paddingBottom="@dimen/small_padding"></TextView>
+
+        <TextView
+            android:id="@+id/tv_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/black"
+            android:paddingBottom="@dimen/small_padding"></TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/establishment_mobile"
+            android:paddingBottom="@dimen/small_padding"></TextView>
+
+        <TextView
+            android:id="@+id/tv_mobile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/black"
+            android:paddingBottom="@dimen/small_padding"></TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/establishment_email"
+            android:paddingBottom="@dimen/small_padding"></TextView>
+
+        <TextView
+            android:id="@+id/tv_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/black"
+            android:paddingBottom="@dimen/small_padding"></TextView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+            <Button
+                android:id="@+id/btn_set_default"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/establishment_use_by_default"
+                android:textColor="@color/white"
+                android:padding="@dimen/small_padding"
+                android:background="@drawable/green_rounded_border_green_bg_color"
+                />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

@@ -5,6 +5,7 @@
     <color name="light_gray"> #ECECEC</color>
     <color name="colorPrimary">#09703E</color>
     <color name="colorPrimaryDark">#09703E</color>
+    <color name="light_green">#bbdd96</color>
     <color name="colorAccent">#FF4081</color>
     <color name="button_label">#FFFFFF</color>
     <color name="light_blue_600">#FF039BE5</color>

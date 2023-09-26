@@ -1,18 +1,23 @@
 package org.moa.etlits.ui.fragments;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 import org.moa.etlits.R;
+import org.moa.etlits.ui.activities.EstablishmentSummaryActivity;
 import org.moa.etlits.ui.activities.SyncActivity;
 import org.moa.etlits.ui.activities.AnimalListActivity;
 import org.moa.etlits.ui.activities.LoginActivity;
@@ -34,7 +39,11 @@ public class HomeTabsFragment extends Fragment {
 
     private AlertDialog.Builder builder;
 
+    private TextView selectedEstablishment;
+
     private EncryptedPreferences encryptedPreferences;
+
+    private SharedPreferences sharedPreferences;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home_tabs, container, false);
@@ -43,11 +52,13 @@ public class HomeTabsFragment extends Fragment {
     }
 
     private void initializeBottomNavigation(View v) {
+        getActivity().setTitle(R.string.menu_home);
 
         BottomNavigationView bottomNavigationView = v.findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.navigation_btm_home) {
                 loadFragment(homeFragment);
+                getActivity().setTitle(R.string.menu_home);
                 return true;
             } else if(item.getItemId() == R.id.navigation_sync) {
                 Intent intent = new Intent(getActivity(), SyncActivity.class);
@@ -56,9 +67,11 @@ public class HomeTabsFragment extends Fragment {
                 return true;
             } else if (item.getItemId() == R.id.navigation_move) {
                 loadFragment(moveFragment);
+                getActivity().setTitle(R.string.menu_move);
                 return true;
             } else if (item.getItemId() == R.id.navigation_animals) {
                 loadFragment(animalsFragment);
+                getActivity().setTitle(R.string.menu_animals);
                 return true;
             }
 
@@ -71,7 +84,6 @@ public class HomeTabsFragment extends Fragment {
         moveFragment = new MoveFragment();
         animalsFragment = new AnimalsFragment();
         activeFragment = homeFragment;
-
 
         getChildFragmentManager().beginTransaction().add(R.id.home_fragment_container, homeFragment, "home").commit();
         getChildFragmentManager().beginTransaction().add(R.id.home_fragment_container, syncFragment, "sync").hide(syncFragment).commit();
@@ -115,8 +127,20 @@ public class HomeTabsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         builder = new AlertDialog.Builder(getActivity());
-
+        selectedEstablishment = ((MainActivity) getActivity()).findViewById(R.id.tv_selected_establishment);
+        sharedPreferences = ((MainActivity) getActivity()).getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE);
         encryptedPreferences = new EncryptedPreferences(getActivity());
+
+        selectedEstablishment.setOnClickListener(v -> {
+            if (!TextUtils.isEmpty(selectedEstablishment.getText())) {
+                String code = selectedEstablishment.getText().toString().trim();
+                Intent intent = new Intent(getActivity(), EstablishmentSummaryActivity.class);
+                intent.putExtra("code", code.trim());
+                intent.putExtra("isViewMode", true);
+                startActivity(intent);
+            }
+        });
+
         NavigationView navigationView = ((MainActivity) getActivity()).findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -136,6 +160,14 @@ public class HomeTabsFragment extends Fragment {
                 return true;
             }
         });
+
+
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        String defaultEstablishment = sharedPreferences.getString(Constants.DEFAULT_ESTABLISHMENT, "");
+        selectedEstablishment.setText(defaultEstablishment);
     }
 }
 
