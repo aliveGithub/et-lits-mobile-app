@@ -63,6 +63,7 @@ public class EstablishmentSummaryActivity extends AppCompatActivity {
             editor.putString(Constants.DEFAULT_ESTABLISHMENT, code);
             editor.apply();
             Toast.makeText(this, getString(R.string.establishment_set_default_msg, code), Toast.LENGTH_SHORT).show();
+            finish();
         });
 
 
@@ -98,7 +99,7 @@ public class EstablishmentSummaryActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-          EstablishmentSummaryActivity.super.onBackPressed();
+          onBackPressed();
           return true;
         }
         return super.onOptionsItemSelected(item);

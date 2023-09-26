@@ -26,23 +26,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingTop="@dimen/big_padding"
-            android:paddingBottom="@dimen/small_padding"
             android:paddingRight="@dimen/big_padding"
             android:paddingLeft="@dimen/big_padding"
             >
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:minHeight="@dimen/min_touch_target_size"
                 android:layout_weight="1"
-                android:gravity="start"
+                android:layout_marginLeft="@dimen/small_margin"
+                android:gravity="center_vertical"
                 android:text="@string/selected_establishment"
                 android:textStyle="bold"/>
             <TextView
                 android:id="@+id/tv_selected_establishment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="end"
+                android:minWidth="@dimen/min_touch_target_size"
+                android:minHeight="@dimen/min_touch_target_size"
+                android:gravity="center_vertical"
+                android:layout_marginRight="@dimen/small_margin"
                 android:text=""
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold"/>
