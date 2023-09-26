@@ -30,7 +30,7 @@ public class AnimalsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_animals, container, false);
         searchFragment = new SearchFragment();
-        getChildFragmentManager().beginTransaction().add(R.id.animals_search_fragment, searchFragment, "search").commit();
+        getChildFragmentManager().beginTransaction().add(R.id.animals_search_fragment, searchFragment, "search_animals").commit();
         return v;
     }
 
