@@ -3,7 +3,6 @@ package org.moa.etlits.jobs;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import org.moa.etlits.api.RetrofitUtil;
 import org.moa.etlits.api.response.CatalogType;
@@ -13,7 +12,6 @@ import org.moa.etlits.api.response.TypeObjectUnmovable;
 import org.moa.etlits.api.response.ValueType;
 import org.moa.etlits.api.services.ConfigService;
 import org.moa.etlits.data.models.CategoryValue;
-import org.moa.etlits.data.models.Establishment;
 import org.moa.etlits.data.models.SyncError;
 import org.moa.etlits.data.models.SyncLog;
 import org.moa.etlits.data.repositories.CategoryValueRepository;
@@ -27,7 +25,6 @@ import java.net.UnknownHostException;
 import java.util.Date;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 import okhttp3.Credentials;
