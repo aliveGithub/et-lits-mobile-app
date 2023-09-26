@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 import org.moa.etlits.R;
+import org.moa.etlits.ui.activities.EstablishmentSummaryActivity;
 import org.moa.etlits.ui.activities.SyncActivity;
 import org.moa.etlits.ui.activities.AnimalListActivity;
 import org.moa.etlits.ui.activities.LoginActivity;
@@ -129,6 +131,15 @@ public class HomeTabsFragment extends Fragment {
         sharedPreferences = ((MainActivity) getActivity()).getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE);
         encryptedPreferences = new EncryptedPreferences(getActivity());
 
+        selectedEstablishment.setOnClickListener(v -> {
+            if (!TextUtils.isEmpty(selectedEstablishment.getText())) {
+                String code = selectedEstablishment.getText().toString().trim();
+                Intent intent = new Intent(getActivity(), EstablishmentSummaryActivity.class);
+                intent.putExtra("code", code.trim());
+                intent.putExtra("isViewMode", true);
+                startActivity(intent);
+            }
+        });
 
         NavigationView navigationView = ((MainActivity) getActivity()).findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {

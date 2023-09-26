@@ -49,6 +49,13 @@ public class EstablishmentSummaryActivity extends AppCompatActivity {
         setDefault = findViewById(R.id.btn_set_default);
 
         String code = getIntent().getStringExtra("code");
+        boolean viewMode = getIntent().getBooleanExtra("isViewMode", false);
+        if(viewMode) {
+            setDefault.setVisibility(Button.GONE);
+        }
+        else {
+            setDefault.setVisibility(Button.VISIBLE);
+        }
 
         setDefault.setOnClickListener(v -> {
             SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE);
