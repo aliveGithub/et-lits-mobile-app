@@ -69,15 +69,17 @@ public class EditAnimalActivity extends AppCompatActivity {
 
         animalViewModel.getAnimal().observe(this, animal -> {
             if (animal != null) {
-                tag.setText(animal.getTag());
+                /*tag.setText(animal.getTag());
                 methodSpinner.setSelection(ad.getPosition(animal.getMethod()));
                 date.setText(dateFormat.format(animal.getDateIdentification()));
+                identificationCalendar.setTime(animal.getDateIdentification());
+                 */
             }
         });
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String selectedMethod = methodSpinner.getSelectedItem() != null ? (String) methodSpinner.getSelectedItem() : "";
+                /*String selectedMethod = methodSpinner.getSelectedItem() != null ? (String) methodSpinner.getSelectedItem() : "";
                 Toast.makeText(EditAnimalActivity.this, selectedMethod + "" , Toast.LENGTH_SHORT).show();
 
                 long animalId = getIntent().getLongExtra("animalId", 0);
@@ -103,6 +105,7 @@ public class EditAnimalActivity extends AppCompatActivity {
 
                     finish();
                 }
+            }*/
             }
         });
 

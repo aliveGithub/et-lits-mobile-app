@@ -26,13 +26,13 @@ public class AnimalListAdapter extends ListAdapter<Animal, AnimalViewHolder> {
 
     @Override
     public void onBindViewHolder(AnimalViewHolder holder, int position) {
-        Animal current = getItem(position);
+        /*Animal current = getItem(position);
         String tag = current.getTag() != null ? current.getTag() : "";
         String method = current.getMethod() != null ? current.getMethod() : "";
         android.text.format.DateFormat df = new android.text.format.DateFormat();
 
         String date = current.getDateIdentification() != null ? (String) df.format("yyyy-MM-dd", current.getDateIdentification()) : "";
-        holder.bind(current.getTag() + ":" + method +  ":" + date);
+        holder.bind(current.getTag() + ":" + method +  ":" + date);*/
     }
 
     public static class AnimalDiff extends DiffUtil.ItemCallback<Animal> {
@@ -44,7 +44,7 @@ public class AnimalListAdapter extends ListAdapter<Animal, AnimalViewHolder> {
 
         @Override
         public boolean areContentsTheSame(@NonNull Animal oldItem, @NonNull Animal newItem) {
-            return String.valueOf(oldItem.getId()).equals(String.valueOf(newItem.getId()));
+            return true; //String.valueOf(oldItem.getId()).equals(String.valueOf(newItem.getId()));
         }
     }
 

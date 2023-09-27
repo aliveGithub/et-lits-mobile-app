@@ -31,7 +31,7 @@ public class AnimalViewModel extends AndroidViewModel {
     }
 
     public void update(long id, String tag, String method, Date dateIdentification) {
-         Animal animal = new Animal(id, tag, method, dateIdentification);
-         animalRepository.update(animal);
+         /*Animal animal = new Animal(id, tag, method, dateIdentification);
+         animalRepository.update(animal);*/
     }
 }
