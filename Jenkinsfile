@@ -9,6 +9,7 @@ pipeline {
             }
             environment {
                 FIREBASE_CREDENTIALS_FILE = credentials('ET_LITS_FIREBASE_CREDENTIALS')
+				FIREBASE_APP_ID = credentials('ET_LITS_APP_ID')
             }
 			steps {
 				sh './gradlew assembleDebug appDistributionUploadDebug'
