@@ -1,5 +1,8 @@
 package org.moa.etlits.utils;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Constants {
     public static final String SHARED_PREFERENCES = "et-lits-shared-prefs";
     public static final String SYNC_LOG_ID = "syncLogId";
@@ -34,5 +37,13 @@ public class Constants {
         SUCCESSFUL,
         FAILED
     }
+
+    public enum AnimalRegStep {
+        MOVE_EVENTS,
+        REGISTRATION,
+        TREATMENTS
+    }
+
+    public static final List<AnimalRegStep> REGISTRATION_STEPS = Arrays.asList(AnimalRegStep.MOVE_EVENTS, AnimalRegStep.REGISTRATION, AnimalRegStep.TREATMENTS);
 }
 

@@ -15,7 +15,7 @@ tools:context=".ui.fragments.SearchFragment">
     android:text="@string/home_establishment_search"
     android:textColor="@color/colorPrimaryDark"
     android:padding="@dimen/big_padding"
-    android:background="@drawable/light_green_rounded_border_light_green_bg_color"
+    android:background="@drawable/bg_light_green"
     android:textStyle="bold"
     android:layout_marginBottom="-10dp"
     />
