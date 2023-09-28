@@ -143,7 +143,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/sync_status_bg"
+            android:background="@drawable/bg_sync_status"
             android:orientation="horizontal"
             android:paddingLeft="@dimen/small_padding"
             android:paddingRight="@dimen/small_padding"
@@ -232,7 +232,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:background="@drawable/sync_details_bg"
+            android:background="@drawable/bg_sync_details"
             android:padding="@dimen/big_padding">
             <LinearLayout
                 android:layout_width="match_parent"
@@ -244,7 +244,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Show Details"
-                    android:background="@drawable/rounded_border_white_bg"
+                    android:background="@drawable/bg_white_round_corners"
                     android:textColor="@color/colorPrimary"
                     android:padding="@dimen/small_padding"
                     android:layout_gravity="center_horizontal"
@@ -257,7 +257,7 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/small_padding"
                 android:orientation="vertical"
-                android:background="@drawable/rounded_border_white_bg">
+                android:background="@drawable/bg_white_round_corners">
 
                 <TextView
                     android:id="@+id/tv_update_details"
@@ -302,7 +302,7 @@
                 android:orientation="vertical"
                 android:layout_marginTop="24dp"
                 app:cardCornerRadius="@dimen/big_padding"
-                android:background="@drawable/rounded_border_white_bg">
+                android:background="@drawable/bg_white_round_corners">
                 <TextView
                     android:id="@+id/tv_errors_title"
                     android:layout_width="match_parent"

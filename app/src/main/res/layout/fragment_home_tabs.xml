@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@drawable/bottom_sheet_bg">
+        android:background="@drawable/bg_bottom_sheet">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -57,7 +57,7 @@
             app:itemIconTint="@color/bottom_nav_color"
             app:itemTextColor="@color/bottom_nav_color"
             android:elevation="0dp"
-            android:background="@drawable/rounded_border_white_bg"
+            android:background="@drawable/bg_white_round_corners"
             app:labelVisibilityMode="labeled"
             android:layout_marginBottom="@dimen/big_padding"
             android:layout_marginLeft="@dimen/big_padding"

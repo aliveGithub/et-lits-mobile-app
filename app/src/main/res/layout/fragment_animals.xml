@@ -29,6 +29,7 @@
                 android:columnOrderPreserved="false">
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/card_register"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/small_margin"
@@ -46,7 +47,6 @@
                         android:layout_gravity="center">
 
                         <ImageView
-                            android:id="@+id/card_register"
                             android:layout_width="@dimen/card_item_icon_size"
                             android:layout_height="@dimen/card_item_icon_size"
                             android:scaleType="centerCrop"

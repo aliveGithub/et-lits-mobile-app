@@ -1,16 +1,19 @@
 package org.moa.etlits.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.moa.etlits.R;
+import org.moa.etlits.ui.activities.AnimalRegistrationActivity;
+
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
 
 public class AnimalsFragment extends Fragment {
+    private CardView registerAnimal;
     private Fragment searchFragment;
     public AnimalsFragment() {
     }
@@ -31,6 +34,14 @@ public class AnimalsFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_animals, container, false);
         searchFragment = new SearchFragment();
         getChildFragmentManager().beginTransaction().add(R.id.animals_search_fragment, searchFragment, "search_animals").commit();
+        registerAnimal = v.findViewById(R.id.card_register);
+        registerAnimal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AnimalRegistrationActivity.class);
+                startActivity(intent);
+            }
+        });
         return v;
     }
 

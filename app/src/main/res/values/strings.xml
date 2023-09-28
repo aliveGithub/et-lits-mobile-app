@@ -96,5 +96,13 @@
     <string name="animals_remove">Remove</string>
     <string name="animals_health">Health</string>
     <string name="animals_register_tag">Register/Tag</string>
+    <string name="animal_reg_on_holding_ground">On Holding Ground</string>
+    <string name="animal_reg_establishment_eid">Establishment EID*</string>
+    <string name="animal_reg_lookup_eid">Lookup EID</string>
+    <string name="animal_reg_date_move_off">Date Move-Off*</string>
+    <string name="animal_reg_select_date">Select Date ...</string>
+    <string name="animal_reg_establishment">Establishment</string>
+    <string name="animal_reg_date_move_on">Date Move-On*</string>
+    <string name="animal_reg_date_identification">Date Identification*</string>
 
 </resources>
