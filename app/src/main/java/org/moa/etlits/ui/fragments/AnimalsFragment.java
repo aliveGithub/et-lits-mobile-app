@@ -32,8 +32,12 @@ public class AnimalsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_animals, container, false);
-        searchFragment = new SearchFragment();
-        getChildFragmentManager().beginTransaction().add(R.id.animals_search_fragment, searchFragment, "search_animals").commit();
+
+        if (savedInstanceState == null) {
+            searchFragment = new SearchFragment();
+            getChildFragmentManager().beginTransaction().add(R.id.animals_search_fragment, searchFragment, "search_animals").commit();
+        }
+
         registerAnimal = v.findViewById(R.id.card_register);
         registerAnimal.setOnClickListener(new View.OnClickListener() {
             @Override

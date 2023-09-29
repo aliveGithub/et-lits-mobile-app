@@ -47,11 +47,12 @@ public class HomeTabsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home_tabs, container, false);
-        initializeBottomNavigation(v);
+
+        initializeBottomNavigation(v, savedInstanceState);
         return v;
     }
 
-    private void initializeBottomNavigation(View v) {
+    private void initializeBottomNavigation(View v, Bundle savedInstanceState) {
         getActivity().setTitle(R.string.menu_home);
 
         BottomNavigationView bottomNavigationView = v.findViewById(R.id.bottom_navigation);
@@ -78,17 +79,23 @@ public class HomeTabsFragment extends Fragment {
             return false;
         });
 
-        // Initialize fragments
-        homeFragment = new HomeFragment();
-        syncFragment = new SyncFragment();
-        moveFragment = new MoveFragment();
-        animalsFragment = new AnimalsFragment();
-        activeFragment = homeFragment;
+        if (savedInstanceState == null) {
+            homeFragment = new HomeFragment();
+            syncFragment = new SyncFragment();
+            moveFragment = new MoveFragment();
+            animalsFragment = new AnimalsFragment();
+            activeFragment = homeFragment;
 
-        getChildFragmentManager().beginTransaction().add(R.id.home_fragment_container, homeFragment, "home").commit();
-        getChildFragmentManager().beginTransaction().add(R.id.home_fragment_container, syncFragment, "sync").hide(syncFragment).commit();
-        getChildFragmentManager().beginTransaction().add(R.id.home_fragment_container, animalsFragment, "animals").hide(animalsFragment).commit();
-        getChildFragmentManager().beginTransaction().add(R.id.home_fragment_container, moveFragment, "move").hide(moveFragment).commit();
+            getChildFragmentManager().beginTransaction().add(R.id.home_fragment_container, homeFragment, "home").commit();
+            getChildFragmentManager().beginTransaction().add(R.id.home_fragment_container, syncFragment, "sync").hide(syncFragment).commit();
+            getChildFragmentManager().beginTransaction().add(R.id.home_fragment_container, animalsFragment, "animals").hide(animalsFragment).commit();
+            getChildFragmentManager().beginTransaction().add(R.id.home_fragment_container, moveFragment, "move").hide(moveFragment).commit();
+        } else {
+            homeFragment = getChildFragmentManager().findFragmentByTag("home");
+            syncFragment = getChildFragmentManager().findFragmentByTag("sync");
+            moveFragment = getChildFragmentManager().findFragmentByTag("move");
+            animalsFragment = getChildFragmentManager().findFragmentByTag("animals");
+        }
 
     }
 

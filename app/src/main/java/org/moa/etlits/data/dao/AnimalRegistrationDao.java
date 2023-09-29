@@ -23,6 +23,6 @@ public interface AnimalRegistrationDao {
     @Query("SELECT * FROM animal_registrations")
     LiveData<List<AnimalRegistration>> getAll();
 
-    @Query("SELECT * FROM animal_registrations where id=:id")
+    @Query("SELECT * FROM animal_registrations WHERE id=:id")
     LiveData<AnimalRegistration> loadById(long id);
 }

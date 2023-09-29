@@ -33,6 +33,9 @@ public class Animal {
     @ColumnInfo(name = "seller")
     private String seller;
 
+    @ColumnInfo(name = "animal_registration_id")
+    private long animalRegistrationId;
+
     public long getId() {
         return id;
     }
@@ -88,5 +91,12 @@ public class Animal {
 
     public void setSeller(String seller) {
         this.seller = seller;
+    }
+    public long getAnimalRegistrationId() {
+        return animalRegistrationId;
+    }
+
+    public void setAnimalRegistrationId(long animalRegistrationId) {
+        this.animalRegistrationId = animalRegistrationId;
     }
 }

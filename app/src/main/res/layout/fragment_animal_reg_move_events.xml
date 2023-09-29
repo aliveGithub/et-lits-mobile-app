@@ -19,7 +19,8 @@
         android:gravity="center"
         android:textColor="@color/white"
         android:padding="@dimen/small_padding"
-        android:background="@drawable/bg_section_header_green"/>
+        android:background="@drawable/bg_section_header_green"
+        android:layout_marginBottom="@dimen/small_margin"/>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -132,11 +133,13 @@
         android:gravity="center"
         android:textColor="@color/white"
         android:padding="@dimen/small_padding"
-        android:background="@drawable/bg_section_header_green"/>
+        android:background="@drawable/bg_section_header_green"
+        android:layout_marginBottom="@dimen/small_margin"/>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+
         >
         <ImageView
             android:layout_width="wrap_content"
@@ -154,13 +157,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/animal_reg_establishment" />
-            <AutoCompleteTextView
+           <AutoCompleteTextView
+                android:id="@+id/actv_move_on_eid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_move_on_eid"
                 android:hint="@string/animal_reg_lookup_eid"
                 android:minHeight="@dimen/min_touch_target_size"
                 />
+
         </RelativeLayout>
     </LinearLayout>
 

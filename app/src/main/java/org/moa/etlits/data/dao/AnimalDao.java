@@ -25,4 +25,7 @@ public interface AnimalDao {
 
     @Query("SELECT * FROM animals where id=:animalId")
     LiveData<Animal> loadById(long animalId);
+
+    @Query("SELECT * FROM animals where animal_registration_id=:animalRegistrationId")
+    LiveData<List<Animal>> getByAnimalRegistrationId(long animalRegistrationId);
 }

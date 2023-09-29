@@ -1,6 +1,7 @@
 package org.moa.etlits.data.dao;
 
 import org.moa.etlits.data.models.Animal;
+import org.moa.etlits.data.models.AnimalRegistration;
 import org.moa.etlits.data.models.CategoryValue;
 import org.moa.etlits.data.models.Establishment;
 import org.moa.etlits.data.models.SyncError;
@@ -18,7 +19,7 @@ import android.content.Context;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Animal.class, SyncLog.class, SyncError.class, CategoryValue.class, Establishment.class}, version = 1)
+@Database(entities = {Animal.class, SyncLog.class, SyncError.class, CategoryValue.class, Establishment.class, AnimalRegistration.class}, version = 1)
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
     private static final String DATABASE_NAME = "et_lits_database";
@@ -66,4 +67,6 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract CategoryValueDao categoryValueDao();
 
     public abstract EstablishmentDao establishmentDao();
+
+    public abstract AnimalRegistrationDao animalRegistrationDao();
 }

@@ -5,7 +5,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 
 @Entity(tableName = "establishments", primaryKeys = {"code","name"})
-public class Establishment {
+public class Establishment implements Comparable<Establishment> {
     @NonNull
     @ColumnInfo(name = "code")
     private String code;
@@ -178,7 +178,7 @@ public class Establishment {
     }
 
     public String toString() {
-        return code + " - " + name;
+       return code + " - " + name.substring(0, Math.min(name.length(), 20)) + " ...";
     }
 
     public String getPhysicalAddress() {
@@ -187,5 +187,10 @@ public class Establishment {
 
     public String getLatLng() {
         return (getLatitude() + " " + getLongitude()).trim();
+    }
+
+    @Override
+    public int compareTo(Establishment est2) {
+        return this.name.compareTo(est2.name);
     }
 }

@@ -1,18 +1,24 @@
 package org.moa.etlits.ui.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 
 import org.moa.etlits.R;
+import org.moa.etlits.data.models.AnimalRegistration;
+import org.moa.etlits.ui.adapters.EstablishmentAdapter;
 import org.moa.etlits.ui.fragments.AnimalRegAddAnimalsFragment;
 import org.moa.etlits.ui.fragments.AnimalRegMoveEventsFragment;
 import org.moa.etlits.ui.fragments.AnimalRegTreatmentsFragment;
-import org.moa.etlits.ui.fragments.HomeTabsFragment;
 import org.moa.etlits.ui.viewmodels.AnimalRegViewModel;
 import org.moa.etlits.utils.Constants;
+
+import java.util.ArrayList;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 
 public class AnimalRegActivity extends AppCompatActivity {
     private Fragment moveEventsFragment;
@@ -25,14 +31,21 @@ public class AnimalRegActivity extends AppCompatActivity {
     private ImageView ivLast;
     private AnimalRegViewModel viewModel;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_animal_reg);
-        viewModel = new AnimalRegViewModel(getApplication());
-        addFragments();
+
+        viewModel = new ViewModelProvider((ViewModelStoreOwner) this, (ViewModelProvider.Factory) new AnimalRegViewModel.Factory(getApplication(), 0)).get(AnimalRegViewModel.class);
+        if (savedInstanceState == null) {
+            addFragments();
+        }
+
         setupNavigation();
     }
+
     private void addFragments() {
         animalRegFragment = new AnimalRegAddAnimalsFragment();
         moveEventsFragment = new AnimalRegMoveEventsFragment();
@@ -44,7 +57,18 @@ public class AnimalRegActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fl_animal_reg, treatmentsFragment, Constants.AnimalRegStep.TREATMENTS.toString()).hide(treatmentsFragment).commit();
     }
+
     public void showFragment(Constants.AnimalRegStep step) {
+        Log.i("AnimalRegActivity", "showFragment: " + step.toString());
+        if (viewModel.getAnimalRegistration().getValue() != null) {
+            Log.i("AnimalRegActivity -", "Date Move Off: " + viewModel.getAnimalRegistration().getValue().getDateMoveOff());
+            Log.i("AnimalRegActivity -", "Date Move On: " + viewModel.getAnimalRegistration().getValue().getDateMoveOn());
+            Log.i("AnimalRegActivity -", "Date Identification: " + viewModel.getAnimalRegistration().getValue().getDateIdentification());
+
+            Log.i("AnimalRegActivity -", "Move Off Eid: " + viewModel.getAnimalRegistration().getValue().getHoldingGroundEid());
+            Log.i("AnimalRegActivity -", "Move On Eid: " + viewModel.getAnimalRegistration().getValue().getEstablishmentEid());
+
+        }
         switch (step) {
             case REGISTRATION:
                 getSupportFragmentManager().beginTransaction().hide(moveEventsFragment).commit();
@@ -63,6 +87,7 @@ public class AnimalRegActivity extends AppCompatActivity {
                 break;
         }
     }
+
     private void setupNavigation() {
         ivFirst = findViewById(R.id.iv_first);
         ivPrev = findViewById(R.id.iv_prev);

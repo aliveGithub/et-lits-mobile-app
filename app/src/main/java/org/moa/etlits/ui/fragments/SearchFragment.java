@@ -16,6 +16,7 @@ import org.moa.etlits.ui.adapters.EstablishmentAdapter;
 import org.moa.etlits.ui.viewmodels.SearchViewModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -70,6 +71,7 @@ public class SearchFragment extends Fragment {
 
         searchViewModel = new SearchViewModel((Application) getActivity().getApplicationContext());
         searchViewModel.getEstablishments().observe(getActivity(), lst -> {
+            Collections.sort(lst);
             establishmentAdapter.clear();
             establishmentAdapter.addAll(lst);
             establishmentAdapter.notifyDataSetChanged();
