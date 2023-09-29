@@ -104,5 +104,8 @@
     <string name="animal_reg_establishment">Establishment</string>
     <string name="animal_reg_date_move_on">Date Move-On*</string>
     <string name="animal_reg_date_identification">Date Identification*</string>
+    <string name="animal_reg_animals_identified_and_registered">Animals identified and registered</string>
+    <string name="animal_reg_herd_specie">Herd Specie*</string>
+    <string name="animal_reg_add_animal">Add Animal</string>
 
 </resources>

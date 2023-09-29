@@ -22,26 +22,40 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.moa.etlits.R;
+import org.moa.etlits.data.models.Animal;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 class AnimalViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    private final TextView animalItemView;
+    private final TextView tvAnimalId;
+    private final TextView tvSex;
+    private final TextView tvBreed;
+    private final TextView tvAge;
+
     private AnimalListAdapter.AnimalItemEventsListener animalItemEventsListener;
     private AnimalViewHolder(View itemView, AnimalListAdapter.AnimalItemEventsListener animalItemEventsListener) {
         super(itemView);
         itemView.setOnClickListener(this);
         this.animalItemEventsListener = animalItemEventsListener;
-        animalItemView = itemView.findViewById(R.id.textView);
+        tvAnimalId = itemView.findViewById(R.id.tv_animal_id);
+        tvSex = itemView.findViewById(R.id.tv_sex);
+        tvBreed = itemView.findViewById(R.id.tv_breed);
+        tvAge = itemView.findViewById(R.id.tv_age);
+
     }
 
-    public void bind(String text) {
-        animalItemView.setText(text);
+    public void bind(Animal animal) {
+        tvAnimalId.setText(String.valueOf(animal.getAnimalId()));
+        tvSex.setText(animal.getSex());
+        tvBreed.setText(animal.getBreed());
+        //tvAge.setText(String.valueOf(animal.getAge()));
+
     }
 
-    static AnimalViewHolder create(ViewGroup parent, AnimalListAdapter.AnimalItemEventsListener animalItemEventsListener) {
+    public static AnimalViewHolder create(ViewGroup parent, AnimalListAdapter.AnimalItemEventsListener animalItemEventsListener) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recyclerview_item, parent, false);
+                .inflate(R.layout.recyclerview_animal_item, parent, false);
+
         return new AnimalViewHolder(view, animalItemEventsListener);
     }
 

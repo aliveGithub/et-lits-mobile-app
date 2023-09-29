@@ -141,6 +141,10 @@ public class AnimalRegViewModel extends AndroidViewModel {
         }
     }
 
+    public LiveData<List<Animal>> getAnimals() {
+        return animalList;
+    }
+
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
         private Application application;
         private long id;

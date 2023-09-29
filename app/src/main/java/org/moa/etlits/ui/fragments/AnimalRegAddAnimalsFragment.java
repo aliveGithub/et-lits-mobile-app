@@ -2,65 +2,83 @@ package org.moa.etlits.ui.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.moa.etlits.R;
+import org.moa.etlits.data.models.Animal;
+import org.moa.etlits.databinding.FragmentAnimalRegAddAnimalsBinding;
+import org.moa.etlits.ui.adapters.AnimalListAdapter;
+import org.moa.etlits.ui.viewmodels.AnimalRegViewModel;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AnimalRegAddAnimalsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class AnimalRegAddAnimalsFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class AnimalRegAddAnimalsFragment extends Fragment implements AnimalListAdapter.AnimalItemEventsListener {
+    private AnimalRegViewModel viewModel;
+    private AnimalListAdapter adapter;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private FragmentAnimalRegAddAnimalsBinding binding;
 
     public AnimalRegAddAnimalsFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AnimalRegAddAnimalsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AnimalRegAddAnimalsFragment newInstance(String param1, String param2) {
+    public static AnimalRegAddAnimalsFragment newInstance() {
         AnimalRegAddAnimalsFragment fragment = new AnimalRegAddAnimalsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_animal_reg_add_animals, container, false);
+        binding = FragmentAnimalRegAddAnimalsBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        viewModel = new ViewModelProvider((ViewModelStoreOwner) getActivity(), (ViewModelProvider.Factory) new AnimalRegViewModel.Factory(getActivity().getApplication(), 0)).get(AnimalRegViewModel.class);
+
+        adapter = new AnimalListAdapter(new AnimalListAdapter.AnimalDiff(), this);
+        binding.rvAnimals.setAdapter(adapter);
+        binding.rvAnimals.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        viewModel.getAnimals().observe(getViewLifecycleOwner(), animals -> {
+            adapter.submitList(animals);
+        });
+
+        binding.btnAddAnimal.setOnClickListener(v -> {
+            for (int i = 0; i < 10; i++) {
+                Animal animal = new Animal();
+                animal.setAnimalId("00000000" + i);
+                viewModel.getAnimals().getValue().add(animal);
+            }
+            adapter.notifyDataSetChanged();
+        });
+
+
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    @Override
+    public void onAnimalClick(int position) {
+
     }
 }
