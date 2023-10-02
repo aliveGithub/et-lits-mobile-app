@@ -14,7 +14,7 @@
         android:theme="@style/Theme.LITSMobileApp"
         tools:targetApi="31">
         <activity
-            android:name=".ui.activities.AddAnimalActivity"
+            android:name=".ui.activities.AnimalDataEntryActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activities.AnimalRegActivity"

@@ -59,16 +59,6 @@ public class AnimalRegActivity extends AppCompatActivity {
     }
 
     public void showFragment(Constants.AnimalRegStep step) {
-        Log.i("AnimalRegActivity", "showFragment: " + step.toString());
-        if (viewModel.getAnimalRegistration().getValue() != null) {
-            Log.i("AnimalRegActivity -", "Date Move Off: " + viewModel.getAnimalRegistration().getValue().getDateMoveOff());
-            Log.i("AnimalRegActivity -", "Date Move On: " + viewModel.getAnimalRegistration().getValue().getDateMoveOn());
-            Log.i("AnimalRegActivity -", "Date Identification: " + viewModel.getAnimalRegistration().getValue().getDateIdentification());
-
-            Log.i("AnimalRegActivity -", "Move Off Eid: " + viewModel.getAnimalRegistration().getValue().getHoldingGroundEid());
-            Log.i("AnimalRegActivity -", "Move On Eid: " + viewModel.getAnimalRegistration().getValue().getEstablishmentEid());
-
-        }
         switch (step) {
             case REGISTRATION:
                 getSupportFragmentManager().beginTransaction().hide(moveEventsFragment).commit();

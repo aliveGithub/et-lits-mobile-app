@@ -17,7 +17,7 @@ public class Animal implements java.io.Serializable {
 
     @NonNull
     @ColumnInfo(name = "animal_id")
-    private String animalId; //tag
+    private String animalId;
     @ColumnInfo(name = "breed")
     private String breed;
 
