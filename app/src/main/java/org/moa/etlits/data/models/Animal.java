@@ -10,7 +10,7 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "animals", indices = {@Index(value = {"animal_id"}, unique = true)})
-public class Animal {
+public class Animal implements java.io.Serializable {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     private long id;

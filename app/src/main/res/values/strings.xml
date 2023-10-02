@@ -107,5 +107,17 @@
     <string name="animal_reg_animals_identified_and_registered">Animals identified and registered</string>
     <string name="animal_reg_herd_specie">Herd Specie*</string>
     <string name="animal_reg_add_animal">Add Animal</string>
+    <string name="reg_enter_animal_id">Animal ID</string>
+    <string name="animal_reg_animal_id">Animal ID*</string>
+    <string name="animal_reg_add_next_animal">Add Next Animal</string>
+    <string name="animal_reg_done">Done</string>
+    <string name="animal_reg_breed">Breed*</string>
+    <string name="animal_reg_select">Select...</string>
+    <string name="animal_reg_sex">Sex*</string>
+    <string name="animal_reg_age">Age (Months)</string>
+    <string name="animal_reg_age_hint">Age in months...</string>
+    <string name="animal_reg_dead">Dead</string>
+    <string name="animal_reg_seller">Seller</string>
+    <string name="animal_reg_seller_hint">Seller</string>
 
 </resources>

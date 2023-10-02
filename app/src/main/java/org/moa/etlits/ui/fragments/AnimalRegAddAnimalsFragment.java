@@ -1,7 +1,10 @@
 package org.moa.etlits.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -13,16 +16,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.moa.etlits.R;
 import org.moa.etlits.data.models.Animal;
 import org.moa.etlits.databinding.FragmentAnimalRegAddAnimalsBinding;
+import org.moa.etlits.ui.activities.AddAnimalActivity;
 import org.moa.etlits.ui.adapters.AnimalListAdapter;
 import org.moa.etlits.ui.viewmodels.AnimalRegViewModel;
+
+import static android.app.Activity.RESULT_OK;
 
 
 public class AnimalRegAddAnimalsFragment extends Fragment implements AnimalListAdapter.AnimalItemEventsListener {
     private AnimalRegViewModel viewModel;
     private AnimalListAdapter adapter;
+
+    private ActivityResultLauncher<Intent> activityResultLauncher;
 
     private FragmentAnimalRegAddAnimalsBinding binding;
 
@@ -59,14 +66,27 @@ public class AnimalRegAddAnimalsFragment extends Fragment implements AnimalListA
             adapter.submitList(animals);
         });
 
+        activityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null) {
+                            Animal animal = (Animal) data.getSerializableExtra(AddAnimalActivity.ADD_ANIMAL_RESULT);
+                             if (animal != null) {
+                                    viewModel.getAnimals().getValue().add(animal);
+                                    adapter.notifyDataSetChanged();
+                             }
+                        }
+                    }
+                });
+
         binding.btnAddAnimal.setOnClickListener(v -> {
-            for (int i = 0; i < 10; i++) {
-                Animal animal = new Animal();
-                animal.setAnimalId("00000000" + i);
-                viewModel.getAnimals().getValue().add(animal);
-            }
-            adapter.notifyDataSetChanged();
+            Intent intent = new Intent(getActivity(), AddAnimalActivity.class);
+            activityResultLauncher.launch(intent);
         });
+
+
 
 
     }

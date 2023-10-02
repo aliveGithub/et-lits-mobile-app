@@ -6,24 +6,20 @@ import androidx.lifecycle.ViewModelStoreOwner;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.moa.etlits.R;
-import org.moa.etlits.data.models.Animal;
 import org.moa.etlits.ui.viewmodels.AnimalEditViewModel;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class EditAnimalActivity extends AppCompatActivity {
+public class EditAnimalActivityOld extends AppCompatActivity {
 
     String[] registrationMethods = { "Feedlot", "Slaughter house"};
 
@@ -61,7 +57,7 @@ public class EditAnimalActivity extends AppCompatActivity {
 
         identificationCalendar = Calendar.getInstance();
         date.setOnClickListener(v -> {
-            new DatePickerDialog(EditAnimalActivity.this, (view, year, month, dayOfMonth) -> {
+            new DatePickerDialog(EditAnimalActivityOld.this, (view, year, month, dayOfMonth) -> {
                 identificationCalendar.set(year, month, dayOfMonth);
                 date.setText(dateFormat.format(identificationCalendar.getTime()));
             }, identificationCalendar.get(Calendar.YEAR), identificationCalendar.get(Calendar.MONTH), identificationCalendar.get(Calendar.DAY_OF_MONTH)).show();
@@ -80,7 +76,7 @@ public class EditAnimalActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 /*String selectedMethod = methodSpinner.getSelectedItem() != null ? (String) methodSpinner.getSelectedItem() : "";
-                Toast.makeText(EditAnimalActivity.this, selectedMethod + "" , Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditAnimalActivityOld.this, selectedMethod + "" , Toast.LENGTH_SHORT).show();
 
                 long animalId = getIntent().getLongExtra("animalId", 0);
                 Animal animal = new Animal();

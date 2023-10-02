@@ -8,7 +8,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.moa.etlits.R;
 import org.moa.etlits.ui.adapters.AnimalListAdapter;
-import org.moa.etlits.data.models.Animal;
 import org.moa.etlits.ui.viewmodels.AnimalViewModel;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,7 +36,7 @@ public class AnimalListActivity extends AppCompatActivity implements AnimalListA
         btnAddAnimal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AnimalListActivity.this, EditAnimalActivity.class);
+                Intent intent = new Intent(AnimalListActivity.this, EditAnimalActivityOld.class);
                 startActivity(intent);
             }
         });
@@ -50,7 +49,7 @@ public class AnimalListActivity extends AppCompatActivity implements AnimalListA
     @Override
     public void onAnimalClick(int position) {
        /*Animal animal = adapter.getCurrentList().get(position);
-       Intent intent = new Intent(AnimalListActivity.this, EditAnimalActivity.class);
+       Intent intent = new Intent(AnimalListActivity.this, EditAnimalActivityOld.class);
        intent.putExtra("animalId", animal.getId());
        startActivity(intent);*/
     }

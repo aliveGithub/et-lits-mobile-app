@@ -1,7 +1,6 @@
 package org.moa.etlits.ui.fragments;
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,14 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 
-import org.moa.etlits.R;
-import org.moa.etlits.data.models.Establishment;
 import org.moa.etlits.databinding.FragmentAnimalRegMoveEventsBinding;
-import org.moa.etlits.ui.activities.EditAnimalActivity;
-import org.moa.etlits.ui.activities.EstablishmentSummaryActivity;
-import org.moa.etlits.ui.activities.MainActivity;
 import org.moa.etlits.ui.adapters.EstablishmentAdapter;
 import org.moa.etlits.ui.viewmodels.AnimalRegViewModel;
 
@@ -29,7 +22,6 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Locale;
 
 public class AnimalRegMoveEventsFragment extends Fragment {
