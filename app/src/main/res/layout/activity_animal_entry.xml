@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.activities.AnimalDataEntryActivity"
+    tools:context=".ui.activities.AnimalEntryActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -60,6 +60,7 @@
                 android:src="@drawable/ic_animal_filled"
                 android:layout_margin="@dimen/big_padding"
                 android:layout_gravity="center"
+
                 />
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -175,6 +176,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_dead"
                     android:minHeight="@dimen/min_touch_target_size"
+                    android:minWidth="@dimen/min_touch_target_size"
                     tools:ignore="UseSwitchCompatOrMaterialXml" />
             </RelativeLayout>
         </LinearLayout>

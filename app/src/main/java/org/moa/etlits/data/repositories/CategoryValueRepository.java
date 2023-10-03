@@ -37,7 +37,7 @@ public class CategoryValueRepository {
         });
     }
 
-    public LiveData<CategoryValue>loadByType(String categoryKey){
+    public LiveData<List<CategoryValue>>loadByType(String categoryKey){
         return categoryValueDao.loadByCategoryKey(categoryKey);
     }
 

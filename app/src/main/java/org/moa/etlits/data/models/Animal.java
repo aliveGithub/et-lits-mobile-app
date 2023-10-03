@@ -21,8 +21,8 @@ public class Animal implements java.io.Serializable {
     @ColumnInfo(name = "breed")
     private String breed;
 
-    @ColumnInfo(name = "date_birth")
-    private Date dateBirth;
+    @ColumnInfo(name = "age")
+    private Integer age;
 
     @ColumnInfo(name = "dead")
     private boolean dead;
@@ -61,13 +61,7 @@ public class Animal implements java.io.Serializable {
         this.breed = breed;
     }
 
-    public Date getDateBirth() {
-        return dateBirth;
-    }
 
-    public void setDateBirth(Date dateBirth) {
-        this.dateBirth = dateBirth;
-    }
 
     public boolean isDead() {
         return dead;
@@ -83,6 +77,14 @@ public class Animal implements java.io.Serializable {
 
     public void setSex(String sex) {
         this.sex = sex;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
     }
 
     public String getSeller() {

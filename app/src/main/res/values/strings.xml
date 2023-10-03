@@ -119,5 +119,11 @@
     <string name="animal_reg_dead">Dead</string>
     <string name="animal_reg_seller">Seller</string>
     <string name="animal_reg_seller_hint">Seller</string>
+    <string name="animal_reg_animal_id_required">Animal Id field is required</string>
+    <string name="animal_reg_sex_required">Sex field is required</string>
+    <string name="animal_reg_breed_required">Breed field is required</string>
+    <string name="animal_reg_age_required">Age field is required</string>
+    <string name="animal_reg_animal_id_invalid">Invalid animal Id</string>
+
 
 </resources>

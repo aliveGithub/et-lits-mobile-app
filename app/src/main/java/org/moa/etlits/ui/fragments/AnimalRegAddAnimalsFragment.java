@@ -19,7 +19,7 @@ import android.view.ViewGroup;
 
 import org.moa.etlits.data.models.Animal;
 import org.moa.etlits.databinding.FragmentAnimalRegAddAnimalsBinding;
-import org.moa.etlits.ui.activities.AnimalDataEntryActivity;
+import org.moa.etlits.ui.activities.AnimalEntryActivity;
 import org.moa.etlits.ui.adapters.AnimalListAdapter;
 import org.moa.etlits.ui.viewmodels.AnimalRegViewModel;
 
@@ -73,24 +73,30 @@ public class AnimalRegAddAnimalsFragment extends Fragment implements AnimalListA
                     if (result.getResultCode() == RESULT_OK) {
                         Intent data = result.getData();
                         if (data != null) {
-                            Animal animal = (Animal) data.getSerializableExtra(AnimalDataEntryActivity.ADD_ANIMAL_RESULT);
+                            Animal animal = (Animal) data.getSerializableExtra(AnimalEntryActivity.ADD_ANIMAL_RESULT);
                              if (animal != null) {
                                  Log.d("AnimalRegAddAnimalsFragment", "onViewCreated: " + animal.getAnimalId());
                                  Log.d("AnimalRegAddAnimalsFragment", "onViewCreated: " + animal.getBreed());
                                  Log.d("AnimalRegAddAnimalsFragment", "onViewCreated: " + animal.getSex());
-                                 Log.d("AnimalRegAddAnimalsFragment", "onViewCreated: " + animal.getDateBirth());
+                                 Log.d("AnimalRegAddAnimalsFragment", "onViewCreated: " + animal.getAge());
                                  Log.d("AnimalRegAddAnimalsFragment", "onViewCreated: " + animal.isDead());
                                  Log.d("AnimalRegAddAnimalsFragment", "onViewCreated: " + animal.getSeller());
 
-                                    viewModel.getAnimals().getValue().add(animal);
-                                    adapter.notifyDataSetChanged();
+                                 viewModel.getAnimals().getValue().add(animal);
+                                 adapter.notifyDataSetChanged();
+                             }
+                             boolean addAnotherAnimal = data.getBooleanExtra(AnimalEntryActivity.ADD_ANOTHER_ANIMAL, false);
+
+                             if(addAnotherAnimal){
+                                 Intent intent = new Intent(getActivity(), AnimalEntryActivity.class);
+                                 activityResultLauncher.launch(intent);
                              }
                         }
                     }
                 });
 
         binding.btnAddAnimal.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), AnimalDataEntryActivity.class);
+            Intent intent = new Intent(getActivity(), AnimalEntryActivity.class);
             activityResultLauncher.launch(intent);
         });
 

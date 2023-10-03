@@ -24,7 +24,7 @@ public interface CategoryValueDao {
     LiveData<List<CategoryValue>> getAllCategoryValues();
 
    @Query("SELECT * FROM category_values where category_key=:categoryKey")
-    LiveData<CategoryValue> loadByCategoryKey(String categoryKey);
+    LiveData<List<CategoryValue>> loadByCategoryKey(String categoryKey);
 
     @Query("SELECT * FROM category_values where value_id=:valueId")
     LiveData<CategoryValue> loadByValueId(String valueId);
