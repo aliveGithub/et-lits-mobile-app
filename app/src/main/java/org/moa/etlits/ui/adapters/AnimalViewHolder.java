@@ -48,9 +48,7 @@ class AnimalViewHolder extends RecyclerView.ViewHolder implements View.OnClickLi
         tvAnimalId.setText(String.valueOf(animal.getAnimalId()));
         tvSex.setText(animal.getSex());
         tvBreed.setText(animal.getBreed());
-        //tvAge.setText(String.valueOf(animal.getAge()));
-
-    }
+        tvAge.setText(tvAge.getContext().getString(R.string.animal_reg_age_months, String.valueOf(animal.getAge())));}
 
     public static AnimalViewHolder create(ViewGroup parent, AnimalListAdapter.AnimalItemEventsListener animalItemEventsListener) {
         View view = LayoutInflater.from(parent.getContext())

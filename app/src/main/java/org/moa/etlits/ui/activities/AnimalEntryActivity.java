@@ -9,7 +9,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import org.moa.etlits.R;
 import org.moa.etlits.data.models.Animal;
+import org.moa.etlits.data.models.CategoryValue;
 import org.moa.etlits.databinding.ActivityAnimalEntryBinding;
 import org.moa.etlits.ui.viewmodels.AnimalEntryModel;
 
@@ -30,6 +32,9 @@ public class AnimalEntryActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         animalDataEntryViewModel = new ViewModelProvider(AnimalEntryActivity.this, new AnimalEntryModel.AnimalDataEntryViewModelFactory(getApplication())).get(AnimalEntryModel.class);
         animalDataEntryViewModel.getBreedList().observe(this, breeds -> {
+            CategoryValue categoryValue = new CategoryValue();
+            categoryValue.setValue(" ");
+            breeds.add(0, categoryValue);
             binding.sBreed.setAdapter(new ArrayAdapter<>(AnimalEntryActivity.this, android.R.layout.simple_spinner_item, breeds));
         });
 
@@ -64,6 +69,9 @@ public class AnimalEntryActivity extends AppCompatActivity {
         });
 
         animalDataEntryViewModel.getSexList().observe(this, sexList -> {
+            CategoryValue categoryValue = new CategoryValue();
+            categoryValue.setValue(" ");
+            sexList.add(0, categoryValue);
             binding.sSex.setAdapter(new ArrayAdapter<>(AnimalEntryActivity.this, android.R.layout.simple_spinner_item, sexList));
         });
 
@@ -151,8 +159,8 @@ public class AnimalEntryActivity extends AppCompatActivity {
     private void dataChanged() {
         animalDataEntryViewModel.dataChanged(
                 binding.etAnimalId.getText().toString(),
-                binding.sBreed.getSelectedItem() != null ? binding.sBreed.getSelectedItem().toString() : null,
                 binding.sSex.getSelectedItem() != null ? binding.sSex.getSelectedItem().toString() : null,
+                binding.sBreed.getSelectedItem() != null ? binding.sBreed.getSelectedItem().toString() : null,
                 binding.etAge.getText().toString().isEmpty() ? null : Integer.parseInt(binding.etAge.getText().toString()),
                 binding.swDead.isChecked(),
                 binding.etSeller.getText().toString());

@@ -26,7 +26,7 @@ public class AnimalEntryModel extends ViewModel {
     private LiveData<List<CategoryValue>> breedList;
     private LiveData<List<CategoryValue>> sexList;
 
-    private static final String REGEX_PATTERN = "^ET \\d{10}$";
+    private static final String ANIMAL_ID_REGEX_PATTERN = "^ET \\d{10}$";
 
     AnimalEntryModel(Application application) {
         this.categoryValueRepository = new CategoryValueRepository(application);
@@ -78,17 +78,17 @@ public class AnimalEntryModel extends ViewModel {
         if (animalId == null) {
             return false;
         }
-        Pattern pattern = Pattern.compile(REGEX_PATTERN);
+        Pattern pattern = Pattern.compile(ANIMAL_ID_REGEX_PATTERN);
         Matcher matcher = pattern.matcher(animalId);
         return matcher.matches();
     }
 
     private boolean isEmpty(String value) {
-        return value != null && value.trim().length() > 0;
+        return value == null || value.trim().length() == 0;
     }
 
     private boolean isEmpty(Integer value) {
-        return value != null && value > 0;
+        return value == null || value <= 0;
     }
 
     public static class AnimalDataEntryViewModelFactory implements ViewModelProvider.Factory {
