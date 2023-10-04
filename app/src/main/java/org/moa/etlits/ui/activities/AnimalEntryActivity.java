@@ -1,9 +1,12 @@
 package org.moa.etlits.ui.activities;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,8 +17,11 @@ import org.moa.etlits.data.models.Animal;
 import org.moa.etlits.data.models.CategoryValue;
 import org.moa.etlits.databinding.ActivityAnimalEntryBinding;
 import org.moa.etlits.ui.viewmodels.AnimalEntryModel;
+import org.moa.etlits.utils.Constants;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 public class AnimalEntryActivity extends AppCompatActivity {
@@ -83,7 +89,21 @@ public class AnimalEntryActivity extends AppCompatActivity {
             returnResult(true);
         });
 
-        validateInput();
+        setUpActionBar();
+        setUpDataValidation();
+    }
+
+    private void setUpActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(R.string.animal_reg_animal_detail_title);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            final Drawable upArrow = ContextCompat.getDrawable(this, androidx.appcompat.R.drawable.abc_ic_ab_back_material);
+            if (upArrow != null) {
+                upArrow.setColorFilter(getResources().getColor(R.color.colorPrimaryDark, getTheme()), PorterDuff.Mode.SRC_ATOP);
+                actionBar.setHomeAsUpIndicator(upArrow);
+            }
+        }
     }
 
     public void returnResult(boolean addAnotherAnimal) {
@@ -116,7 +136,7 @@ public class AnimalEntryActivity extends AppCompatActivity {
         finish();
     }
 
-    private void validateInput() {
+    private void setUpDataValidation() {
         TextWatcher afterTextChangedListener = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -172,5 +192,15 @@ public class AnimalEntryActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         binding = null;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            this.onBackPressed();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

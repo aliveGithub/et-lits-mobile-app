@@ -1,23 +1,21 @@
 package org.moa.etlits.ui.activities;
 
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.ImageView;
 
 import org.moa.etlits.R;
-import org.moa.etlits.data.models.AnimalRegistration;
 import org.moa.etlits.databinding.ActivityAnimalRegBinding;
-import org.moa.etlits.ui.adapters.EstablishmentAdapter;
 import org.moa.etlits.ui.fragments.AnimalRegAddAnimalsFragment;
 import org.moa.etlits.ui.fragments.AnimalRegMoveEventsFragment;
 import org.moa.etlits.ui.fragments.AnimalRegTreatmentsFragment;
 import org.moa.etlits.ui.viewmodels.AnimalRegViewModel;
 import org.moa.etlits.utils.Constants;
 
-import java.util.ArrayList;
-
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
@@ -29,6 +27,8 @@ public class AnimalRegActivity extends AppCompatActivity {
     private ActivityAnimalRegBinding binding;
     private AnimalRegViewModel viewModel;
     private SharedPreferences sharedPreferences;
+
+    private ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +42,8 @@ public class AnimalRegActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             addFragments();
         }
-        setupNavigation();
+        setUpNavigation();
+        setUpActionBar();
     }
 
     private void addFragments() {
@@ -77,7 +78,20 @@ public class AnimalRegActivity extends AppCompatActivity {
         }
     }
 
-    private void setupNavigation() {
+    private void setUpActionBar() {
+        actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(R.string.animal_reg_title);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            final Drawable upArrow = ContextCompat.getDrawable(this, androidx.appcompat.R.drawable.abc_ic_ab_back_material);
+            if (upArrow != null) {
+                upArrow.setColorFilter(getResources().getColor(R.color.colorPrimaryDark, getTheme()), PorterDuff.Mode.SRC_ATOP);
+                actionBar.setHomeAsUpIndicator(upArrow);
+            }
+        }
+    }
+
+    private void setUpNavigation() {
         binding.ivFirst.setOnClickListener(v -> {
             viewModel.first();
             showFragment(viewModel.getCurrentStep());

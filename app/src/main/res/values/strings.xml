@@ -126,6 +126,6 @@
     <string name="animal_reg_animal_id_invalid">Invalid animal Id</string>
     <string name="animal_reg_age_invalid">Invalid Age. Allowed range is 1 to 300 months.</string>
     <string name="animal_reg_age_months">%1$s months</string>
-
-
+    <string name="animal_reg_animal_detail_title">Animal Details</string>
+    <string name="animal_reg_title">Animal Registrations</string>
 </resources>

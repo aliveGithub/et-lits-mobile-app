@@ -282,7 +282,7 @@ public class SyncActivity extends AppCompatActivity {
             if (syncViewModel.getSyncRunning() && !hasInitialized) {
                 showDataInitDialog();
             } else {
-                SyncActivity.super.onBackPressed();
+                this.onBackPressed();
             }
 
             return true;
