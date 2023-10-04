@@ -1,11 +1,13 @@
 package org.moa.etlits.ui.activities;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 
 import org.moa.etlits.R;
 import org.moa.etlits.data.models.AnimalRegistration;
+import org.moa.etlits.databinding.ActivityAnimalRegBinding;
 import org.moa.etlits.ui.adapters.EstablishmentAdapter;
 import org.moa.etlits.ui.fragments.AnimalRegAddAnimalsFragment;
 import org.moa.etlits.ui.fragments.AnimalRegMoveEventsFragment;
@@ -24,25 +26,22 @@ public class AnimalRegActivity extends AppCompatActivity {
     private Fragment moveEventsFragment;
     private Fragment animalRegFragment;
     private Fragment treatmentsFragment;
-
-    private ImageView ivFirst;
-    private ImageView ivPrev;
-    private ImageView ivNext;
-    private ImageView ivLast;
+    private ActivityAnimalRegBinding binding;
     private AnimalRegViewModel viewModel;
-
-
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_animal_reg);
+        binding = ActivityAnimalRegBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
+        sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES, MODE_PRIVATE);
         viewModel = new ViewModelProvider((ViewModelStoreOwner) this, (ViewModelProvider.Factory) new AnimalRegViewModel.Factory(getApplication(), 0)).get(AnimalRegViewModel.class);
+
         if (savedInstanceState == null) {
             addFragments();
         }
-
         setupNavigation();
     }
 
@@ -79,25 +78,34 @@ public class AnimalRegActivity extends AppCompatActivity {
     }
 
     private void setupNavigation() {
-        ivFirst = findViewById(R.id.iv_first);
-        ivPrev = findViewById(R.id.iv_prev);
-        ivNext = findViewById(R.id.iv_next);
-        ivLast = findViewById(R.id.iv_last);
-        ivFirst.setOnClickListener(v -> {
+        binding.ivFirst.setOnClickListener(v -> {
             viewModel.first();
             showFragment(viewModel.getCurrentStep());
         });
-        ivPrev.setOnClickListener(v -> {
+        binding.ivPrev.setOnClickListener(v -> {
             viewModel.prev();
             showFragment(viewModel.getCurrentStep());
         });
-        ivNext.setOnClickListener(v -> {
+        binding.ivNext.setOnClickListener(v -> {
             viewModel.next();
             showFragment(viewModel.getCurrentStep());
         });
-        ivLast.setOnClickListener(v -> {
+        binding.ivLast.setOnClickListener(v -> {
             viewModel.last();
             showFragment(viewModel.getCurrentStep());
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        String defaultEstablishment = sharedPreferences.getString(Constants.DEFAULT_ESTABLISHMENT, "");
+        binding.tvSelectedEstablishment.setText(defaultEstablishment);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 }

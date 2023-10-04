@@ -19,6 +19,7 @@ package org.moa.etlits.ui.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.moa.etlits.R;
@@ -32,6 +33,8 @@ class AnimalViewHolder extends RecyclerView.ViewHolder implements View.OnClickLi
     private final TextView tvBreed;
     private final TextView tvAge;
 
+    private ImageView ivDelete;
+
     private AnimalListAdapter.AnimalItemEventsListener animalItemEventsListener;
     private AnimalViewHolder(View itemView, AnimalListAdapter.AnimalItemEventsListener animalItemEventsListener) {
         super(itemView);
@@ -41,6 +44,16 @@ class AnimalViewHolder extends RecyclerView.ViewHolder implements View.OnClickLi
         tvSex = itemView.findViewById(R.id.tv_sex);
         tvBreed = itemView.findViewById(R.id.tv_breed);
         tvAge = itemView.findViewById(R.id.tv_age);
+        ivDelete = itemView.findViewById(R.id.iv_delete);
+        ivDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(animalItemEventsListener != null) {
+                    animalItemEventsListener.onAnimalItemDeleteClick(getAdapterPosition());
+                }
+            }
+        });
+
 
     }
 
@@ -49,6 +62,8 @@ class AnimalViewHolder extends RecyclerView.ViewHolder implements View.OnClickLi
         tvSex.setText(animal.getSex());
         tvBreed.setText(animal.getBreed());
         tvAge.setText(tvAge.getContext().getString(R.string.animal_reg_age_months, String.valueOf(animal.getAge())));}
+
+
 
     public static AnimalViewHolder create(ViewGroup parent, AnimalListAdapter.AnimalItemEventsListener animalItemEventsListener) {
         View view = LayoutInflater.from(parent.getContext())
@@ -59,9 +74,9 @@ class AnimalViewHolder extends RecyclerView.ViewHolder implements View.OnClickLi
 
         @Override
         public void onClick(View v) {
-           if(animalItemEventsListener != null) {
-               animalItemEventsListener.onAnimalClick(getAdapterPosition());
-           }
+            if(animalItemEventsListener != null) {
+                animalItemEventsListener.onAnimalItemClick(getAdapterPosition());
+            }
         }
 
 }

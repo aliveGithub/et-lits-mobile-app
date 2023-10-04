@@ -93,11 +93,13 @@ public class AnimalEntryActivity extends AppCompatActivity {
         animal.setAnimalId(binding.etAnimalId.getText().toString().trim());
 
         if (binding.sBreed.getSelectedItem() != null) {
-            animal.setBreed(String.valueOf(binding.sBreed.getSelectedItem()));
+            CategoryValue v = (CategoryValue) binding.sBreed.getSelectedItem();
+            animal.setBreed(v.getValueId());
         }
 
         if (binding.sSex.getSelectedItem() != null) {
-            animal.setSex(binding.sSex.getSelectedItem().toString());
+            CategoryValue v = (CategoryValue) binding.sSex.getSelectedItem();
+            animal.setSex(v.getValueId());
         }
 
         if (!binding.etAge.getText().toString().isEmpty()) {

@@ -16,8 +16,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
 import org.moa.etlits.data.models.Animal;
+import org.moa.etlits.data.models.CategoryValue;
 import org.moa.etlits.databinding.FragmentAnimalRegAddAnimalsBinding;
 import org.moa.etlits.ui.activities.AnimalEntryActivity;
 import org.moa.etlits.ui.adapters.AnimalListAdapter;
@@ -67,6 +69,11 @@ public class AnimalRegAddAnimalsFragment extends Fragment implements AnimalListA
             adapter.submitList(animals);
         });
 
+        viewModel.getSpeciesList().observe(getActivity(), speciesList -> {
+            binding.sSpecies.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, speciesList));
+        });
+
+        binding.sSpecies.setEnabled(false);
         activityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -101,8 +108,6 @@ public class AnimalRegAddAnimalsFragment extends Fragment implements AnimalListA
         });
 
 
-
-
     }
 
     @Override
@@ -112,7 +117,12 @@ public class AnimalRegAddAnimalsFragment extends Fragment implements AnimalListA
     }
 
     @Override
-    public void onAnimalClick(int position) {
+    public void onAnimalItemClick(int position) {
+    }
 
+    @Override
+    public void onAnimalItemDeleteClick(int position) {
+        viewModel.getAnimals().getValue().remove(position);
+        adapter.notifyDataSetChanged();
     }
 }

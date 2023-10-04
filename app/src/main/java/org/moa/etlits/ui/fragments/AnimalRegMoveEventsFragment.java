@@ -13,8 +13,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 
+import org.moa.etlits.data.models.CategoryValue;
 import org.moa.etlits.databinding.FragmentAnimalRegMoveEventsBinding;
+import org.moa.etlits.ui.activities.AnimalEntryActivity;
 import org.moa.etlits.ui.adapters.EstablishmentAdapter;
 import org.moa.etlits.ui.viewmodels.AnimalRegViewModel;
 
@@ -63,6 +66,8 @@ public class AnimalRegMoveEventsFragment extends Fragment {
             establishmentAdapter.addAll(lst);
             establishmentAdapter.notifyDataSetChanged();
         });
+
+
 
         binding.actvMoveOffEid.setAdapter(establishmentAdapter);
         binding.actvMoveOffEid.setOnItemClickListener(new AdapterView.OnItemClickListener() {

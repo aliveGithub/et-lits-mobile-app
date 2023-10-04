@@ -144,6 +144,7 @@
                     android:layout_below="@+id/tv_age"
                     android:hint="@string/animal_reg_age_hint"
                     android:minHeight="@dimen/min_touch_target_size"
+                    android:inputType="number"
                     />
 
             </RelativeLayout>
