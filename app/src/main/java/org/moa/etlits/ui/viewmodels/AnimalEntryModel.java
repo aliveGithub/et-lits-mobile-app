@@ -32,7 +32,6 @@ public class AnimalEntryModel extends ViewModel {
         this.categoryValueRepository = new CategoryValueRepository(application);
         breedList = this.categoryValueRepository.loadByType(Constants.CATEGORY_KEY_BREEDS);
         sexList = this.categoryValueRepository.loadByType(Constants.CATEGORY_KEY_SEX);
-
     }
 
     public LiveData<List<CategoryValue>> getBreedList() {
@@ -69,6 +68,10 @@ public class AnimalEntryModel extends ViewModel {
 
         if (isEmpty(age)){
             newAnimalFormState.setAgeError(R.string.animal_reg_age_required);
+        } else {
+            if (!isValidAge(age)) {
+                newAnimalFormState.setAgeError(R.string.animal_reg_age_invalid);
+            }
         }
 
        animalFormState.setValue(newAnimalFormState);
@@ -81,6 +84,12 @@ public class AnimalEntryModel extends ViewModel {
         Pattern pattern = Pattern.compile(ANIMAL_ID_REGEX_PATTERN);
         Matcher matcher = pattern.matcher(animalId);
         return matcher.matches();
+    }
+   private boolean isValidAge(Integer age) {
+        if (age == null) {
+            return false;
+        }
+        return age > 0 && age <= 300;
     }
 
     private boolean isEmpty(String value) {

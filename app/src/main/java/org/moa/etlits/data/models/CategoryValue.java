@@ -56,6 +56,9 @@ public class CategoryValue {
     }
 
     public String toString() {
-        return  getValue() ;
+        if (getValue() != null) {
+            return getValue();
+        }
+        return  "";
     }
 }

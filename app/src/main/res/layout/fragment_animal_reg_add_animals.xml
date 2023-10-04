@@ -50,6 +50,7 @@
                     android:layout_below="@+id/tv_herd_specie"
                     android:hint=""
                     android:minHeight="@dimen/min_touch_target_size"
+                    android:enabled="false"
                     />
 
             </RelativeLayout>

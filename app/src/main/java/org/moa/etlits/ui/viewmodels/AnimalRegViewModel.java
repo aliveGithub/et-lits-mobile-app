@@ -5,12 +5,14 @@ import android.widget.TextView;
 
 import org.moa.etlits.data.models.Animal;
 import org.moa.etlits.data.models.AnimalRegistration;
+import org.moa.etlits.data.models.CategoryValue;
 import org.moa.etlits.data.models.Establishment;
 import org.moa.etlits.data.repositories.AnimalRegistrationRepository;
 import org.moa.etlits.data.repositories.AnimalRepository;
 import org.moa.etlits.data.repositories.EstablishmentRepository;
 import org.moa.etlits.utils.Constants;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -34,6 +36,8 @@ public class AnimalRegViewModel extends AndroidViewModel {
 
     private LiveData<List<Animal>> animalList;
 
+    private LiveData<List<CategoryValue>> speciesList;
+
     private Calendar dateMoveOn;
     private Calendar dateMoveOff;
 
@@ -49,6 +53,18 @@ public class AnimalRegViewModel extends AndroidViewModel {
         dateMoveOn = Calendar.getInstance();
         dateMoveOff = Calendar.getInstance();
         dateIdentification = Calendar.getInstance();
+        populateSpeciesList();
+    }
+
+    private void populateSpeciesList() {
+        List<CategoryValue> species = new ArrayList<>();
+        CategoryValue newCategoryValue = new CategoryValue();
+        newCategoryValue.setValueId("csCattle");
+        newCategoryValue.setValue("Cattle");
+        newCategoryValue.setCategoryKey(Constants.CATEGORY_KEY_SPECIES);
+        newCategoryValue.setLanguage("en");
+        species.add(newCategoryValue);
+        speciesList = new MutableLiveData<>(species);
     }
 
     public void next() {
@@ -132,7 +148,6 @@ public class AnimalRegViewModel extends AndroidViewModel {
         if (getAnimalRegistration().getValue() != null) {
             getAnimalRegistration().getValue().setHoldingGroundEid(code);
         }
-
     }
 
     public void setMoveOnEstablishment(String code) {
@@ -143,6 +158,10 @@ public class AnimalRegViewModel extends AndroidViewModel {
 
     public LiveData<List<Animal>> getAnimals() {
         return animalList;
+    }
+
+    public LiveData<List<CategoryValue>> getSpeciesList() {
+        return speciesList;
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {

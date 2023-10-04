@@ -43,6 +43,7 @@ public class AnimalListAdapter extends ListAdapter<Animal, AnimalViewHolder> {
     }
 
     public interface AnimalItemEventsListener {
-        void onAnimalClick(int position);
+        void onAnimalItemClick(int position);
+        void onAnimalItemDeleteClick(int position);
     }
 }

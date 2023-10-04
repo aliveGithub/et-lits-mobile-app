@@ -47,10 +47,14 @@ public class AnimalListActivity extends AppCompatActivity implements AnimalListA
     }
 
     @Override
-    public void onAnimalClick(int position) {
+    public void onAnimalItemClick(int position) {
        /*Animal animal = adapter.getCurrentList().get(position);
        Intent intent = new Intent(AnimalListActivity.this, EditAnimalActivityOld.class);
        intent.putExtra("animalId", animal.getId());
        startActivity(intent);*/
+    }
+
+    @Override
+    public void onAnimalItemDeleteClick(int position) {
     }
 }

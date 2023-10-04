@@ -12,6 +12,8 @@
        android:text="0000908980"
         android:layout_weight="1"
         android:layout_margin="@dimen/small_margin"
+        android:maxLines="1"
+        android:minWidth="200dp"
         />
 
     <TextView
@@ -20,7 +22,10 @@
         android:layout_height="wrap_content"
         android:text="Borana"
         android:padding="@dimen/small_padding"
-        android:layout_margin="@dimen/small_margin"/>
+        android:layout_margin="@dimen/small_margin"
+        android:layout_weight="1"
+        android:maxLines="1"
+        android:ellipsize="end"/>
 
     <TextView
         android:id="@+id/tv_age"
@@ -29,6 +34,9 @@
         android:text="36 months"
         android:padding="@dimen/small_padding"
         android:layout_margin="@dimen/small_margin"
+        android:layout_weight="1"
+        android:maxLines="1"
+        android:ellipsize="end"
         />
 
     <TextView
@@ -37,7 +45,11 @@
         android:layout_height="wrap_content"
         android:text="F"
         android:padding="@dimen/small_padding"
-        android:layout_margin="@dimen/small_margin"/>
+        android:layout_margin="@dimen/small_margin"
+        android:layout_weight="1"
+        android:maxLines="1"
+        android:ellipsize="end"
+        />
 
     <ImageView
         android:id="@+id/iv_delete"
