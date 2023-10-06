@@ -13,17 +13,17 @@ import androidx.lifecycle.LiveData;
 public class AnimalRepository {
     private AnimalDao animalDao;
 
-    private LiveData<List<Animal>> animalList;
+    //private LiveData<List<Animal>> animalList;
 
     public AnimalRepository(Application application) {
         AppDatabase db = AppDatabase.getDatabase(application);
         animalDao = db.animalDao();
-        animalList = animalDao.getAllAnimals();
+       // animalList = animalDao.getAllAnimals();
     }
 
-    public LiveData<List<Animal>> getAllAnimals() {
+    /*public LiveData<List<Animal>> getAllAnimals() {
         return animalList;
-    }
+    }*/
 
     public void insert(Animal animal) {
         AppDatabase.databaseWriteExecutor.execute(() -> {

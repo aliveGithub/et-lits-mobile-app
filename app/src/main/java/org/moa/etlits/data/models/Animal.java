@@ -33,6 +33,7 @@ public class Animal implements java.io.Serializable {
     @ColumnInfo(name = "seller")
     private String seller;
 
+    @NonNull
     @ColumnInfo(name = "animal_registration_id")
     private long animalRegistrationId;
 

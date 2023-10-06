@@ -39,12 +39,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activities.EditAnimalActivityOld"
-            android:exported="false" />
-        <activity
-            android:name=".ui.activities.AnimalListActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.activities.MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false" />

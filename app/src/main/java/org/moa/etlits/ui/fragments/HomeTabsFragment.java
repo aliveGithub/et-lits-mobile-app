@@ -19,7 +19,6 @@ import com.google.android.material.navigation.NavigationView;
 import org.moa.etlits.R;
 import org.moa.etlits.ui.activities.EstablishmentSummaryActivity;
 import org.moa.etlits.ui.activities.SyncActivity;
-import org.moa.etlits.ui.activities.AnimalListActivity;
 import org.moa.etlits.ui.activities.LoginActivity;
 import org.moa.etlits.ui.activities.MainActivity;
 import org.moa.etlits.utils.Constants;
@@ -152,11 +151,7 @@ public class HomeTabsFragment extends Fragment {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                // Handle navigation view item clicks here.
-                if (item.getItemId() == R.id.nav_settings) {
-                    Intent intent = new Intent(getActivity(), AnimalListActivity.class);
-                    startActivity(intent);
-                } else if (item.getItemId() == R.id.nav_logout) {
+                if (item.getItemId() == R.id.nav_logout) {
                     logout();
                 }
 
