@@ -1,8 +1,9 @@
 package org.moa.etlits.ui.viewmodels;
 
 import android.app.Application;
-import android.widget.TextView;
+import android.util.Log;
 
+import org.moa.etlits.R;
 import org.moa.etlits.data.models.Animal;
 import org.moa.etlits.data.models.AnimalRegistration;
 import org.moa.etlits.data.models.CategoryValue;
@@ -10,13 +11,15 @@ import org.moa.etlits.data.models.Establishment;
 import org.moa.etlits.data.repositories.AnimalRegistrationRepository;
 import org.moa.etlits.data.repositories.AnimalRepository;
 import org.moa.etlits.data.repositories.EstablishmentRepository;
+import org.moa.etlits.ui.validation.AnimalRegFormState;
+import org.moa.etlits.ui.validation.ValidationUtil;
 import org.moa.etlits.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -32,6 +35,8 @@ public class AnimalRegViewModel extends AndroidViewModel {
     private final MutableLiveData<Integer> currentStep = new MutableLiveData<>(0);
 
     private LiveData<AnimalRegistration> animalRegistration = new MutableLiveData<>(new AnimalRegistration());
+
+    private MutableLiveData<AnimalRegFormState> animalRegFormState = new MutableLiveData<>();
     private LiveData<List<Establishment>> establishmentList;
 
     private LiveData<List<Animal>> animalList;
@@ -156,12 +161,67 @@ public class AnimalRegViewModel extends AndroidViewModel {
         }
     }
 
+    public void validateMoveEvents() {
+        AnimalRegFormState newAnimalRegFormState = new AnimalRegFormState();
+        AnimalRegistration animalRegistration = getAnimalRegistration().getValue();
+        if (animalRegistration == null) {
+            return;
+        }
+        if (ValidationUtil.isEmpty(animalRegistration.getDateIdentification())) {
+            newAnimalRegFormState.setDateIdentificationError(R.string.animal_reg_date_required);
+        } else {
+            if (ValidationUtil.dateInFuture(animalRegistration.getDateIdentification())) {
+                newAnimalRegFormState.setDateIdentificationError(R.string.animal_reg_date_in_future);
+            }
+        }
+
+        if (ValidationUtil.isEmpty(animalRegistration.getDateMoveOff())) {
+            newAnimalRegFormState.setDateMoveOffError(R.string.animal_reg_date_required);
+        } else {
+            if (ValidationUtil.dateInFuture(animalRegistration.getDateMoveOff())) {
+                newAnimalRegFormState.setDateMoveOffError(R.string.animal_reg_date_in_future);
+            }
+            if (ValidationUtil.dateIsAfter(animalRegistration.getDateIdentification(), animalRegistration.getDateMoveOff())) {
+                newAnimalRegFormState.setDateMoveOffError(R.string.animal_reg_identification_date_after_move_off);
+            }
+        }
+
+        if (ValidationUtil.isEmpty(animalRegistration.getHoldingGroundEid())) {
+            newAnimalRegFormState.setHoldingGroundEidError(R.string.animal_reg_eid_required);
+        }
+
+        if (ValidationUtil.isEmpty(animalRegistration.getDateMoveOn())) {
+            newAnimalRegFormState.setDateMoveOnError(R.string.animal_reg_date_required);
+        } else {
+            if (ValidationUtil.dateInFuture(animalRegistration.getDateMoveOn())) {
+                newAnimalRegFormState.setDateMoveOnError(R.string.animal_reg_date_in_future);
+            }
+            if (ValidationUtil.dateIsAfter(animalRegistration.getDateMoveOff(), animalRegistration.getDateMoveOn())) {
+                newAnimalRegFormState.setDateMoveOnError(R.string.animal_reg_move_off_date_after_move_on);
+            }
+        }
+
+        if (ValidationUtil.isEmpty(animalRegistration.getEstablishmentEid())) {
+            newAnimalRegFormState.setEstablishmentEidError(R.string.animal_reg_eid_required);
+        }
+
+        animalRegFormState.setValue(newAnimalRegFormState);
+    }
+
+    private boolean moveEventsIsValid() {
+        return getAnimalRegFormState().getValue().isDataValid();
+    }
+
     public LiveData<List<Animal>> getAnimals() {
         return animalList;
     }
 
     public LiveData<List<CategoryValue>> getSpeciesList() {
         return speciesList;
+    }
+
+    public MutableLiveData<AnimalRegFormState> getAnimalRegFormState() {
+        return animalRegFormState;
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {

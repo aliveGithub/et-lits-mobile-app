@@ -37,6 +37,7 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/big_margin"
             android:layout_weight="1">
             <TextView
                 android:id="@+id/tv_move_off_eid"
@@ -69,6 +70,7 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/big_margin"
             android:layout_weight="1">
             <TextView
                 android:id="@+id/tv_date_identification"
@@ -81,7 +83,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_date_identification"
-                android:text="@string/animal_reg_select_date"
+                android:text=""
+                android:hint="@string/animal_reg_select_date"
                 android:gravity="left|center_vertical"
                 android:padding="@dimen/very_small_padding"
                 android:background="@drawable/bg_light_green"
@@ -104,6 +107,7 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/big_margin"
             android:layout_weight="1">
             <TextView
                 android:id="@+id/tv_date_move_off"
@@ -116,7 +120,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_date_move_off"
-                android:text="@string/animal_reg_select_date"
+                android:hint="@string/animal_reg_select_date"
                 android:gravity="left|center_vertical"
                 android:padding="@dimen/very_small_padding"
                 android:background="@drawable/bg_light_green"
@@ -151,6 +155,7 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/big_margin"
             android:layout_weight="1">
             <TextView
                 android:id="@+id/tv_move_on_eid"
@@ -184,6 +189,7 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/big_margin"
             android:layout_weight="1">
             <TextView
                 android:id="@+id/tv_date_move_on"
@@ -195,7 +201,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_date_move_on"
-                android:text="@string/animal_reg_select_date"
+                android:hint="@string/animal_reg_select_date"
                 android:gravity="left|center_vertical"
                 android:padding="@dimen/very_small_padding"
                 android:background="@drawable/bg_light_green"

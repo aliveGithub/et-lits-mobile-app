@@ -67,7 +67,33 @@ public class AnimalRegMoveEventsFragment extends Fragment {
             establishmentAdapter.notifyDataSetChanged();
         });
 
+        viewModel.getAnimalRegFormState().observe(getActivity(), formState -> {
+            if (formState == null) {
+                return;
+            }
+            //binding.btnNext.setEnabled(formState.isDataValid());
+            binding.actvMoveOffEid.setError(null);
+            binding.actvMoveOnEid.setError(null);
+            binding.btnDateMoveOff.setError(null);
+            binding.btnDateMoveOn.setError(null);
+            binding.btnDateIdentification.setError(null);
 
+            if (formState.getHoldingGroundEidError() != null) {
+                binding.actvMoveOffEid.setError(getString(formState.getHoldingGroundEidError()));
+            }
+            if (formState.getEstablishmentEidError() != null) {
+                binding.actvMoveOnEid.setError(getString(formState.getEstablishmentEidError()));
+            }
+            if (formState.getDateMoveOffError() != null) {
+                binding.btnDateMoveOff.setError(getString(formState.getDateMoveOffError()));
+            }
+            if (formState.getDateMoveOnError() != null) {
+                binding.btnDateMoveOn.setError(getString(formState.getDateMoveOnError()));
+            }
+            if (formState.getDateIdentificationError() != null) {
+                binding.btnDateIdentification.setError(getString(formState.getDateIdentificationError()));
+            }
+        });
 
         binding.actvMoveOffEid.setAdapter(establishmentAdapter);
         binding.actvMoveOffEid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -77,6 +103,7 @@ public class AnimalRegMoveEventsFragment extends Fragment {
                 if (selectedItem != null) {
                     String code = selectedItem.split("-")[0];
                     viewModel.setMoveOffEstablishment(code.trim());
+                    viewModel.validateMoveEvents();
                 }
             }
         });
@@ -89,6 +116,7 @@ public class AnimalRegMoveEventsFragment extends Fragment {
                 if (selectedItem != null) {
                     String code = selectedItem.split("-")[0];
                     viewModel.setMoveOnEstablishment(code.trim());
+                    viewModel.validateMoveEvents();
                 }
             }
         });
@@ -98,13 +126,14 @@ public class AnimalRegMoveEventsFragment extends Fragment {
             new DatePickerDialog(getActivity(), (dView, year, month, dayOfMonth) -> {
                 viewModel.setDateMoveOn(year, month, dayOfMonth);
                 binding.btnDateMoveOn.setText(dateFormat.format(viewModel.getDateMoveOn().getTime()));
+                viewModel.validateMoveEvents();
             }, viewModel.getDateMoveOn().get(Calendar.YEAR), viewModel.getDateMoveOn().get(Calendar.MONTH), viewModel.getDateMoveOn().get(Calendar.DAY_OF_MONTH)).show();
         });
         binding.btnDateMoveOff.setOnClickListener(v -> {
             new DatePickerDialog(getActivity(), (dView, year, month, dayOfMonth) -> {
-
                 viewModel.setDateMoveOff(year, month, dayOfMonth);
                 binding.btnDateMoveOff.setText(dateFormat.format(viewModel.getDateMoveOff().getTime()));
+                viewModel.validateMoveEvents();
             }, viewModel.getDateMoveOff().get(Calendar.YEAR), viewModel.getDateMoveOff().get(Calendar.MONTH), viewModel.getDateMoveOff().get(Calendar.DAY_OF_MONTH)).show();
         });
 
@@ -112,9 +141,11 @@ public class AnimalRegMoveEventsFragment extends Fragment {
             new DatePickerDialog(getActivity(), (dView, year, month, dayOfMonth) -> {
                 viewModel.setDateIdentification(year, month, dayOfMonth);
                 binding.btnDateIdentification.setText(dateFormat.format(viewModel.getDateIdentification().getTime()));
+                viewModel.validateMoveEvents();
             }, viewModel.getDateIdentification().get(Calendar.YEAR), viewModel.getDateIdentification().get(Calendar.MONTH), viewModel.getDateIdentification().get(Calendar.DAY_OF_MONTH)).show();
         });
     }
+
 
     @Override
     public void onDestroyView() {

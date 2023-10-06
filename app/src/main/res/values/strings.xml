@@ -128,4 +128,10 @@
     <string name="animal_reg_age_months">%1$s months</string>
     <string name="animal_reg_animal_detail_title">Animal Details</string>
     <string name="animal_reg_title">Animal Registrations</string>
+    <string name="animal_reg_date_required">Date required</string>
+    <string name="animal_reg_eid_required">Establishment ID required</string>
+    <string name="animal_reg_date_in_future">Selected date should not be in future.</string>
+    <string name="animal_reg_identification_date_after_move_off">Date Move-Off must be after or same as Date Identification</string>
+    <string name="animal_reg_move_off_date_after_move_on">Date Move-On must be on or after Date Move-Off.</string>
+
 </resources>

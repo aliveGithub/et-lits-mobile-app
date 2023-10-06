@@ -48,7 +48,6 @@ public class AnimalEntryModel extends ViewModel {
 
 
     public void dataChanged(String animalId, String sex, String breed,Integer age, boolean dead, String seller) {
-        TextUtils.isEmpty(animalId);
         AnimalFormState newAnimalFormState = new AnimalFormState();
         if (isEmpty(animalId)) {
             newAnimalFormState.setAnimalIdError(R.string.animal_reg_animal_id_required);
