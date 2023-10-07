@@ -82,18 +82,11 @@ public class AnimalRegAddAnimalsFragment extends Fragment implements AnimalListA
                         if (data != null) {
                             Animal animal = (Animal) data.getSerializableExtra(AnimalEntryActivity.ADD_ANIMAL_RESULT);
                              if (animal != null) {
-                                 Log.d("AnimalRegAddAnimalsFragment", "onViewCreated: " + animal.getAnimalId());
-                                 Log.d("AnimalRegAddAnimalsFragment", "onViewCreated: " + animal.getBreed());
-                                 Log.d("AnimalRegAddAnimalsFragment", "onViewCreated: " + animal.getSex());
-                                 Log.d("AnimalRegAddAnimalsFragment", "onViewCreated: " + animal.getAge());
-                                 Log.d("AnimalRegAddAnimalsFragment", "onViewCreated: " + animal.isDead());
-                                 Log.d("AnimalRegAddAnimalsFragment", "onViewCreated: " + animal.getSeller());
-
                                  viewModel.getAnimals().getValue().add(animal);
                                  adapter.notifyDataSetChanged();
                              }
-                             boolean addAnotherAnimal = data.getBooleanExtra(AnimalEntryActivity.ADD_ANOTHER_ANIMAL, false);
 
+                             boolean addAnotherAnimal = data.getBooleanExtra(AnimalEntryActivity.ADD_ANOTHER_ANIMAL, false);
                              if(addAnotherAnimal){
                                  Intent intent = new Intent(getActivity(), AnimalEntryActivity.class);
                                  activityResultLauncher.launch(intent);

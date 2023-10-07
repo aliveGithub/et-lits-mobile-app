@@ -15,7 +15,7 @@ import androidx.room.Update;
 @Dao
 public interface AnimalRegistrationDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(AnimalRegistration animalRegistration);
+    long insert(AnimalRegistration animalRegistration);
 
     @Update
     void update(AnimalRegistration animalRegistration);

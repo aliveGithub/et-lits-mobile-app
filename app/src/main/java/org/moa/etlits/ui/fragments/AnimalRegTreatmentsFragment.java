@@ -1,66 +1,110 @@
 package org.moa.etlits.ui.fragments;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
-import org.moa.etlits.R;
+import org.moa.etlits.data.models.CategoryValue;
+import org.moa.etlits.data.models.Treatment;
+import org.moa.etlits.databinding.FragmentAnimalRegTreatmentsBinding;
+import org.moa.etlits.ui.viewmodels.AnimalRegViewModel;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AnimalRegTreatmentsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.List;
+
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
+
 public class AnimalRegTreatmentsFragment extends Fragment {
+    private AnimalRegViewModel viewModel;
+    private FragmentAnimalRegTreatmentsBinding binding;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+   public AnimalRegTreatmentsFragment() {
+   }
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public AnimalRegTreatmentsFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AnimalRegTreatmentsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AnimalRegTreatmentsFragment newInstance(String param1, String param2) {
-        AnimalRegTreatmentsFragment fragment = new AnimalRegTreatmentsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    public static AnimalRegTreatmentsFragment newInstance() {
+        return new AnimalRegTreatmentsFragment();
+     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_animal_reg_treatments, container, false);
+        binding = FragmentAnimalRegTreatmentsBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        viewModel = new ViewModelProvider((ViewModelStoreOwner) getActivity(), (ViewModelProvider.Factory) new AnimalRegViewModel.Factory(getActivity().getApplication(), 0)).get(AnimalRegViewModel.class);
+
+        viewModel.getTreatmentList().observe(getActivity(), treatments ->  {
+            if(treatments != null){
+                for (Treatment t : treatments) {
+                    Log.i("Treatment", "---------------------" + t.getTreatmentApplied());
+
+
+
+                }
+
+            }});
+
+        viewModel.getTreatmentTypeList().observe(getActivity(), treatmentTypes -> {
+            if (treatmentTypes != null) {
+                List<String> selected = viewModel.getSelectedTreatmentTypes();
+                for (int i = 0; i < treatmentTypes.size(); i++) {
+                    CategoryValue treatmentType = treatmentTypes.get(i);
+                    CheckBox checkBox = new CheckBox(getActivity());
+                    checkBox.setTag(treatmentType.getValueId());
+                    checkBox.setText(treatmentType.getValue());
+                    checkBox.setChecked(selected.contains(treatmentType.getValueId()));
+                    checkBox.setPadding(8, 16, 8, 16);
+                    checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                            String id = (String) buttonView.getTag();
+                            List<Treatment> treatments = viewModel.getTreatments();
+                            if (isChecked) {
+                                Treatment treatment = new Treatment();
+                                treatment.setTreatmentApplied(id);
+                               treatments.add(treatment);
+                            } else {
+                                    for(int i = 0; i < treatments.size(); i++){
+                                    if(treatments.get(i).getTreatmentApplied().equals(id)){
+                                        treatments.remove(i);
+                                        break;
+                                    }
+                                }
+                            }
+                            Log.i("Treatment", "---------------------" + viewModel.getTreatmentList().getValue().size());
+                        }
+
+                    });
+                    binding.llTreatmentList.addView(checkBox);
+                }
+            }
+
+        });
+
+       binding.btnFinishRegistration.setOnClickListener(v -> {
+           viewModel.save();
+           getActivity().finish();
+        });
+
+   }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

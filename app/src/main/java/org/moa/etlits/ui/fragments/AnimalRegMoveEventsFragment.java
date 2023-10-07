@@ -58,6 +58,7 @@ public class AnimalRegMoveEventsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         establishmentAdapter = new EstablishmentAdapter(getActivity(), new ArrayList<>());
         viewModel = new ViewModelProvider((ViewModelStoreOwner) getActivity(), (ViewModelProvider.Factory) new AnimalRegViewModel.Factory(getActivity().getApplication(), 0)).get(AnimalRegViewModel.class);
         viewModel.getEstablishments().observe(getActivity(), lst -> {

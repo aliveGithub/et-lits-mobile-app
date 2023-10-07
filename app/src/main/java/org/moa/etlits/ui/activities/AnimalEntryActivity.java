@@ -17,7 +17,6 @@ import org.moa.etlits.data.models.Animal;
 import org.moa.etlits.data.models.CategoryValue;
 import org.moa.etlits.databinding.ActivityAnimalEntryBinding;
 import org.moa.etlits.ui.viewmodels.AnimalEntryModel;
-import org.moa.etlits.utils.Constants;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;

@@ -133,5 +133,8 @@
     <string name="animal_reg_date_in_future">Selected date should not be in future.</string>
     <string name="animal_reg_identification_date_after_move_off">Date Move-Off must be after or same as Date Identification</string>
     <string name="animal_reg_move_off_date_after_move_on">Date Move-On must be on or after Date Move-Off.</string>
+    <string name="animal_reg_treatments_applied">Treatments Applied</string>
+    <string name="animal_reg_finish_registration">Finish Registration</string>
+    <string name="animal_reg_view_registrations">View Registrations</string>
 
 </resources>

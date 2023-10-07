@@ -26,6 +26,8 @@ public class Constants {
 
     public static String CATEGORY_KEY_SPECIES = "csSpeciesForEntry";
 
+    public static String CATEGORY_KEY_TREATMENT_TYPE = "csTypeTreatment";
+
 
 
     public enum SyncType {

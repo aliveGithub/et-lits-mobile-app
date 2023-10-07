@@ -31,6 +31,7 @@ public class AnimalRepository {
         });
     }
 
+
     public void update(Animal animal) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             animalDao.update(animal);

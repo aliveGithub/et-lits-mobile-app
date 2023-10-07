@@ -1,5 +1,8 @@
 package org.moa.etlits.ui.validation;
 
+import org.moa.etlits.R;
+import org.moa.etlits.data.models.AnimalRegistration;
+
 import androidx.annotation.Nullable;
 
 public class AnimalRegFormState {
@@ -15,6 +18,49 @@ public class AnimalRegFormState {
     private Integer establishmentEidError;
 
     public AnimalRegFormState() {
+    }
+
+    public void validateMoveEvents(AnimalRegistration animalRegistration) {
+        if (animalRegistration == null) {
+            return;
+        }
+        if (ValidationUtil.isEmpty(animalRegistration.getDateIdentification())) {
+            this.setDateIdentificationError(R.string.animal_reg_date_required);
+        } else {
+            if (ValidationUtil.dateInFuture(animalRegistration.getDateIdentification())) {
+                this.setDateIdentificationError(R.string.animal_reg_date_in_future);
+            }
+        }
+
+        if (ValidationUtil.isEmpty(animalRegistration.getDateMoveOff())) {
+            this.setDateMoveOffError(R.string.animal_reg_date_required);
+        } else {
+            if (ValidationUtil.dateInFuture(animalRegistration.getDateMoveOff())) {
+                this.setDateMoveOffError(R.string.animal_reg_date_in_future);
+            }
+            if (ValidationUtil.dateIsAfter(animalRegistration.getDateIdentification(), animalRegistration.getDateMoveOff())) {
+                this.setDateMoveOffError(R.string.animal_reg_identification_date_after_move_off);
+            }
+        }
+
+        if (ValidationUtil.isEmpty(animalRegistration.getHoldingGroundEid())) {
+            this.setHoldingGroundEidError(R.string.animal_reg_eid_required);
+        }
+
+        if (ValidationUtil.isEmpty(animalRegistration.getDateMoveOn())) {
+            this.setDateMoveOnError(R.string.animal_reg_date_required);
+        } else {
+            if (ValidationUtil.dateInFuture(animalRegistration.getDateMoveOn())) {
+                this.setDateMoveOnError(R.string.animal_reg_date_in_future);
+            }
+            if (ValidationUtil.dateIsAfter(animalRegistration.getDateMoveOff(), animalRegistration.getDateMoveOn())) {
+                this.setDateMoveOnError(R.string.animal_reg_move_off_date_after_move_on);
+            }
+        }
+
+        if (ValidationUtil.isEmpty(animalRegistration.getEstablishmentEid())) {
+            this.setEstablishmentEidError(R.string.animal_reg_eid_required);
+        }
     }
 
     @Nullable

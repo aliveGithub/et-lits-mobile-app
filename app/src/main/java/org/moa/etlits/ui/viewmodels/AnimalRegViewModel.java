@@ -1,23 +1,22 @@
 package org.moa.etlits.ui.viewmodels;
 
 import android.app.Application;
-import android.util.Log;
 
-import org.moa.etlits.R;
 import org.moa.etlits.data.models.Animal;
 import org.moa.etlits.data.models.AnimalRegistration;
 import org.moa.etlits.data.models.CategoryValue;
 import org.moa.etlits.data.models.Establishment;
+import org.moa.etlits.data.models.Treatment;
 import org.moa.etlits.data.repositories.AnimalRegistrationRepository;
 import org.moa.etlits.data.repositories.AnimalRepository;
+import org.moa.etlits.data.repositories.CategoryValueRepository;
 import org.moa.etlits.data.repositories.EstablishmentRepository;
+import org.moa.etlits.data.repositories.TreatmentRepository;
 import org.moa.etlits.ui.validation.AnimalRegFormState;
-import org.moa.etlits.ui.validation.ValidationUtil;
 import org.moa.etlits.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import androidx.lifecycle.AndroidViewModel;
@@ -31,7 +30,11 @@ public class AnimalRegViewModel extends AndroidViewModel {
 
     private AnimalRegistrationRepository animalRegistrationRepository;
     private AnimalRepository animalRepository;
+
+    private TreatmentRepository treatmentRepository;
     private EstablishmentRepository establishmentRepository;
+
+    private CategoryValueRepository categoryValueRepository;
     private final MutableLiveData<Integer> currentStep = new MutableLiveData<>(0);
 
     private LiveData<AnimalRegistration> animalRegistration = new MutableLiveData<>(new AnimalRegistration());
@@ -41,7 +44,11 @@ public class AnimalRegViewModel extends AndroidViewModel {
 
     private LiveData<List<Animal>> animalList;
 
+   private LiveData<List<Treatment>> treatmentList;
+
     private LiveData<List<CategoryValue>> speciesList;
+
+    private LiveData<List<CategoryValue>> treatmentTypeList;
 
     private Calendar dateMoveOn;
     private Calendar dateMoveOff;
@@ -53,12 +60,20 @@ public class AnimalRegViewModel extends AndroidViewModel {
         animalRegistrationRepository = new AnimalRegistrationRepository(application);
         animalRepository = new AnimalRepository(application);
         establishmentRepository = new EstablishmentRepository(application);
+        treatmentRepository = new TreatmentRepository(application);
+        categoryValueRepository = new CategoryValueRepository(application);
+
+        animalRegistration = animalRegistrationRepository.loadById(id);
         establishmentList = establishmentRepository.getAll();
         animalList = animalRepository.getByAnimalRegistrationId(id);
+        treatmentList = treatmentRepository.getByAnimalRegistrationId(id);
+
+        treatmentTypeList = categoryValueRepository.loadByType(Constants.CATEGORY_KEY_TREATMENT_TYPE);
+
+        populateSpeciesList();
         dateMoveOn = Calendar.getInstance();
         dateMoveOff = Calendar.getInstance();
         dateIdentification = Calendar.getInstance();
-        populateSpeciesList();
     }
 
     private void populateSpeciesList() {
@@ -100,12 +115,25 @@ public class AnimalRegViewModel extends AndroidViewModel {
         return animalRegistration;
     }
 
-    public void insert(AnimalRegistration animalRegistration) {
-        animalRegistrationRepository.insert(animalRegistration);
+    public void insert() {
+        animalRegistrationRepository.insert(getAnimalRegistration().getValue(), getAnimals().getValue(), getTreatmentList().getValue());
     }
 
-    public void update(AnimalRegistration animalRegistration) {
-        animalRegistrationRepository.update(animalRegistration);
+    public void update() {
+        animalRegistrationRepository.update(getAnimalRegistration().getValue(), getAnimals().getValue(), getTreatmentList().getValue());
+    }
+
+    public void save() {
+        if (getAnimalRegistration().getValue().getId() == 0) {
+            insert();
+        } else {
+            update();
+        }
+    }
+
+    public void loadById(long id) {
+        animalRegistrationRepository.loadById(id);
+
     }
 
     public LiveData<List<Establishment>> getEstablishmentList() {
@@ -162,49 +190,12 @@ public class AnimalRegViewModel extends AndroidViewModel {
     }
 
     public void validateMoveEvents() {
-        AnimalRegFormState newAnimalRegFormState = new AnimalRegFormState();
         AnimalRegistration animalRegistration = getAnimalRegistration().getValue();
         if (animalRegistration == null) {
             return;
         }
-        if (ValidationUtil.isEmpty(animalRegistration.getDateIdentification())) {
-            newAnimalRegFormState.setDateIdentificationError(R.string.animal_reg_date_required);
-        } else {
-            if (ValidationUtil.dateInFuture(animalRegistration.getDateIdentification())) {
-                newAnimalRegFormState.setDateIdentificationError(R.string.animal_reg_date_in_future);
-            }
-        }
-
-        if (ValidationUtil.isEmpty(animalRegistration.getDateMoveOff())) {
-            newAnimalRegFormState.setDateMoveOffError(R.string.animal_reg_date_required);
-        } else {
-            if (ValidationUtil.dateInFuture(animalRegistration.getDateMoveOff())) {
-                newAnimalRegFormState.setDateMoveOffError(R.string.animal_reg_date_in_future);
-            }
-            if (ValidationUtil.dateIsAfter(animalRegistration.getDateIdentification(), animalRegistration.getDateMoveOff())) {
-                newAnimalRegFormState.setDateMoveOffError(R.string.animal_reg_identification_date_after_move_off);
-            }
-        }
-
-        if (ValidationUtil.isEmpty(animalRegistration.getHoldingGroundEid())) {
-            newAnimalRegFormState.setHoldingGroundEidError(R.string.animal_reg_eid_required);
-        }
-
-        if (ValidationUtil.isEmpty(animalRegistration.getDateMoveOn())) {
-            newAnimalRegFormState.setDateMoveOnError(R.string.animal_reg_date_required);
-        } else {
-            if (ValidationUtil.dateInFuture(animalRegistration.getDateMoveOn())) {
-                newAnimalRegFormState.setDateMoveOnError(R.string.animal_reg_date_in_future);
-            }
-            if (ValidationUtil.dateIsAfter(animalRegistration.getDateMoveOff(), animalRegistration.getDateMoveOn())) {
-                newAnimalRegFormState.setDateMoveOnError(R.string.animal_reg_move_off_date_after_move_on);
-            }
-        }
-
-        if (ValidationUtil.isEmpty(animalRegistration.getEstablishmentEid())) {
-            newAnimalRegFormState.setEstablishmentEidError(R.string.animal_reg_eid_required);
-        }
-
+        AnimalRegFormState newAnimalRegFormState = new AnimalRegFormState();
+        newAnimalRegFormState.validateMoveEvents(animalRegistration);
         animalRegFormState.setValue(newAnimalRegFormState);
     }
 
@@ -216,8 +207,32 @@ public class AnimalRegViewModel extends AndroidViewModel {
         return animalList;
     }
 
+    public LiveData<List<Treatment>> getTreatmentList() {
+        return treatmentList;
+    }
+    public List<Treatment> getTreatments() {
+        if (treatmentList.getValue() == null) {
+            treatmentList = new MutableLiveData<>(new ArrayList<>());
+        }
+        return treatmentList.getValue();
+    }
+
+    public List<String> getSelectedTreatmentTypes() {
+        List<Treatment> treatments = getTreatments();
+        List<String> selectedTreatmentTypes = new ArrayList<>();
+        for (int i = 0; i < treatments.size(); i++) {
+            Treatment treatment = treatments.get(i);
+            selectedTreatmentTypes.add(treatment.getTreatmentApplied());
+        }
+        return selectedTreatmentTypes;
+    }
+
     public LiveData<List<CategoryValue>> getSpeciesList() {
         return speciesList;
+    }
+
+    public LiveData<List<CategoryValue>> getTreatmentTypeList() {
+        return treatmentTypeList;
     }
 
     public MutableLiveData<AnimalRegFormState> getAnimalRegFormState() {

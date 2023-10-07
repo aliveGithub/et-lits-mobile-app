@@ -35,9 +35,10 @@ public class AnimalRegActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityAnimalRegBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES, MODE_PRIVATE);
-        viewModel = new ViewModelProvider((ViewModelStoreOwner) this, (ViewModelProvider.Factory) new AnimalRegViewModel.Factory(getApplication(), 0)).get(AnimalRegViewModel.class);
+
+        Long registrationId = getIntent().getLongExtra("registrationId", 0);
+        viewModel = new ViewModelProvider((ViewModelStoreOwner) this, (ViewModelProvider.Factory) new AnimalRegViewModel.Factory(getApplication(), registrationId)).get(AnimalRegViewModel.class);
 
         if (savedInstanceState == null) {
             addFragments();
