@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import org.moa.etlits.R;
 import org.moa.etlits.databinding.ActivityAnimalRegBinding;
@@ -122,5 +123,22 @@ public class AnimalRegActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         binding = null;
+    }
+
+     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                /*if (viewModel.getCurrentStep() == Constants.AnimalRegStep.REGISTRATION) {
+                    finish();
+                } else {
+                    viewModel.prev();
+                    showFragment(viewModel.getCurrentStep());
+                }*/
+                this.onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

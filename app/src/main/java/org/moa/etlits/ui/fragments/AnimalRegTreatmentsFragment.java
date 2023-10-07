@@ -51,9 +51,6 @@ public class AnimalRegTreatmentsFragment extends Fragment {
             if(treatments != null){
                 for (Treatment t : treatments) {
                     Log.i("Treatment", "---------------------" + t.getTreatmentApplied());
-
-
-
                 }
 
             }});

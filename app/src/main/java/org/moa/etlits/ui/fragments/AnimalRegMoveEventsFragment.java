@@ -2,22 +2,12 @@ package org.moa.etlits.ui.fragments;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 
-import org.moa.etlits.data.models.CategoryValue;
 import org.moa.etlits.databinding.FragmentAnimalRegMoveEventsBinding;
-import org.moa.etlits.ui.activities.AnimalEntryActivity;
 import org.moa.etlits.ui.adapters.EstablishmentAdapter;
 import org.moa.etlits.ui.viewmodels.AnimalRegViewModel;
 
@@ -26,6 +16,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Locale;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 
 public class AnimalRegMoveEventsFragment extends Fragment {
 
@@ -66,6 +62,17 @@ public class AnimalRegMoveEventsFragment extends Fragment {
             establishmentAdapter.clear();
             establishmentAdapter.addAll(lst);
             establishmentAdapter.notifyDataSetChanged();
+        });
+        viewModel.getAnimalRegistration().observe(getActivity(), animalRegistration -> {
+            if (animalRegistration != null) {
+                binding.actvMoveOffEid.setText(animalRegistration.getHoldingGroundEid());
+                binding.actvMoveOnEid.setText(animalRegistration.getEstablishmentEid());
+                binding.btnDateMoveOff.setText(dateFormat.format(animalRegistration.getDateMoveOff().getTime()));
+                binding.btnDateMoveOn.setText(dateFormat.format(animalRegistration.getDateMoveOn().getTime()));
+                binding.btnDateIdentification.setText(dateFormat.format(animalRegistration.getDateIdentification().getTime()));
+            } else {
+                viewModel.initAnimalRegistration();
+            }
         });
 
         viewModel.getAnimalRegFormState().observe(getActivity(), formState -> {

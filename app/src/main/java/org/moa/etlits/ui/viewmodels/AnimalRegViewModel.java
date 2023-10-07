@@ -136,6 +136,10 @@ public class AnimalRegViewModel extends AndroidViewModel {
 
     }
 
+    public void initAnimalRegistration() {
+        animalRegistration = new MutableLiveData<>(new AnimalRegistration());
+    }
+
     public LiveData<List<Establishment>> getEstablishmentList() {
         return establishmentList;
     }

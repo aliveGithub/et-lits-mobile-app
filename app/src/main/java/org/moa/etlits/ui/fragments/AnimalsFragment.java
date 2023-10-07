@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import org.moa.etlits.R;
 import org.moa.etlits.ui.activities.AnimalRegActivity;
+import org.moa.etlits.ui.activities.AnimalRegListActivity;
 import org.moa.etlits.utils.Constants;
 
 import androidx.cardview.widget.CardView;
@@ -59,6 +60,14 @@ public class AnimalsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), AnimalRegActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        viewRegistrations.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AnimalRegListActivity.class);
                 startActivity(intent);
             }
         });

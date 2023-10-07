@@ -92,8 +92,8 @@ public class HomeTabsFragment extends Fragment {
         } else {
             homeFragment = getChildFragmentManager().findFragmentByTag("home");
             syncFragment = getChildFragmentManager().findFragmentByTag("sync");
-            moveFragment = getChildFragmentManager().findFragmentByTag("move");
             animalsFragment = getChildFragmentManager().findFragmentByTag("animals");
+            moveFragment = getChildFragmentManager().findFragmentByTag("move");
         }
 
     }
