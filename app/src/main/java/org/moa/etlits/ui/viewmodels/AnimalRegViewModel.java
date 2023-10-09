@@ -17,6 +17,7 @@ import org.moa.etlits.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import androidx.lifecycle.AndroidViewModel;
@@ -133,11 +134,15 @@ public class AnimalRegViewModel extends AndroidViewModel {
 
     public void loadById(long id) {
         animalRegistrationRepository.loadById(id);
-
     }
 
     public void initAnimalRegistration() {
-        animalRegistration = new MutableLiveData<>(new AnimalRegistration());
+        AnimalRegistration newAnimalRegistration = new AnimalRegistration();
+        Date today = Calendar.getInstance().getTime();
+        newAnimalRegistration.setDateIdentification(today);
+        newAnimalRegistration.setDateMoveOff(today);
+        newAnimalRegistration.setDateMoveOn(today);
+        animalRegistration = new MutableLiveData<>(newAnimalRegistration);
     }
 
     public LiveData<List<Establishment>> getEstablishmentList() {

@@ -36,25 +36,26 @@ public class AnimalsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_animals, container, false);
 
+        View v = inflater.inflate(R.layout.fragment_animals, container, false);
         if (savedInstanceState == null) {
             searchFragment = new SearchFragment();
             getChildFragmentManager().beginTransaction().add(R.id.animals_search_fragment, searchFragment, "search_animals").commit();
         }
 
+        registerAnimal = v.findViewById(R.id.card_register);
+        viewRegistrations = v.findViewById(R.id.card_view_registrations);
+
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE);
         String defaultEstablishment = sharedPreferences.getString(Constants.DEFAULT_ESTABLISHMENT, "");
 
-        registerAnimal = v.findViewById(R.id.card_register);
-        viewRegistrations = v.findViewById(R.id.card_view_registrations);
-        if (defaultEstablishment.isEmpty()) {
+       /* if (defaultEstablishment.isEmpty()) {
             registerAnimal.setVisibility(View.GONE);
             viewRegistrations.setVisibility(View.GONE);
         } else {
             registerAnimal.setVisibility(View.VISIBLE);
             viewRegistrations.setVisibility(View.VISIBLE);
-        }
+        }*/
 
         registerAnimal.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,5 +74,4 @@ public class AnimalsFragment extends Fragment {
         });
         return v;
     }
-
 }

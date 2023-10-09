@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
+import org.moa.etlits.data.models.AnimalRegistration;
 import org.moa.etlits.databinding.FragmentAnimalRegMoveEventsBinding;
 import org.moa.etlits.ui.adapters.EstablishmentAdapter;
 import org.moa.etlits.ui.viewmodels.AnimalRegViewModel;
@@ -64,15 +65,17 @@ public class AnimalRegMoveEventsFragment extends Fragment {
             establishmentAdapter.notifyDataSetChanged();
         });
         viewModel.getAnimalRegistration().observe(getActivity(), animalRegistration -> {
-            if (animalRegistration != null) {
-                binding.actvMoveOffEid.setText(animalRegistration.getHoldingGroundEid());
-                binding.actvMoveOnEid.setText(animalRegistration.getEstablishmentEid());
-                binding.btnDateMoveOff.setText(dateFormat.format(animalRegistration.getDateMoveOff().getTime()));
-                binding.btnDateMoveOn.setText(dateFormat.format(animalRegistration.getDateMoveOn().getTime()));
-                binding.btnDateIdentification.setText(dateFormat.format(animalRegistration.getDateIdentification().getTime()));
+            AnimalRegistration ar = animalRegistration;
+            if (ar != null) {
+                binding.actvMoveOffEid.setText(ar.getHoldingGroundEid());
+                binding.actvMoveOnEid.setText(ar.getEstablishmentEid());
             } else {
                 viewModel.initAnimalRegistration();
+                ar = viewModel.getAnimalRegistration().getValue();
             }
+            binding.btnDateMoveOff.setText(dateFormat.format(ar.getDateMoveOff().getTime()));
+            binding.btnDateMoveOn.setText(dateFormat.format(ar.getDateMoveOn().getTime()));
+            binding.btnDateIdentification.setText(dateFormat.format(ar.getDateIdentification().getTime()));
         });
 
         viewModel.getAnimalRegFormState().observe(getActivity(), formState -> {

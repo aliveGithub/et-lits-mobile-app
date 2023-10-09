@@ -129,12 +129,6 @@ public class AnimalRegActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                /*if (viewModel.getCurrentStep() == Constants.AnimalRegStep.REGISTRATION) {
-                    finish();
-                } else {
-                    viewModel.prev();
-                    showFragment(viewModel.getCurrentStep());
-                }*/
                 this.onBackPressed();
                 return true;
             default:
