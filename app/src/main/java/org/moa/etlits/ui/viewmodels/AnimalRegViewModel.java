@@ -88,25 +88,34 @@ public class AnimalRegViewModel extends AndroidViewModel {
         speciesList = new MutableLiveData<>(species);
     }
 
-    public void next() {
+    public void moveNext() {
         if (currentStep.getValue() < Constants.AnimalRegStep.values().length - 1) {
             currentStep.setValue(currentStep.getValue() + 1);
         }
     }
 
-    public void prev() {
+    public void movePrev() {
         if (currentStep.getValue() > 0) {
             currentStep.setValue(currentStep.getValue() - 1);
         }
     }
 
-    public void first() {
+    public void moveFirst() {
         currentStep.setValue(0);
     }
 
-    public void last() {
+    public void moveLast() {
         currentStep.setValue(Constants.AnimalRegStep.values().length - 1);
     }
+
+    public boolean isLast(){
+        return currentStep.getValue() == Constants.AnimalRegStep.values().length - 1;
+    }
+
+    public boolean isFirst(){
+        return currentStep.getValue() == 0;
+    }
+
 
     public Constants.AnimalRegStep getCurrentStep() {
         return Constants.AnimalRegStep.values()[currentStep.getValue()];

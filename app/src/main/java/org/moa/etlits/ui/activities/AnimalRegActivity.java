@@ -5,6 +5,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 import org.moa.etlits.R;
 import org.moa.etlits.databinding.ActivityAnimalRegBinding;
@@ -94,22 +95,55 @@ public class AnimalRegActivity extends AppCompatActivity {
     }
 
     private void setUpNavigation() {
+        updateNavigationButtons();
         binding.ivFirst.setOnClickListener(v -> {
-            viewModel.first();
+            viewModel.moveFirst();
             showFragment(viewModel.getCurrentStep());
+            updateNavigationButtons();
         });
         binding.ivPrev.setOnClickListener(v -> {
-            viewModel.prev();
+            viewModel.movePrev();
             showFragment(viewModel.getCurrentStep());
+            updateNavigationButtons();
         });
         binding.ivNext.setOnClickListener(v -> {
-            viewModel.next();
+            viewModel.moveNext();
             showFragment(viewModel.getCurrentStep());
+            updateNavigationButtons();
         });
         binding.ivLast.setOnClickListener(v -> {
-            viewModel.last();
+            viewModel.moveLast();
             showFragment(viewModel.getCurrentStep());
+            updateNavigationButtons();
         });
+    }
+    private void updateNavigationButtons(){
+        if (viewModel == null) return;
+        if(viewModel.isFirst()){
+            disableNavigationButton(binding.ivFirst);
+            disableNavigationButton(binding.ivPrev);
+        } else {
+            enableNavigationButton(binding.ivFirst);
+            enableNavigationButton(binding.ivPrev);
+        }
+
+        if(viewModel.isLast()){
+            disableNavigationButton(binding.ivLast);
+            disableNavigationButton(binding.ivNext);
+        }else{
+            enableNavigationButton(binding.ivLast);
+            enableNavigationButton(binding.ivNext);
+        }
+    }
+
+    private void disableNavigationButton(ImageView button){
+        button.setEnabled(false);
+        button.setColorFilter(getResources().getColor(R.color.icon_in_active, getTheme()), PorterDuff.Mode.SRC_ATOP);
+    }
+
+    private void enableNavigationButton(ImageView button){
+        button.setEnabled(true);
+        button.setColorFilter(getResources().getColor(R.color.colorPrimaryDark, getTheme()), PorterDuff.Mode.SRC_ATOP);
     }
 
     @Override
