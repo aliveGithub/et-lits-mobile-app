@@ -25,7 +25,10 @@ import androidx.lifecycle.ViewModelProvider;
 
 public class AnimalEntryActivity extends AppCompatActivity {
     private ActivityAnimalEntryBinding binding;
-    private AnimalEntryModel animalDataEntryViewModel;
+    private AnimalEntryModel viewModel;
+
+    private boolean breedSpinnerInitialized = false;
+    private boolean sexSpinnerInitialized = false;
 
     public static final String ADD_ANIMAL_RESULT = "ADD_ANIMAL_RESULT";
     public static final String ADD_ANOTHER_ANIMAL = "ADD_ANOTHER_ANIMAL";
@@ -33,17 +36,17 @@ public class AnimalEntryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       binding = ActivityAnimalEntryBinding.inflate(getLayoutInflater());
+        binding = ActivityAnimalEntryBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        animalDataEntryViewModel = new ViewModelProvider(AnimalEntryActivity.this, new AnimalEntryModel.AnimalDataEntryViewModelFactory(getApplication())).get(AnimalEntryModel.class);
-        animalDataEntryViewModel.getBreedList().observe(this, breeds -> {
+        viewModel = new ViewModelProvider(AnimalEntryActivity.this, new AnimalEntryModel.AnimalDataEntryViewModelFactory(getApplication())).get(AnimalEntryModel.class);
+        viewModel.getBreedList().observe(this, breeds -> {
             CategoryValue categoryValue = new CategoryValue();
             categoryValue.setValue(" ");
             breeds.add(0, categoryValue);
             binding.sBreed.setAdapter(new ArrayAdapter<>(AnimalEntryActivity.this, android.R.layout.simple_spinner_item, breeds));
         });
 
-        animalDataEntryViewModel.getAnimalFormState().observe(this, formState -> {
+        viewModel.getAnimalFormState().observe(this, formState -> {
             if (formState == null) {
                 return;
             }
@@ -73,7 +76,7 @@ public class AnimalEntryActivity extends AppCompatActivity {
             }
         });
 
-        animalDataEntryViewModel.getSexList().observe(this, sexList -> {
+        viewModel.getSexList().observe(this, sexList -> {
             CategoryValue categoryValue = new CategoryValue();
             categoryValue.setValue(" ");
             sexList.add(0, categoryValue);
@@ -81,11 +84,17 @@ public class AnimalEntryActivity extends AppCompatActivity {
         });
 
         binding.btnDone.setOnClickListener(v -> {
-            returnResult(false);
+            validateAllFields();
+            if (viewModel.getAnimalFormState().getValue() != null && viewModel.getAnimalFormState().getValue().isDataValid()) {
+                returnResult(false);
+            }
+
         });
 
         binding.btnAddNextAnimal.setOnClickListener(v -> {
-            returnResult(true);
+            if (viewModel.getAnimalFormState().getValue() != null && viewModel.getAnimalFormState().getValue().isDataValid()) {
+                returnResult(true);
+            }
         });
 
         setUpActionBar();
@@ -122,7 +131,7 @@ public class AnimalEntryActivity extends AppCompatActivity {
         }
 
         if (!binding.etAge.getText().toString().isEmpty()) {
-           animal.setAge(Integer.parseInt(binding.etAge.getText().toString()));
+            animal.setAge(Integer.parseInt(binding.etAge.getText().toString()));
         }
 
         animal.setDead(binding.swDead.isChecked());
@@ -136,7 +145,8 @@ public class AnimalEntryActivity extends AppCompatActivity {
     }
 
     private void setUpDataValidation() {
-        TextWatcher afterTextChangedListener = new TextWatcher() {
+
+        binding.etAnimalId.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -147,15 +157,36 @@ public class AnimalEntryActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                dataChanged();
+                viewModel.validateAnimalId(binding.etAnimalId.getText().toString());
             }
-        };
-        binding.etAnimalId.addTextChangedListener(afterTextChangedListener);
-        binding.etAge.addTextChangedListener(afterTextChangedListener);
+        });
+
+        binding.etAge.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                viewModel.validateAge(binding.etAge.getText().toString().isEmpty() ? null : Integer.parseInt(binding.etAge.getText().toString()));
+            }
+        });
+
+
         binding.sBreed.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                dataChanged();
+
+                if (!breedSpinnerInitialized) {
+                    breedSpinnerInitialized = true;
+                    return;
+                }
+
+                viewModel.validateBreed(binding.sBreed.getSelectedItem() != null ? binding.sBreed.getSelectedItem().toString() : null);
             }
 
             @Override
@@ -166,19 +197,24 @@ public class AnimalEntryActivity extends AppCompatActivity {
         binding.sSex.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                dataChanged();
+
+                if (!sexSpinnerInitialized) {
+                    sexSpinnerInitialized = true;
+                    return;
+                }
+
+                viewModel.validateSex(binding.sSex.getSelectedItem() != null ? binding.sSex.getSelectedItem().toString() : null);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
     }
 
-    private void dataChanged() {
-        animalDataEntryViewModel.dataChanged(
+    private void validateAllFields() {
+        viewModel.validateAllFields(
                 binding.etAnimalId.getText().toString(),
                 binding.sSex.getSelectedItem() != null ? binding.sSex.getSelectedItem().toString() : null,
                 binding.sBreed.getSelectedItem() != null ? binding.sBreed.getSelectedItem().toString() : null,

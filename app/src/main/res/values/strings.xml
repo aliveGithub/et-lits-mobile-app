@@ -123,7 +123,7 @@
     <string name="animal_reg_sex_required">Sex field is required</string>
     <string name="animal_reg_breed_required">Breed field is required</string>
     <string name="animal_reg_age_required">Age field is required</string>
-    <string name="animal_reg_animal_id_invalid">Invalid animal Id</string>
+    <string name="animal_reg_animal_id_invalid">Invalid animal Id. Allowed format is: ET 0000000001</string>
     <string name="animal_reg_age_invalid">Invalid Age. Allowed range is 1 to 300 months.</string>
     <string name="animal_reg_age_months">%1$s months</string>
     <string name="animal_reg_animal_detail_title">Animal Details</string>

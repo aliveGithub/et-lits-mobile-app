@@ -1,7 +1,6 @@
 package org.moa.etlits.ui.viewmodels;
 
 import android.app.Application;
-import android.text.TextUtils;
 
 import org.moa.etlits.R;
 import org.moa.etlits.data.models.CategoryValue;
@@ -9,7 +8,6 @@ import org.moa.etlits.data.repositories.CategoryValueRepository;
 import org.moa.etlits.ui.validation.AnimalFormState;
 import org.moa.etlits.utils.Constants;
 
-import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -47,7 +45,47 @@ public class AnimalEntryModel extends ViewModel {
     }
 
 
-    public void dataChanged(String animalId, String sex, String breed,Integer age, boolean dead, String seller) {
+    public void validateAnimalId(String animalId) {
+        AnimalFormState newAnimalFormState = new AnimalFormState();
+        if (isEmpty(animalId)) {
+            newAnimalFormState.setAnimalIdError(R.string.animal_reg_animal_id_required);
+        } else {
+            if (!isValidAnimalId(animalId)) {
+                newAnimalFormState.setAnimalIdError(R.string.animal_reg_animal_id_invalid);
+            }
+        }
+        animalFormState.setValue(newAnimalFormState);
+    }
+
+    public void validateAge(Integer age) {
+        AnimalFormState newAnimalFormState = new AnimalFormState();
+        if (isEmpty(age)){
+            newAnimalFormState.setAgeError(R.string.animal_reg_age_required);
+        } else {
+            if (!isValidAge(age)) {
+                newAnimalFormState.setAgeError(R.string.animal_reg_age_invalid);
+            }
+        }
+        animalFormState.setValue(newAnimalFormState);
+    }
+
+    public void validateSex(String sex) {
+        AnimalFormState newAnimalFormState = new AnimalFormState();
+        if (isEmpty(sex)){
+            newAnimalFormState.setSexError(R.string.animal_reg_sex_required);
+        }
+        animalFormState.setValue(newAnimalFormState);
+    }
+
+    public void validateBreed(String breed) {
+        AnimalFormState newAnimalFormState = new AnimalFormState();
+        if (isEmpty(breed)){
+            newAnimalFormState.setBreedError(R.string.animal_reg_breed_required);
+        }
+        animalFormState.setValue(newAnimalFormState);
+    }
+
+    public void validateAllFields(String animalId, String sex, String breed,Integer age, boolean dead, String seller) {
         AnimalFormState newAnimalFormState = new AnimalFormState();
         if (isEmpty(animalId)) {
             newAnimalFormState.setAnimalIdError(R.string.animal_reg_animal_id_required);
@@ -84,6 +122,7 @@ public class AnimalEntryModel extends ViewModel {
         Matcher matcher = pattern.matcher(animalId);
         return matcher.matches();
     }
+
    private boolean isValidAge(Integer age) {
         if (age == null) {
             return false;
