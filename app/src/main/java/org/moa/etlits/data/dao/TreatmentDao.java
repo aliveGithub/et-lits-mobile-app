@@ -20,6 +20,10 @@ public interface TreatmentDao {
     @Update
     void update(Treatment treatment);
 
+
+    @Query("DELETE FROM treatments where id=:id")
+    void deleteById(long id);
+
     @Query("SELECT * FROM treatments")
     LiveData<List<Treatment>> getAllTreatments();
 
@@ -28,4 +32,6 @@ public interface TreatmentDao {
 
     @Query("SELECT * FROM treatments where animal_registration_id=:animaRegistrationId")
     LiveData<List<Treatment>> getByAnimalRegistrationId(long animaRegistrationId);
+
+
 }

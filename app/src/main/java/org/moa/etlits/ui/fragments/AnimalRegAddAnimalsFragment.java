@@ -80,11 +80,17 @@ public class AnimalRegAddAnimalsFragment extends Fragment implements AnimalListA
                     if (result.getResultCode() == RESULT_OK) {
                         Intent data = result.getData();
                         if (data != null) {
-                            Animal animal = (Animal) data.getSerializableExtra(AnimalEntryActivity.ADD_ANIMAL_RESULT);
-                             if (animal != null) {
-                                 viewModel.getAnimals().getValue().add(animal);
-                                 adapter.notifyDataSetChanged();
-                             }
+                            Animal animal = (Animal) data.getSerializableExtra(AnimalEntryActivity.ANIMAL_DETAILS_RESULT);
+                            int position = data.getIntExtra(AnimalEntryActivity.POSITION_IN_LIST, -1);
+                            if (animal != null) {
+                                if (position != -1) {
+                                    viewModel.getAnimals().getValue().set(position, animal);
+                                } else {
+                                    viewModel.getAnimals().getValue().add(animal);
+                                }
+
+                                adapter.notifyDataSetChanged();
+                            }
 
                              boolean addAnotherAnimal = data.getBooleanExtra(AnimalEntryActivity.ADD_ANOTHER_ANIMAL, false);
                              if(addAnotherAnimal){
@@ -111,11 +117,15 @@ public class AnimalRegAddAnimalsFragment extends Fragment implements AnimalListA
 
     @Override
     public void onAnimalItemClick(int position) {
+        Intent intent = new Intent(getActivity(), AnimalEntryActivity.class);
+        intent.putExtra(AnimalEntryActivity.ANIMAL, viewModel.getAnimals().getValue().get(position));
+        intent.putExtra(AnimalEntryActivity.POSITION_IN_LIST, position);
+        activityResultLauncher.launch(intent);
     }
 
     @Override
     public void onAnimalItemDeleteClick(int position) {
-        viewModel.getAnimals().getValue().remove(position);
+        viewModel.removeAnimal(position);
         adapter.notifyDataSetChanged();
     }
 }

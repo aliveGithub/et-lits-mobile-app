@@ -45,6 +45,10 @@ public class AnimalRegViewModel extends AndroidViewModel {
 
     private LiveData<List<Animal>> animalList;
 
+    private MutableLiveData<List<Long>> idsForRemovedAnimals = new MutableLiveData<>(new ArrayList<>());
+
+    private MutableLiveData<List<Long>> idsForRemovedTreatments = new MutableLiveData<>(new ArrayList<>());
+
    private LiveData<List<Treatment>> treatmentList;
 
     private LiveData<List<CategoryValue>> speciesList;
@@ -130,7 +134,9 @@ public class AnimalRegViewModel extends AndroidViewModel {
     }
 
     public void update() {
-        animalRegistrationRepository.update(getAnimalRegistration().getValue(), getAnimals().getValue(), getTreatmentList().getValue());
+        animalRegistrationRepository.update(getAnimalRegistration().getValue(),
+                getAnimals().getValue(), getTreatmentList().getValue(),
+                getIdsForRemovedAnimals().getValue(), getIdsForRemovedTreatments().getValue());
     }
 
     public void save() {
@@ -139,6 +145,26 @@ public class AnimalRegViewModel extends AndroidViewModel {
         } else {
             update();
         }
+    }
+
+    public void removeAnimal(int position) {
+        Animal animal = getAnimals().getValue().get(position);
+        if (animal.getId() != 0) {
+            List<Long> ids = idsForRemovedAnimals.getValue();
+            ids.add(animal.getId());
+            idsForRemovedAnimals.setValue(ids);
+        }
+        getAnimals().getValue().remove(position);
+    }
+
+    public void removeTreatment(int position) {
+        Treatment treatment = getTreatments().get(position);
+        if (treatment.getId() != 0) {
+            List<Long> ids = idsForRemovedTreatments.getValue();
+            ids.add(treatment.getId());
+            idsForRemovedTreatments.setValue(ids);
+        }
+        getTreatmentList().getValue().remove(position);
     }
 
     public void loadById(long id) {
@@ -255,6 +281,14 @@ public class AnimalRegViewModel extends AndroidViewModel {
 
     public MutableLiveData<AnimalRegFormState> getAnimalRegFormState() {
         return animalRegFormState;
+    }
+
+    public MutableLiveData<List<Long>> getIdsForRemovedAnimals() {
+        return idsForRemovedAnimals;
+    }
+
+    public MutableLiveData<List<Long>> getIdsForRemovedTreatments() {
+        return idsForRemovedTreatments;
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {

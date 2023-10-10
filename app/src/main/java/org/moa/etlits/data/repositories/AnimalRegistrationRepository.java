@@ -58,27 +58,38 @@ public class AnimalRegistrationRepository {
         });
     }
 
-    public void update(AnimalRegistration animalRegistration, List<Animal> animalList, List<Treatment> treatmentList) {
+    public void update(AnimalRegistration animalRegistration,
+                       List<Animal> animalList, List<Treatment> treatmentList,
+                       List<Long> idsForRemovedAnimals, List<Long> idsForRemovedTreatments) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             animalRegistrationDao.update(animalRegistration);
             if (animalList != null) {
                 for (Animal animal : animalList) {
                     if (animal.getId() == 0) {
                         animal.setAnimalRegistrationId(animalRegistration.getId());
-                        db.animalDao().insert(animal);
+                        animalDao.insert(animal);
+                    } else {
+                        animalDao.update(animal);
                     }
-                    db.animalDao().update(animal);
                 }
+            }
+            for (Long id : idsForRemovedAnimals) {
+                animalDao.deleteById(id);
             }
 
             if (treatmentList != null) {
                 for (Treatment treatment : treatmentList) {
                     if (treatment.getId() == 0) {
                         treatment.setAnimalRegistrationId(animalRegistration.getId());
-                        db.treatmentDao().insert(treatment);
+                        treatmentDao.insert(treatment);
+                    } else {
+                        treatmentDao.update(treatment);
                     }
-                    db.treatmentDao().update(treatment);
+
                 }
+            }
+            for (Long id : idsForRemovedTreatments) {
+                treatmentDao.deleteById(id);
             }
         });
     }

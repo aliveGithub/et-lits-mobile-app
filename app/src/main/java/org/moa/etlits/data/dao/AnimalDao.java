@@ -20,6 +20,9 @@ public interface AnimalDao {
     @Update
     void update(Animal animal);
 
+    @Query("DELETE FROM animals where id=:id")
+    void deleteById(long id);
+
     @Query("SELECT * FROM animals")
     LiveData<List<Animal>> getAllAnimals();
 

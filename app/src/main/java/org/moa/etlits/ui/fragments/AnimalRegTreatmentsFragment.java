@@ -1,7 +1,6 @@
 package org.moa.etlits.ui.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,12 +22,12 @@ public class AnimalRegTreatmentsFragment extends Fragment {
     private AnimalRegViewModel viewModel;
     private FragmentAnimalRegTreatmentsBinding binding;
 
-   public AnimalRegTreatmentsFragment() {
-   }
+    public AnimalRegTreatmentsFragment() {
+    }
 
     public static AnimalRegTreatmentsFragment newInstance() {
         return new AnimalRegTreatmentsFragment();
-     }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,57 +46,62 @@ public class AnimalRegTreatmentsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider((ViewModelStoreOwner) getActivity(), (ViewModelProvider.Factory) new AnimalRegViewModel.Factory(getActivity().getApplication(), 0)).get(AnimalRegViewModel.class);
 
-        viewModel.getTreatmentList().observe(getActivity(), treatments ->  {
-            if(treatments != null){
-                for (Treatment t : treatments) {
-                    Log.i("Treatment", "---------------------" + t.getTreatmentApplied());
-                }
-
-            }});
-
         viewModel.getTreatmentTypeList().observe(getActivity(), treatmentTypes -> {
             if (treatmentTypes != null) {
                 List<String> selected = viewModel.getSelectedTreatmentTypes();
                 for (int i = 0; i < treatmentTypes.size(); i++) {
-                    CategoryValue treatmentType = treatmentTypes.get(i);
-                    CheckBox checkBox = new CheckBox(getActivity());
-                    checkBox.setTag(treatmentType.getValueId());
-                    checkBox.setText(treatmentType.getValue());
-                    checkBox.setChecked(selected.contains(treatmentType.getValueId()));
-                    checkBox.setPadding(8, 16, 8, 16);
-                    checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                            String id = (String) buttonView.getTag();
-                            List<Treatment> treatments = viewModel.getTreatments();
-                            if (isChecked) {
-                                Treatment treatment = new Treatment();
-                                treatment.setTreatmentApplied(id);
-                               treatments.add(treatment);
-                            } else {
-                                    for(int i = 0; i < treatments.size(); i++){
-                                    if(treatments.get(i).getTreatmentApplied().equals(id)){
-                                        treatments.remove(i);
-                                        break;
-                                    }
-                                }
-                            }
-                            Log.i("Treatment", "---------------------" + viewModel.getTreatmentList().getValue().size());
-                        }
-
-                    });
-                    binding.llTreatmentList.addView(checkBox);
+                    binding.llTreatmentList.addView(createTreatmentChecBox(treatmentTypes.get(i), selected));
                 }
             }
-
         });
 
-       binding.btnFinishRegistration.setOnClickListener(v -> {
-           viewModel.save();
-           getActivity().finish();
+        viewModel.getTreatmentList().observe(getActivity(), treatments -> {
+            if (treatments != null) {
+                for (int i = 0; i < treatments.size(); i++) {
+                    CheckBox checkBox = binding.llTreatmentList.findViewWithTag(treatments.get(i).getTreatmentApplied());
+                    if (checkBox != null && !checkBox.isChecked()) {
+                        checkBox.setChecked(true);
+                    }
+                }
+
+            }
         });
 
-   }
+        binding.btnFinishRegistration.setOnClickListener(v -> {
+            viewModel.save();
+            getActivity().finish();
+        });
+
+    }
+
+    private CheckBox createTreatmentChecBox(CategoryValue treatmentType, List<String> selected) {
+        CheckBox checkBox = new CheckBox(getActivity());
+        checkBox.setTag(treatmentType.getValueId());
+        checkBox.setText(treatmentType.getValue());
+        checkBox.setChecked(selected.contains(treatmentType.getValueId()));
+        checkBox.setPadding(8, 16, 8, 16);
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                String id = (String) buttonView.getTag();
+                List<Treatment> treatments = viewModel.getTreatments();
+                if (isChecked) {
+                    Treatment treatment = new Treatment();
+                    treatment.setTreatmentApplied(id);
+                    treatments.add(treatment);
+                } else {
+                    for (int i = 0; i < treatments.size(); i++) {
+                        if (treatments.get(i).getTreatmentApplied().equals(id)) {
+                            viewModel.removeTreatment(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+
+        return checkBox;
+    }
 
     @Override
     public void onDestroyView() {

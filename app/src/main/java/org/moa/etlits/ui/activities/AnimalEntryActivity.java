@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,22 +31,82 @@ public class AnimalEntryActivity extends AppCompatActivity {
     private boolean breedSpinnerInitialized = false;
     private boolean sexSpinnerInitialized = false;
 
-    public static final String ADD_ANIMAL_RESULT = "ADD_ANIMAL_RESULT";
+    public static final String ANIMAL_DETAILS_RESULT = "ANIMAL_DETAILS_RESULT";
     public static final String ADD_ANOTHER_ANIMAL = "ADD_ANOTHER_ANIMAL";
+    public static final String POSITION_IN_LIST = "POSITION_IN_LIST";
+    public static final String ANIMAL = "ANIMAL";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityAnimalEntryBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        Animal animal = (Animal) getIntent().getSerializableExtra(ANIMAL);
         viewModel = new ViewModelProvider(AnimalEntryActivity.this, new AnimalEntryModel.AnimalDataEntryViewModelFactory(getApplication())).get(AnimalEntryModel.class);
         viewModel.getBreedList().observe(this, breeds -> {
             CategoryValue categoryValue = new CategoryValue();
             categoryValue.setValue(" ");
             breeds.add(0, categoryValue);
             binding.sBreed.setAdapter(new ArrayAdapter<>(AnimalEntryActivity.this, android.R.layout.simple_spinner_item, breeds));
+
+            if (animal != null && animal.getBreed() != null) {
+                for (int i = 0; i < binding.sBreed.getAdapter().getCount(); i++) {
+                    CategoryValue v = (CategoryValue) binding.sBreed.getAdapter().getItem(i);
+                    if (v.getValueId() != null && v.getValueId().equals(animal.getBreed())) {
+                        binding.sBreed.setSelection(i);
+                        break;
+                    }
+                }
+            }
         });
 
+        viewModel.getSexList().observe(this, sexList -> {
+            CategoryValue categoryValue = new CategoryValue();
+            categoryValue.setValue(" ");
+            sexList.add(0, categoryValue);
+            binding.sSex.setAdapter(new ArrayAdapter<>(AnimalEntryActivity.this, android.R.layout.simple_spinner_item, sexList));
+
+            if (animal != null && animal.getSex() != null) {
+                for (int i = 0; i < binding.sSex.getAdapter().getCount(); i++) {
+                    CategoryValue v = (CategoryValue) binding.sSex.getAdapter().getItem(i);
+                    if (v.getValueId() != null && v.getValueId().equals(animal.getSex())) {
+                        binding.sSex.setSelection(i);
+                        break;
+                    }
+                }
+            }
+        });
+
+        binding.btnDone.setOnClickListener(v -> {
+            validateAllFields();
+            if (viewModel.getAnimalFormState().getValue() != null && viewModel.getAnimalFormState().getValue().isDataValid()) {
+                returnResult(false);
+            }
+
+        });
+
+        binding.btnAddNextAnimal.setOnClickListener(v -> {
+            if (viewModel.getAnimalFormState().getValue() != null && viewModel.getAnimalFormState().getValue().isDataValid()) {
+                returnResult(true);
+            }
+        });
+
+        setUpActionBar();
+        setUpDataValidation();
+        updateErrors();
+        displayAnimalData();
+    }
+
+    private void displayAnimalData() {
+        Animal animal = (Animal) getIntent().getSerializableExtra(ANIMAL);
+        if (animal != null) {
+            binding.etAnimalId.setText(animal.getAnimalId());
+            binding.etAge.setText(animal.getAge() != null ? String.valueOf(animal.getAge()) : "");
+            binding.etSeller.setText(animal.getSeller());
+            binding.swDead.setChecked(animal.isDead());
+        }
+    }
+    private void updateErrors() {
         viewModel.getAnimalFormState().observe(this, formState -> {
             if (formState == null) {
                 return;
@@ -76,31 +137,7 @@ public class AnimalEntryActivity extends AppCompatActivity {
             }
         });
 
-        viewModel.getSexList().observe(this, sexList -> {
-            CategoryValue categoryValue = new CategoryValue();
-            categoryValue.setValue(" ");
-            sexList.add(0, categoryValue);
-            binding.sSex.setAdapter(new ArrayAdapter<>(AnimalEntryActivity.this, android.R.layout.simple_spinner_item, sexList));
-        });
-
-        binding.btnDone.setOnClickListener(v -> {
-            validateAllFields();
-            if (viewModel.getAnimalFormState().getValue() != null && viewModel.getAnimalFormState().getValue().isDataValid()) {
-                returnResult(false);
-            }
-
-        });
-
-        binding.btnAddNextAnimal.setOnClickListener(v -> {
-            if (viewModel.getAnimalFormState().getValue() != null && viewModel.getAnimalFormState().getValue().isDataValid()) {
-                returnResult(true);
-            }
-        });
-
-        setUpActionBar();
-        setUpDataValidation();
     }
-
     private void setUpActionBar() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -117,7 +154,7 @@ public class AnimalEntryActivity extends AppCompatActivity {
     public void returnResult(boolean addAnotherAnimal) {
         Intent replyIntent = new Intent();
 
-        Animal animal = new Animal();
+        Animal animal = getIntent().getSerializableExtra(ANIMAL) != null ? (Animal) getIntent().getSerializableExtra(ANIMAL) : new Animal();
         animal.setAnimalId(binding.etAnimalId.getText().toString().trim());
 
         if (binding.sBreed.getSelectedItem() != null) {
@@ -137,10 +174,10 @@ public class AnimalEntryActivity extends AppCompatActivity {
         animal.setDead(binding.swDead.isChecked());
         animal.setSeller(String.valueOf(binding.etSeller.getText()));
 
-        replyIntent.putExtra(ADD_ANIMAL_RESULT, animal);
+        replyIntent.putExtra(ANIMAL_DETAILS_RESULT, animal);
         replyIntent.putExtra(ADD_ANOTHER_ANIMAL, addAnotherAnimal);
+        replyIntent.putExtra(POSITION_IN_LIST, getIntent().getIntExtra(POSITION_IN_LIST, -1));
         setResult(RESULT_OK, replyIntent);
-
         finish();
     }
 
