@@ -18,6 +18,9 @@ import org.moa.etlits.data.models.Animal;
 import org.moa.etlits.data.models.CategoryValue;
 import org.moa.etlits.databinding.ActivityAnimalEntryBinding;
 import org.moa.etlits.ui.viewmodels.AnimalEntryModel;
+import org.moa.etlits.utils.ViewUtils;
+
+import java.util.List;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,11 +47,13 @@ public class AnimalEntryActivity extends AppCompatActivity {
         Animal animal = (Animal) getIntent().getSerializableExtra(ANIMAL);
         viewModel = new ViewModelProvider(AnimalEntryActivity.this, new AnimalEntryModel.AnimalDataEntryViewModelFactory(getApplication())).get(AnimalEntryModel.class);
         viewModel.getBreedList().observe(this, breeds -> {
-            CategoryValue categoryValue = new CategoryValue();
-            categoryValue.setValue(" ");
-            breeds.add(0, categoryValue);
-            binding.sBreed.setAdapter(new ArrayAdapter<>(AnimalEntryActivity.this, android.R.layout.simple_spinner_item, breeds));
+            if (!checkInList(" ", breeds)) {
+                CategoryValue categoryValue = new CategoryValue();
+                categoryValue.setValue(" ");
+                breeds.add(0, categoryValue);
+            }
 
+            binding.sBreed.setAdapter(new ArrayAdapter<>(AnimalEntryActivity.this, android.R.layout.simple_spinner_item, breeds));
             if (animal != null && animal.getBreed() != null) {
                 for (int i = 0; i < binding.sBreed.getAdapter().getCount(); i++) {
                     CategoryValue v = (CategoryValue) binding.sBreed.getAdapter().getItem(i);
@@ -61,9 +66,12 @@ public class AnimalEntryActivity extends AppCompatActivity {
         });
 
         viewModel.getSexList().observe(this, sexList -> {
-            CategoryValue categoryValue = new CategoryValue();
-            categoryValue.setValue(" ");
-            sexList.add(0, categoryValue);
+            if (!checkInList(" ", sexList)) {
+                CategoryValue categoryValue = new CategoryValue();
+                categoryValue.setValue(" ");
+                sexList.add(0, categoryValue);
+            }
+
             binding.sSex.setAdapter(new ArrayAdapter<>(AnimalEntryActivity.this, android.R.layout.simple_spinner_item, sexList));
 
             if (animal != null && animal.getSex() != null) {
@@ -97,6 +105,15 @@ public class AnimalEntryActivity extends AppCompatActivity {
         displayAnimalData();
     }
 
+    private boolean checkInList(String value, List<CategoryValue> items) {
+        for (CategoryValue item : items) {
+            if (item.getValueId().equals(value)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void displayAnimalData() {
         Animal animal = (Animal) getIntent().getSerializableExtra(ANIMAL);
         if (animal != null) {
@@ -115,26 +132,10 @@ public class AnimalEntryActivity extends AppCompatActivity {
             binding.btnDone.setEnabled(formState.isDataValid());
             binding.btnAddNextAnimal.setEnabled(formState.isDataValid());
 
-            if (formState.getAnimalIdError() != null) {
-                binding.etAnimalId.setError(getString(formState.getAnimalIdError()));
-            }
-
-            if (formState.getBreedError() != null) {
-                if (binding.sBreed.getSelectedView() != null) {
-                    TextView tv = (TextView) (binding.sBreed.getSelectedView());
-                    tv.setError(getString(formState.getBreedError()));
-                }
-            }
-
-            if (formState.getSexError() != null) {
-                if (binding.sSex.getSelectedView() != null) {
-                    TextView tv = (TextView) (binding.sSex.getSelectedView());
-                    tv.setError(getString(formState.getSexError()));
-                }
-            }
-            if (formState.getAgeError() != null) {
-                binding.etAge.setError(getString(formState.getAgeError()));
-            }
+            ViewUtils.showError(this, formState.getAnimalIdError(), binding.etAnimalId, binding.tvAnimalIdError);
+            ViewUtils.showError(this, formState.getBreedError(), binding.sBreed, binding.tvBreedError);
+            ViewUtils.showError(this, formState.getSexError(), binding.sSex, binding.tvSexError);
+            ViewUtils.showError(this, formState.getAgeError(), binding.etAge, binding.tvAgeError);
         });
 
     }
