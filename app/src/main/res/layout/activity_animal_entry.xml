@@ -94,7 +94,8 @@
                     android:layout_below="@+id/tv_breed"
                     android:hint="@string/animal_reg_select"
                     android:minHeight="@dimen/min_touch_target_size"
-                    android:background="@drawable/bg_input_default"
+                    android:background="@drawable/bg_dropdown_default"
+                    android:paddingRight="@dimen/big_padding"
                     />
                 <TextView
                     android:id="@+id/tv_breed_error"
@@ -141,7 +142,9 @@
                     android:layout_below="@+id/tv_sex"
                     android:hint="@string/animal_reg_select"
                     android:minHeight="@dimen/min_touch_target_size"
-                    android:background="@drawable/bg_input_default"/>
+                    android:background="@drawable/bg_dropdown_default"
+                    android:paddingRight="@dimen/big_padding"
+                    />
                 <TextView
                     android:id="@+id/tv_sex_error"
                     android:layout_width="match_parent"

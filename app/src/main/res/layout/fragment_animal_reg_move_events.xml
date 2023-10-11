@@ -52,7 +52,8 @@
                 android:hint="@string/animal_reg_lookup_eid"
                 android:minHeight="@dimen/min_touch_target_size"
                 android:paddingLeft="@dimen/very_small_padding"
-                android:background="@drawable/bg_input_default"
+                android:background="@drawable/bg_dropdown_default"
+                android:paddingRight="@dimen/big_padding"
                 />
             <TextView
                 android:id="@+id/tv_move_off_eid_error"
@@ -210,7 +211,8 @@
                 android:hint="@string/animal_reg_lookup_eid"
                 android:minHeight="@dimen/min_touch_target_size"
                 android:paddingLeft="@dimen/very_small_padding"
-                android:background="@drawable/bg_input_default"
+               android:paddingRight="@dimen/big_padding"
+                android:background="@drawable/bg_dropdown_default"
                 />
 
             <TextView

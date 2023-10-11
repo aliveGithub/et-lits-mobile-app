@@ -51,7 +51,8 @@
                     android:hint=""
                     android:minHeight="@dimen/min_touch_target_size"
                     android:enabled="false"
-                    android:background="@drawable/bg_input_default"
+                    android:background="@drawable/bg_dropdown_default"
+                    android:layout_marginTop="@dimen/small_margin"
                     />
 
             </RelativeLayout>
