@@ -48,7 +48,7 @@ public class AnimalEntryModel extends ViewModel {
     public void validateAnimalId(String animalId) {
         AnimalFormState newAnimalFormState = new AnimalFormState();
         if (isEmpty(animalId)) {
-            newAnimalFormState.setAnimalIdError(R.string.animal_reg_animal_id_required);
+            newAnimalFormState.setAnimalIdError(R.string.animal_reg_field_required);
         } else {
             if (!isValidAnimalId(animalId)) {
                 newAnimalFormState.setAnimalIdError(R.string.animal_reg_animal_id_invalid);
@@ -60,7 +60,7 @@ public class AnimalEntryModel extends ViewModel {
     public void validateAge(Integer age) {
         AnimalFormState newAnimalFormState = new AnimalFormState();
         if (isEmpty(age)){
-            newAnimalFormState.setAgeError(R.string.animal_reg_age_required);
+            newAnimalFormState.setAgeError(R.string.animal_reg_field_required);
         } else {
             if (!isValidAge(age)) {
                 newAnimalFormState.setAgeError(R.string.animal_reg_age_invalid);
@@ -72,7 +72,7 @@ public class AnimalEntryModel extends ViewModel {
     public void validateSex(String sex) {
         AnimalFormState newAnimalFormState = new AnimalFormState();
         if (isEmpty(sex)){
-            newAnimalFormState.setSexError(R.string.animal_reg_sex_required);
+            newAnimalFormState.setSexError(R.string.animal_reg_field_required);
         }
         animalFormState.setValue(newAnimalFormState);
     }
@@ -80,7 +80,7 @@ public class AnimalEntryModel extends ViewModel {
     public void validateBreed(String breed) {
         AnimalFormState newAnimalFormState = new AnimalFormState();
         if (isEmpty(breed)){
-            newAnimalFormState.setBreedError(R.string.animal_reg_breed_required);
+            newAnimalFormState.setBreedError(R.string.animal_reg_field_required);
         }
         animalFormState.setValue(newAnimalFormState);
     }
@@ -88,7 +88,7 @@ public class AnimalEntryModel extends ViewModel {
     public void validateAllFields(String animalId, String sex, String breed,Integer age, boolean dead, String seller) {
         AnimalFormState newAnimalFormState = new AnimalFormState();
         if (isEmpty(animalId)) {
-            newAnimalFormState.setAnimalIdError(R.string.animal_reg_animal_id_required);
+            newAnimalFormState.setAnimalIdError(R.string.animal_reg_field_required);
         } else {
             if (!isValidAnimalId(animalId)) {
                 newAnimalFormState.setAnimalIdError(R.string.animal_reg_animal_id_invalid);
@@ -96,15 +96,15 @@ public class AnimalEntryModel extends ViewModel {
         }
 
         if (isEmpty(sex)){
-            newAnimalFormState.setSexError(R.string.animal_reg_sex_required);
+            newAnimalFormState.setSexError(R.string.animal_reg_field_required);
         }
 
         if (isEmpty(breed)){
-            newAnimalFormState.setBreedError(R.string.animal_reg_breed_required);
+            newAnimalFormState.setBreedError(R.string.animal_reg_field_required);
         }
 
         if (isEmpty(age)){
-            newAnimalFormState.setAgeError(R.string.animal_reg_age_required);
+            newAnimalFormState.setAgeError(R.string.animal_reg_field_required);
         } else {
             if (!isValidAge(age)) {
                 newAnimalFormState.setAgeError(R.string.animal_reg_age_invalid);

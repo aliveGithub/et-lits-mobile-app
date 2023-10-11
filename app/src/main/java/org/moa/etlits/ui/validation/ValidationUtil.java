@@ -1,5 +1,6 @@
 package org.moa.etlits.ui.validation;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,13 +33,29 @@ public class ValidationUtil {
         if (date == null || dateToCompare == null) {
             return false;
         }
-        return date.after(dateToCompare);
+
+       Date cDate = stripTimeFromDate(date);
+       Date cDateToCompare = stripTimeFromDate(dateToCompare);
+       return cDate.after(cDateToCompare);
+    }
+
+    private static Date stripTimeFromDate(Date date) {
+        Calendar cDate = Calendar.getInstance();
+        cDate.setTime(date);
+        cDate.set(Calendar.HOUR_OF_DAY, 0);
+        cDate.set(Calendar.MINUTE, 0);
+        cDate.set(Calendar.SECOND, 0);
+        cDate.set(Calendar.MILLISECOND, 0);
+        return cDate.getTime();
     }
 
     public static boolean dateInFuture(Date date) {
         if (date == null) {
             return false;
         }
-        return date.after(new Date());
+
+        Date cDate = stripTimeFromDate(date);
+        Date cToday = stripTimeFromDate(new Date());
+        return cDate.after(cToday);
     }
 }
