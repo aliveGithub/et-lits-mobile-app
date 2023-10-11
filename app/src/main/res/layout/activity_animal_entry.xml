@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.activities.AnimalEntryActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -44,6 +47,21 @@
                 android:layout_below="@+id/tv_animal_id"
                 android:hint="@string/reg_enter_animal_id"
                 android:minHeight="@dimen/min_touch_target_size"
+                android:background="@drawable/bg_input_default"
+                android:paddingLeft="@dimen/very_small_padding"
+                />
+
+            <TextView
+                android:id="@+id/tv_animal_id_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/et_animal_id"
+                android:text=""
+                android:textColor="@android:color/holo_red_light"
+                android:visibility="gone"
+                android:paddingLeft="@dimen/very_small_padding"
+                android:paddingBottom="@dimen/small_padding"
+                android:textSize="@dimen/font_size_smaller"
                 />
 
         </RelativeLayout>
@@ -55,14 +73,11 @@
             android:layout_gravity="center"
             >
             <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:src="@drawable/ic_animal_filled"
                 android:layout_margin="@dimen/big_padding"
-                android:layout_gravity="center"
-
-
-                />
+                android:layout_gravity="center"/>
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -79,6 +94,19 @@
                     android:layout_below="@+id/tv_breed"
                     android:hint="@string/animal_reg_select"
                     android:minHeight="@dimen/min_touch_target_size"
+                    android:background="@drawable/bg_input_default"
+                    />
+                <TextView
+                    android:id="@+id/tv_breed_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/s_breed"
+                    android:text=""
+                    android:textColor="@android:color/holo_red_light"
+                    android:visibility="gone"
+                    android:paddingLeft="@dimen/very_small_padding"
+                    android:paddingBottom="@dimen/small_padding"
+                    android:textSize="@dimen/font_size_smaller"
                     />
             </RelativeLayout>
         </LinearLayout>
@@ -103,7 +131,8 @@
                     android:id="@+id/tv_sex"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/animal_reg_sex" />
+                    android:text="@string/animal_reg_sex"
+                    />
 
                 <Spinner
                     android:id="@+id/s_sex"
@@ -111,7 +140,20 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_sex"
                     android:hint="@string/animal_reg_select"
-                    android:minHeight="@dimen/min_touch_target_size" />
+                    android:minHeight="@dimen/min_touch_target_size"
+                    android:background="@drawable/bg_input_default"/>
+                <TextView
+                    android:id="@+id/tv_sex_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/s_sex"
+                    android:text=""
+                    android:textColor="@android:color/holo_red_light"
+                    android:visibility="gone"
+                    android:paddingLeft="@dimen/very_small_padding"
+                    android:paddingBottom="@dimen/small_padding"
+                    android:textSize="@dimen/font_size_smaller"
+                    />
             </RelativeLayout>
         </LinearLayout>
 
@@ -146,6 +188,20 @@
                     android:hint="@string/animal_reg_age_hint"
                     android:minHeight="@dimen/min_touch_target_size"
                     android:inputType="number"
+                    android:paddingLeft="@dimen/very_small_padding"
+                    android:background="@drawable/bg_input_default"
+                    />
+                <TextView
+                    android:id="@+id/tv_age_error"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/et_age"
+                    android:text=""
+                    android:textColor="@android:color/holo_red_light"
+                    android:visibility="gone"
+                    android:paddingLeft="@dimen/very_small_padding"
+                    android:paddingBottom="@dimen/small_padding"
+                    android:textSize="@dimen/font_size_smaller"
                     />
 
             </RelativeLayout>
@@ -213,6 +269,8 @@
                     android:layout_below="@+id/tv_seller"
                     android:hint="@string/animal_reg_seller_hint"
                     android:minHeight="@dimen/min_touch_target_size"
+                    android:background="@drawable/bg_input_default"
+                    android:paddingLeft="@dimen/very_small_padding"
                     />
 
             </RelativeLayout>
@@ -273,3 +331,4 @@
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
+</ScrollView>

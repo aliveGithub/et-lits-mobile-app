@@ -119,6 +119,7 @@
     <string name="animal_reg_dead">Dead</string>
     <string name="animal_reg_seller">Seller</string>
     <string name="animal_reg_seller_hint">Seller</string>
+    <string name="animal_reg_field_required">Required</string>
     <string name="animal_reg_animal_id_required">Animal Id field is required</string>
     <string name="animal_reg_sex_required">Sex field is required</string>
     <string name="animal_reg_breed_required">Breed field is required</string>
@@ -136,5 +137,8 @@
     <string name="animal_reg_treatments_applied">Treatments Applied</string>
     <string name="animal_reg_finish_registration">Finish Registration</string>
     <string name="animal_reg_view_registrations">View Registrations</string>
+    <string name="animal_reg_no_animals_registered">No Animals Registered</string>
+    <string name="animal_reg_animal_list_empty_error">At least one animal must be registered.</string>
+    <string name="animal_reg_dialog_ok">OK</string>
 
 </resources>

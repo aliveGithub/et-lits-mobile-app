@@ -1,11 +1,14 @@
 package org.moa.etlits.ui.activities;
 
+import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.moa.etlits.R;
 import org.moa.etlits.databinding.ActivityAnimalRegBinding;
@@ -107,11 +110,23 @@ public class AnimalRegActivity extends AppCompatActivity {
             updateNavigationButtons();
         });
         binding.ivNext.setOnClickListener(v -> {
+            if (viewModel.getCurrentStep() == Constants.AnimalRegStep.REGISTRATION) {
+                if (viewModel.getAnimals().getValue() == null || viewModel.getAnimals().getValue().isEmpty()) {
+                    showNoAnimalsDialog();
+                    return;
+                }
+            }
             viewModel.moveNext();
             showFragment(viewModel.getCurrentStep());
             updateNavigationButtons();
         });
         binding.ivLast.setOnClickListener(v -> {
+            if (viewModel.getCurrentStep() == Constants.AnimalRegStep.REGISTRATION) {
+                if (viewModel.getAnimals().getValue() == null || viewModel.getAnimals().getValue().isEmpty()) {
+                    showNoAnimalsDialog();
+                    return;
+                }
+            }
             viewModel.moveLast();
             showFragment(viewModel.getCurrentStep());
             updateNavigationButtons();
@@ -168,5 +183,24 @@ public class AnimalRegActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void showNoAnimalsDialog() {
+        final Dialog customDialog = new Dialog(this);
+        customDialog.setContentView(R.layout.custom_dialog);
+        customDialog.setCancelable(false);
+
+        TextView title = customDialog.findViewById(R.id.dialog_title);
+        TextView message = customDialog.findViewById(R.id.dialog_message);
+        Button positiveButton = customDialog.findViewById(R.id.positive_button);
+
+        title.setText(R.string.animal_reg_no_animals_registered);
+        message.setText(R.string.animal_reg_animal_list_empty_error);
+        positiveButton.setText(R.string.animal_reg_dialog_ok);
+        positiveButton.setOnClickListener(v -> {
+            customDialog.dismiss();
+        });
+
+        customDialog.show();
     }
 }

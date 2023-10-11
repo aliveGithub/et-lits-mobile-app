@@ -92,8 +92,19 @@ public class AnimalRegViewModel extends AndroidViewModel {
         speciesList = new MutableLiveData<>(species);
     }
 
+    public void initAnimalRegistration() {
+        AnimalRegistration newAnimalRegistration = new AnimalRegistration();
+        Date today = Calendar.getInstance().getTime();
+        newAnimalRegistration.setDateIdentification(today);
+        newAnimalRegistration.setDateMoveOff(today);
+        newAnimalRegistration.setDateMoveOn(today);
+        animalRegistration = new MutableLiveData<>(newAnimalRegistration);
+    }
+
+
+
     public void moveNext() {
-        if (currentStep.getValue() < Constants.AnimalRegStep.values().length - 1) {
+        if (currentStepIsValid() && currentStep.getValue() < Constants.AnimalRegStep.values().length - 1) {
             currentStep.setValue(currentStep.getValue() + 1);
         }
     }
@@ -109,7 +120,9 @@ public class AnimalRegViewModel extends AndroidViewModel {
     }
 
     public void moveLast() {
-        currentStep.setValue(Constants.AnimalRegStep.values().length - 1);
+        if (currentStepIsValid() && currentStep.getValue() < Constants.AnimalRegStep.values().length - 1){
+            currentStep.setValue(Constants.AnimalRegStep.values().length - 1);
+        }
     }
 
     public boolean isLast(){
@@ -123,6 +136,17 @@ public class AnimalRegViewModel extends AndroidViewModel {
 
     public Constants.AnimalRegStep getCurrentStep() {
         return Constants.AnimalRegStep.values()[currentStep.getValue()];
+    }
+
+    private boolean currentStepIsValid() {
+        switch (getCurrentStep()) {
+            case REGISTRATION:
+                return animalRegistrationStepIsValid();
+            case MOVE_EVENTS:
+                return moveEventsStepIsValid();
+            default:
+                return false;
+        }
     }
 
     public LiveData<AnimalRegistration> getAnimalRegistration() {
@@ -171,14 +195,6 @@ public class AnimalRegViewModel extends AndroidViewModel {
         animalRegistrationRepository.loadById(id);
     }
 
-    public void initAnimalRegistration() {
-        AnimalRegistration newAnimalRegistration = new AnimalRegistration();
-        Date today = Calendar.getInstance().getTime();
-        newAnimalRegistration.setDateIdentification(today);
-        newAnimalRegistration.setDateMoveOff(today);
-        newAnimalRegistration.setDateMoveOn(today);
-        animalRegistration = new MutableLiveData<>(newAnimalRegistration);
-    }
 
     public LiveData<List<Establishment>> getEstablishmentList() {
         return establishmentList;
@@ -243,8 +259,14 @@ public class AnimalRegViewModel extends AndroidViewModel {
         animalRegFormState.setValue(newAnimalRegFormState);
     }
 
-    private boolean moveEventsIsValid() {
+    private boolean moveEventsStepIsValid() {
+        validateMoveEvents();
         return getAnimalRegFormState().getValue().isDataValid();
+    }
+
+    public boolean animalRegistrationStepIsValid() {
+      List<Animal> animals = getAnimals().getValue();
+      return (animals != null && !animals.isEmpty());
     }
 
     public LiveData<List<Animal>> getAnimals() {

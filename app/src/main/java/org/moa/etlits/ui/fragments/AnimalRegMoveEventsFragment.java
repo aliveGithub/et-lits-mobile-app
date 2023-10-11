@@ -6,11 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.TextView;
 
+import org.moa.etlits.R;
 import org.moa.etlits.data.models.AnimalRegistration;
 import org.moa.etlits.databinding.FragmentAnimalRegMoveEventsBinding;
 import org.moa.etlits.ui.adapters.EstablishmentAdapter;
 import org.moa.etlits.ui.viewmodels.AnimalRegViewModel;
+import org.moa.etlits.utils.ViewUtils;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -31,11 +34,12 @@ public class AnimalRegMoveEventsFragment extends Fragment {
     private EstablishmentAdapter establishmentAdapter;
 
     private DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, Locale.getDefault());
+
     public AnimalRegMoveEventsFragment() {
 
     }
 
-   public static AnimalRegMoveEventsFragment newInstance() {
+    public static AnimalRegMoveEventsFragment newInstance() {
         AnimalRegMoveEventsFragment fragment = new AnimalRegMoveEventsFragment();
         return fragment;
     }
@@ -82,28 +86,12 @@ public class AnimalRegMoveEventsFragment extends Fragment {
             if (formState == null) {
                 return;
             }
-            //binding.btnNext.setEnabled(formState.isDataValid());
-            binding.actvMoveOffEid.setError(null);
-            binding.actvMoveOnEid.setError(null);
-            binding.btnDateMoveOff.setError(null);
-            binding.btnDateMoveOn.setError(null);
-            binding.btnDateIdentification.setError(null);
 
-            if (formState.getHoldingGroundEidError() != null) {
-                binding.actvMoveOffEid.setError(getString(formState.getHoldingGroundEidError()));
-            }
-            if (formState.getEstablishmentEidError() != null) {
-                binding.actvMoveOnEid.setError(getString(formState.getEstablishmentEidError()));
-            }
-            if (formState.getDateMoveOffError() != null) {
-                binding.btnDateMoveOff.setError(getString(formState.getDateMoveOffError()));
-            }
-            if (formState.getDateMoveOnError() != null) {
-                binding.btnDateMoveOn.setError(getString(formState.getDateMoveOnError()));
-            }
-            if (formState.getDateIdentificationError() != null) {
-                binding.btnDateIdentification.setError(getString(formState.getDateIdentificationError()));
-            }
+            ViewUtils.showError(getActivity(), formState.getHoldingGroundEidError(), binding.actvMoveOffEid, binding.tvMoveOffEidError);
+            ViewUtils.showError(getActivity(), formState.getEstablishmentEidError(), binding.actvMoveOnEid, binding.tvMoveOnEidError);
+            ViewUtils.showError(getActivity(), formState.getDateIdentificationError(), binding.btnDateIdentification, binding.tvDateIdentificationError);
+            ViewUtils.showError(getActivity(), formState.getDateMoveOffError(), binding.btnDateMoveOff, binding.tvDateMoveOffError);
+            ViewUtils.showError(getActivity(), formState.getDateMoveOnError(), binding.btnDateMoveOn, binding.tvDateMoveOnError);
         });
 
         binding.actvMoveOffEid.setAdapter(establishmentAdapter);
@@ -136,27 +124,26 @@ public class AnimalRegMoveEventsFragment extends Fragment {
         binding.btnDateMoveOn.setOnClickListener(v -> {
             new DatePickerDialog(getActivity(), (dView, year, month, dayOfMonth) -> {
                 viewModel.setDateMoveOn(year, month, dayOfMonth);
-                binding.btnDateMoveOn.setText(dateFormat.format(viewModel.getDateMoveOn().getTime()));
                 viewModel.validateMoveEvents();
+                binding.btnDateMoveOn.setText(dateFormat.format(viewModel.getDateMoveOn().getTime()));
             }, viewModel.getDateMoveOn().get(Calendar.YEAR), viewModel.getDateMoveOn().get(Calendar.MONTH), viewModel.getDateMoveOn().get(Calendar.DAY_OF_MONTH)).show();
         });
         binding.btnDateMoveOff.setOnClickListener(v -> {
             new DatePickerDialog(getActivity(), (dView, year, month, dayOfMonth) -> {
                 viewModel.setDateMoveOff(year, month, dayOfMonth);
-                binding.btnDateMoveOff.setText(dateFormat.format(viewModel.getDateMoveOff().getTime()));
                 viewModel.validateMoveEvents();
+                binding.btnDateMoveOff.setText(dateFormat.format(viewModel.getDateMoveOff().getTime()));
             }, viewModel.getDateMoveOff().get(Calendar.YEAR), viewModel.getDateMoveOff().get(Calendar.MONTH), viewModel.getDateMoveOff().get(Calendar.DAY_OF_MONTH)).show();
         });
 
         binding.btnDateIdentification.setOnClickListener(v -> {
             new DatePickerDialog(getActivity(), (dView, year, month, dayOfMonth) -> {
                 viewModel.setDateIdentification(year, month, dayOfMonth);
-                binding.btnDateIdentification.setText(dateFormat.format(viewModel.getDateIdentification().getTime()));
                 viewModel.validateMoveEvents();
+                binding.btnDateIdentification.setText(dateFormat.format(viewModel.getDateIdentification().getTime()));
             }, viewModel.getDateIdentification().get(Calendar.YEAR), viewModel.getDateIdentification().get(Calendar.MONTH), viewModel.getDateIdentification().get(Calendar.DAY_OF_MONTH)).show();
         });
     }
-
 
     @Override
     public void onDestroyView() {

@@ -51,6 +51,20 @@
                 android:layout_below="@+id/tv_move_off_eid"
                 android:hint="@string/animal_reg_lookup_eid"
                 android:minHeight="@dimen/min_touch_target_size"
+                android:paddingLeft="@dimen/very_small_padding"
+                android:background="@drawable/bg_input_default"
+                />
+            <TextView
+                android:id="@+id/tv_move_off_eid_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/actv_move_off_eid"
+                android:text=""
+                android:textColor="@android:color/holo_red_light"
+                android:visibility="gone"
+                android:paddingLeft="@dimen/very_small_padding"
+                android:paddingBottom="@dimen/small_padding"
+                android:textSize="@dimen/font_size_smaller"
                 />
         </RelativeLayout>
     </LinearLayout>
@@ -87,8 +101,21 @@
                 android:hint="@string/animal_reg_select_date"
                 android:gravity="left|center_vertical"
                 android:padding="@dimen/very_small_padding"
-                android:background="@drawable/bg_light_green"
+                android:background="@drawable/bg_input_default"
                 android:drawableRight="@drawable/ic_calendar_small" />
+
+            <TextView
+                android:id="@+id/tv_date_identification_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_date_identification"
+                android:text=""
+                android:textColor="@android:color/holo_red_light"
+                android:visibility="gone"
+                android:paddingLeft="@dimen/very_small_padding"
+                android:paddingBottom="@dimen/small_padding"
+                android:textSize="@dimen/font_size_smaller"
+                />
         </RelativeLayout>
     </LinearLayout>
 
@@ -123,8 +150,21 @@
                 android:hint="@string/animal_reg_select_date"
                 android:gravity="left|center_vertical"
                 android:padding="@dimen/very_small_padding"
-                android:background="@drawable/bg_light_green"
+                android:background="@drawable/bg_input_default"
                 android:drawableRight="@drawable/ic_calendar_small" />
+
+            <TextView
+                android:id="@+id/tv_date_move_off_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_date_move_off"
+                android:text=""
+                android:textColor="@android:color/holo_red_light"
+                android:visibility="gone"
+                android:paddingLeft="@dimen/very_small_padding"
+                android:paddingBottom="@dimen/small_padding"
+                android:textSize="@dimen/font_size_smaller"
+                />
         </RelativeLayout>
     </LinearLayout>
 
@@ -169,6 +209,21 @@
                 android:layout_below="@+id/tv_move_on_eid"
                 android:hint="@string/animal_reg_lookup_eid"
                 android:minHeight="@dimen/min_touch_target_size"
+                android:paddingLeft="@dimen/very_small_padding"
+                android:background="@drawable/bg_input_default"
+                />
+
+            <TextView
+                android:id="@+id/tv_move_on_eid_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/actv_move_on_eid"
+                android:text=""
+                android:textColor="@android:color/holo_red_light"
+                android:visibility="gone"
+                android:paddingLeft="@dimen/very_small_padding"
+                android:paddingBottom="@dimen/small_padding"
+                android:textSize="@dimen/font_size_smaller"
                 />
 
         </RelativeLayout>
@@ -204,8 +259,21 @@
                 android:hint="@string/animal_reg_select_date"
                 android:gravity="left|center_vertical"
                 android:padding="@dimen/very_small_padding"
-                android:background="@drawable/bg_light_green"
+                android:background="@drawable/bg_input_default"
                 android:drawableRight="@drawable/ic_calendar_small" />
+
+            <TextView
+                android:id="@+id/tv_date_move_on_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_date_move_on"
+                android:text=""
+                android:textColor="@android:color/holo_red_light"
+                android:visibility="gone"
+                android:paddingLeft="@dimen/very_small_padding"
+                android:paddingBottom="@dimen/small_padding"
+                android:textSize="@dimen/font_size_smaller"
+                />
 
         </RelativeLayout>
     </LinearLayout>

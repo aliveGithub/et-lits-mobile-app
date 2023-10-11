@@ -25,7 +25,7 @@ public class AnimalRegFormState {
             return;
         }
         if (ValidationUtil.isEmpty(animalRegistration.getDateIdentification())) {
-            this.setDateIdentificationError(R.string.animal_reg_date_required);
+            this.setDateIdentificationError(R.string.animal_reg_field_required);
         } else {
             if (ValidationUtil.dateInFuture(animalRegistration.getDateIdentification())) {
                 this.setDateIdentificationError(R.string.animal_reg_date_in_future);
@@ -33,7 +33,7 @@ public class AnimalRegFormState {
         }
 
         if (ValidationUtil.isEmpty(animalRegistration.getDateMoveOff())) {
-            this.setDateMoveOffError(R.string.animal_reg_date_required);
+            this.setDateMoveOffError(R.string.animal_reg_field_required);
         } else {
             if (ValidationUtil.dateInFuture(animalRegistration.getDateMoveOff())) {
                 this.setDateMoveOffError(R.string.animal_reg_date_in_future);
@@ -44,11 +44,11 @@ public class AnimalRegFormState {
         }
 
         if (ValidationUtil.isEmpty(animalRegistration.getHoldingGroundEid())) {
-            this.setHoldingGroundEidError(R.string.animal_reg_eid_required);
+            this.setHoldingGroundEidError(R.string.animal_reg_field_required);
         }
 
         if (ValidationUtil.isEmpty(animalRegistration.getDateMoveOn())) {
-            this.setDateMoveOnError(R.string.animal_reg_date_required);
+            this.setDateMoveOnError(R.string.animal_reg_field_required);
         } else {
             if (ValidationUtil.dateInFuture(animalRegistration.getDateMoveOn())) {
                 this.setDateMoveOnError(R.string.animal_reg_date_in_future);
@@ -59,7 +59,7 @@ public class AnimalRegFormState {
         }
 
         if (ValidationUtil.isEmpty(animalRegistration.getEstablishmentEid())) {
-            this.setEstablishmentEidError(R.string.animal_reg_eid_required);
+            this.setEstablishmentEidError(R.string.animal_reg_field_required);
         }
     }
 
