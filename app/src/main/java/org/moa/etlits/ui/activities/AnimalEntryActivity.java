@@ -57,7 +57,7 @@ public class AnimalEntryActivity extends AppCompatActivity {
             if (animal != null && animal.getBreed() != null) {
                 for (int i = 0; i < binding.sBreed.getAdapter().getCount(); i++) {
                     CategoryValue v = (CategoryValue) binding.sBreed.getAdapter().getItem(i);
-                    if (v.getValueId() != null && v.getValueId().equals(animal.getBreed())) {
+                    if (v.getValue() != null && v.getValue().equals(animal.getBreed())) {
                         binding.sBreed.setSelection(i);
                         break;
                     }
@@ -77,7 +77,7 @@ public class AnimalEntryActivity extends AppCompatActivity {
             if (animal != null && animal.getSex() != null) {
                 for (int i = 0; i < binding.sSex.getAdapter().getCount(); i++) {
                     CategoryValue v = (CategoryValue) binding.sSex.getAdapter().getItem(i);
-                    if (v.getValueId() != null && v.getValueId().equals(animal.getSex())) {
+                    if (v.getValue() != null && v.getValue().equals(animal.getSex())) {
                         binding.sSex.setSelection(i);
                         break;
                     }
@@ -107,7 +107,7 @@ public class AnimalEntryActivity extends AppCompatActivity {
 
     private boolean checkInList(String value, List<CategoryValue> items) {
         for (CategoryValue item : items) {
-            if (item.getValueId().equals(value)) {
+            if (item.getValue().equals(value)) {
                 return true;
             }
         }
@@ -160,12 +160,12 @@ public class AnimalEntryActivity extends AppCompatActivity {
 
         if (binding.sBreed.getSelectedItem() != null) {
             CategoryValue v = (CategoryValue) binding.sBreed.getSelectedItem();
-            animal.setBreed(v.getValueId());
+            animal.setBreed(v.getValue());
         }
 
         if (binding.sSex.getSelectedItem() != null) {
             CategoryValue v = (CategoryValue) binding.sSex.getSelectedItem();
-            animal.setSex(v.getValueId());
+            animal.setSex(v.getValue());
         }
 
         if (!binding.etAge.getText().toString().isEmpty()) {

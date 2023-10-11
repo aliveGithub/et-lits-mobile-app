@@ -55,10 +55,16 @@ public class AnimalRegViewModel extends AndroidViewModel {
 
     private LiveData<List<CategoryValue>> treatmentTypeList;
 
+    private LiveData<List<CategoryValue>> breedList;
+
     private Calendar dateMoveOn;
     private Calendar dateMoveOff;
 
     private Calendar dateIdentification;
+
+    public LiveData<List<CategoryValue>> getBreedList() {
+        return breedList;
+    }
 
     public AnimalRegViewModel(Application application, long id) {
         super(application);
@@ -68,14 +74,16 @@ public class AnimalRegViewModel extends AndroidViewModel {
         treatmentRepository = new TreatmentRepository(application);
         categoryValueRepository = new CategoryValueRepository(application);
 
+        treatmentTypeList = categoryValueRepository.loadByType(Constants.CATEGORY_KEY_TREATMENT_TYPE);
+        breedList = this.categoryValueRepository.loadByType(Constants.CATEGORY_KEY_BREEDS);
+        populateSpeciesList();
+
         animalRegistration = animalRegistrationRepository.loadById(id);
         establishmentList = establishmentRepository.getAll();
         animalList = animalRepository.getByAnimalRegistrationId(id);
         treatmentList = treatmentRepository.getByAnimalRegistrationId(id);
 
-        treatmentTypeList = categoryValueRepository.loadByType(Constants.CATEGORY_KEY_TREATMENT_TYPE);
 
-        populateSpeciesList();
         dateMoveOn = Calendar.getInstance();
         dateMoveOff = Calendar.getInstance();
         dateIdentification = Calendar.getInstance();

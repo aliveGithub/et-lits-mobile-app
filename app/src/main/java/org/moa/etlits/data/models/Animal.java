@@ -63,7 +63,6 @@ public class Animal implements java.io.Serializable {
     }
 
 
-
     public boolean isDead() {
         return dead;
     }

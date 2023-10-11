@@ -6,49 +6,55 @@
 
     <TextView
         android:id="@+id/tv_animal_id"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="@dimen/small_padding"
-       android:text="0000908980"
-        android:layout_weight="1"
-        android:layout_margin="@dimen/small_margin"
+        android:text="0000908980"
+        android:layout_weight="4"
         android:maxLines="1"
-        android:minWidth="200dp"
+        android:paddingTop="@dimen/small_padding"
+        android:paddingBottom="@dimen/small_padding"
+        android:layout_marginTop="@dimen/small_padding"
+        android:layout_marginBottom="@dimen/small_padding"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/font_size_smaller"
         />
 
     <TextView
         android:id="@+id/tv_breed"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Borana"
         android:padding="@dimen/small_padding"
         android:layout_margin="@dimen/small_margin"
-        android:layout_weight="1"
         android:maxLines="1"
-        android:ellipsize="end"/>
+        android:ellipsize="end"
+        android:layout_weight="1"
+        android:textSize="@dimen/font_size_smaller"/>
 
     <TextView
         android:id="@+id/tv_age"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="36 months"
         android:padding="@dimen/small_padding"
         android:layout_margin="@dimen/small_margin"
-        android:layout_weight="1"
         android:maxLines="1"
         android:ellipsize="end"
+        android:layout_weight="3"
+        android:textSize="@dimen/font_size_smaller"
         />
 
     <TextView
         android:id="@+id/tv_sex"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="F"
         android:padding="@dimen/small_padding"
         android:layout_margin="@dimen/small_margin"
-        android:layout_weight="1"
         android:maxLines="1"
         android:ellipsize="end"
+        android:layout_weight="1"
+        android:textSize="@dimen/font_size_smaller"
         />
 
     <ImageView
@@ -58,5 +64,6 @@
         android:src="@drawable/ic_close_square"
         android:padding="@dimen/small_padding"
         android:layout_gravity="center"
+        android:layout_weight="1"
         />
 </LinearLayout>

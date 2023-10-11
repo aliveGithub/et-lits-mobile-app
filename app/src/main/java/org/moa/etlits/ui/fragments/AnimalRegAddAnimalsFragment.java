@@ -8,10 +8,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import org.moa.etlits.data.models.Animal;
+import org.moa.etlits.data.models.CategoryValue;
 import org.moa.etlits.databinding.FragmentAnimalRegAddAnimalsBinding;
 import org.moa.etlits.ui.activities.AnimalEntryActivity;
 import org.moa.etlits.ui.adapters.AnimalListAdapter;
 import org.moa.etlits.ui.viewmodels.AnimalRegViewModel;
+
+import java.util.List;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -63,7 +66,7 @@ public class AnimalRegAddAnimalsFragment extends Fragment implements AnimalListA
         binding.rvAnimals.setAdapter(adapter);
         binding.rvAnimals.setLayoutManager(new LinearLayoutManager(requireActivity()));
         viewModel.getAnimals().observe(getViewLifecycleOwner(), animals -> {
-            adapter.submitList(animals);
+           adapter.submitList(animals);
         });
 
         viewModel.getSpeciesList().observe(getActivity(), speciesList -> {

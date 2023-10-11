@@ -13,6 +13,9 @@
         android:layout_weight="1"
         android:layout_margin="@dimen/small_margin"
         android:maxLines="1"
+        android:textSize="@dimen/font_size_smaller"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
         />
 
     <TextView
@@ -24,7 +27,9 @@
         android:layout_margin="@dimen/small_margin"
         android:layout_weight="1"
         android:maxLines="1"
-        android:ellipsize="end"/>
+        android:ellipsize="end"
+        android:textSize="@dimen/font_size_smaller"
+        />
 
       <TextView
         android:id="@+id/tv_date_identification"
@@ -35,7 +40,9 @@
         android:layout_margin="@dimen/small_margin"
         android:layout_weight="1"
         android:maxLines="1"
-        android:ellipsize="end"/>
+        android:ellipsize="end"
+          android:textSize="@dimen/font_size_smaller"
+          />
 
 
 </LinearLayout>
