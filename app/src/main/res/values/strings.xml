@@ -140,5 +140,6 @@
     <string name="animal_reg_no_animals_registered">No Animals Registered</string>
     <string name="animal_reg_animal_list_empty_error">At least one animal must be registered.</string>
     <string name="animal_reg_dialog_ok">OK</string>
+    <string name="card_animals">Animals</string>
 
 </resources>

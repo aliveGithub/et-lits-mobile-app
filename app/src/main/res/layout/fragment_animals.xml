@@ -218,6 +218,44 @@
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/small_margin"
+                    android:layout_columnWeight="1"
+                    android:layout_rowWeight="1"
+                    app:cardElevation="@dimen/card_item_elevation"
+                    app:cardCornerRadius="@dimen/card_item_corner_radius">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/big_padding"
+                        android:gravity="center_horizontal"
+                        android:layout_gravity="center">
+
+                        <ImageView
+                            android:id="@+id/card_animals"
+                            android:layout_width="@dimen/card_item_icon_size"
+                            android:layout_height="@dimen/card_item_icon_size"
+                            android:scaleType="centerCrop"
+                            android:padding="@dimen/small_padding"
+                            android:src="@drawable/ic_animal_filled" />
+
+                        <TextView
+                            android:id="@+id/tv_animals"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/card_animals"
+                            android:textSize="@dimen/font_size_bigger"
+                            android:paddingTop="@dimen/small_padding"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
             </GridLayout>
         </LinearLayout>
     </ScrollView>
