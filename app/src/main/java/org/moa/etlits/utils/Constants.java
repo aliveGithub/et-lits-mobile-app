@@ -1,5 +1,6 @@
 package org.moa.etlits.utils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,6 +29,10 @@ public class Constants {
 
     public static String CATEGORY_KEY_TREATMENT_TYPE = "csTypeTreatment";
 
+    public static List<String> HOLDING_GROUND_ESTABLISHMENT_CATEGORIES = new ArrayList<>(Arrays.asList("kcLairageHoldingGround"));
+
+    public static List<String> PRODUCTION_TYPE_ESTABLISHMENT_CATEGORIES = new ArrayList<>(Arrays.asList("kcFeedlot", "kcLairageQuarantineStation",
+            "kcLairagePreQuarantineStation", "kcSlaughteringExportAbattoir"));
 
 
     public enum SyncType {

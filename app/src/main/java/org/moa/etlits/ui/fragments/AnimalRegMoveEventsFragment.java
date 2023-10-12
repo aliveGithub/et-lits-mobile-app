@@ -2,20 +2,24 @@ package org.moa.etlits.ui.fragments;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import org.moa.etlits.data.models.AnimalRegistration;
+import org.moa.etlits.data.models.Establishment;
 import org.moa.etlits.databinding.FragmentAnimalRegMoveEventsBinding;
 import org.moa.etlits.ui.adapters.EstablishmentAdapter;
 import org.moa.etlits.ui.viewmodels.AnimalRegViewModel;
+import org.moa.etlits.utils.Constants;
 import org.moa.etlits.utils.ViewUtils;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
@@ -28,7 +32,9 @@ public class AnimalRegMoveEventsFragment extends Fragment {
 
     private AnimalRegViewModel viewModel;
     private FragmentAnimalRegMoveEventsBinding binding;
-    private EstablishmentAdapter establishmentAdapter;
+    private EstablishmentAdapter holdingGroundEstablishmentAdapter;
+
+    private EstablishmentAdapter moveOnEstablishmentAdapter;
 
     private DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, Locale.getDefault());
 
@@ -57,10 +63,13 @@ public class AnimalRegMoveEventsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        establishmentAdapter = new EstablishmentAdapter(getActivity(), new ArrayList<>());
+        holdingGroundEstablishmentAdapter = new EstablishmentAdapter(getActivity(), new ArrayList<>());
+        moveOnEstablishmentAdapter = new EstablishmentAdapter(getActivity(), new ArrayList<>());
+
         viewModel = new ViewModelProvider((ViewModelStoreOwner) getActivity(), (ViewModelProvider.Factory) new AnimalRegViewModel.Factory(getActivity().getApplication(), 0)).get(AnimalRegViewModel.class);
         viewModel.getEstablishments().observe(getActivity(), lst -> {
-            establishmentAdapter.submitList(lst);
+            holdingGroundEstablishmentAdapter.submitList(filterEstablishmentsByCategory(lst, Constants.HOLDING_GROUND_ESTABLISHMENT_CATEGORIES));
+            moveOnEstablishmentAdapter.submitList(filterEstablishmentsByCategory(lst, Constants.PRODUCTION_TYPE_ESTABLISHMENT_CATEGORIES));
         });
         viewModel.getAnimalRegistration().observe(getActivity(), animalRegistration -> {
             AnimalRegistration ar = animalRegistration;
@@ -88,7 +97,7 @@ public class AnimalRegMoveEventsFragment extends Fragment {
             ViewUtils.showError(getActivity(), formState.getDateMoveOnError(), binding.btnDateMoveOn, binding.tvDateMoveOnError);
         });
 
-        binding.actvMoveOffEid.setAdapter(establishmentAdapter);
+        binding.actvMoveOffEid.setAdapter(holdingGroundEstablishmentAdapter);
         binding.actvMoveOffEid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -101,7 +110,7 @@ public class AnimalRegMoveEventsFragment extends Fragment {
             }
         });
 
-        binding.actvMoveOnEid.setAdapter(establishmentAdapter);
+        binding.actvMoveOnEid.setAdapter(moveOnEstablishmentAdapter);
         binding.actvMoveOnEid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -139,6 +148,16 @@ public class AnimalRegMoveEventsFragment extends Fragment {
         });
     }
 
+    private List<Establishment> filterEstablishmentsByCategory(List<Establishment> establishments, List<String> categories) {
+        /*List<Establishment> filteredEstablishments = new ArrayList<>();
+        for (Establishment establishment : establishments) {
+            if (establishment.getCategory()!= null && categories.contains(establishment.getCategory())) {
+                filteredEstablishments.add(establishment);
+            }
+        }
+        return filteredEstablishments;*/
+        return establishments;
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
