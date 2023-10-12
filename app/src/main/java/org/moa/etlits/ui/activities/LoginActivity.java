@@ -24,14 +24,14 @@ import org.moa.etlits.ui.viewmodels.login.LoginViewModel;
 import org.moa.etlits.ui.viewmodels.login.LoginViewModelFactory;
 import org.moa.etlits.utils.Constants;
 import org.moa.etlits.utils.EncryptedPreferences;
-import org.moa.etlits.utils.NetworkUtil;
+import org.moa.etlits.utils.NetworkUtils;
+
+import java.net.HttpURLConnection;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import java.net.HttpURLConnection;
 
 public class LoginActivity extends AppCompatActivity {
     private LoginViewModel loginViewModel;
@@ -145,7 +145,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login() {
-        if (NetworkUtil.isInternetConnected(LoginActivity.this)) {
+        if (NetworkUtils.isInternetConnected(LoginActivity.this)) {
             loadingProgressBar.setVisibility(View.VISIBLE);
             loginViewModel.login(usernameEditText.getText().toString().trim(),
                     passwordEditText.getText().toString().trim());

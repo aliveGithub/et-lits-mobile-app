@@ -1,11 +1,11 @@
-package org.moa.etlits.ui.validation;
+package org.moa.etlits.utils;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ValidationUtil {
+public class ValidationUtils {
     private static final String ANIMAL_ID_REGEX_PATTERN = "^ET \\d{10}$";
 
     public static boolean isEmpty(String value) {

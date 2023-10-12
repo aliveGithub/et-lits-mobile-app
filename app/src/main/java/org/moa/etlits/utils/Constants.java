@@ -14,7 +14,7 @@ public class Constants {
     public static String DEFAULT_ESTABLISHMENT = "defaultEstablishment";
 
 
-     //sync error codes
+    //sync error codes
     public static String UNKNOWN_SYNC_ERROR = "UNKNOWN_SYNC_ERROR";
 
     public static String SERVER_UNREACHABLE = "SERVER_UNREACHABLE";

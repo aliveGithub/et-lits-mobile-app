@@ -2,6 +2,7 @@ package org.moa.etlits.ui.validation;
 
 import org.moa.etlits.R;
 import org.moa.etlits.data.models.AnimalRegistration;
+import org.moa.etlits.utils.ValidationUtils;
 
 import androidx.annotation.Nullable;
 
@@ -24,41 +25,41 @@ public class AnimalRegFormState {
         if (animalRegistration == null) {
             return;
         }
-        if (ValidationUtil.isEmpty(animalRegistration.getDateIdentification())) {
+        if (ValidationUtils.isEmpty(animalRegistration.getDateIdentification())) {
             this.setDateIdentificationError(R.string.animal_reg_field_required);
         } else {
-            if (ValidationUtil.dateInFuture(animalRegistration.getDateIdentification())) {
+            if (ValidationUtils.dateInFuture(animalRegistration.getDateIdentification())) {
                 this.setDateIdentificationError(R.string.animal_reg_date_in_future);
             }
         }
 
-        if (ValidationUtil.isEmpty(animalRegistration.getDateMoveOff())) {
+        if (ValidationUtils.isEmpty(animalRegistration.getDateMoveOff())) {
             this.setDateMoveOffError(R.string.animal_reg_field_required);
         } else {
-            if (ValidationUtil.dateInFuture(animalRegistration.getDateMoveOff())) {
+            if (ValidationUtils.dateInFuture(animalRegistration.getDateMoveOff())) {
                 this.setDateMoveOffError(R.string.animal_reg_date_in_future);
             }
-            if (ValidationUtil.dateIsAfter(animalRegistration.getDateIdentification(), animalRegistration.getDateMoveOff())) {
+            if (ValidationUtils.dateIsAfter(animalRegistration.getDateIdentification(), animalRegistration.getDateMoveOff())) {
                 this.setDateMoveOffError(R.string.animal_reg_identification_date_after_move_off);
             }
         }
 
-        if (ValidationUtil.isEmpty(animalRegistration.getHoldingGroundEid())) {
+        if (ValidationUtils.isEmpty(animalRegistration.getHoldingGroundEid())) {
             this.setHoldingGroundEidError(R.string.animal_reg_field_required);
         }
 
-        if (ValidationUtil.isEmpty(animalRegistration.getDateMoveOn())) {
+        if (ValidationUtils.isEmpty(animalRegistration.getDateMoveOn())) {
             this.setDateMoveOnError(R.string.animal_reg_field_required);
         } else {
-            if (ValidationUtil.dateInFuture(animalRegistration.getDateMoveOn())) {
+            if (ValidationUtils.dateInFuture(animalRegistration.getDateMoveOn())) {
                 this.setDateMoveOnError(R.string.animal_reg_date_in_future);
             }
-            if (ValidationUtil.dateIsAfter(animalRegistration.getDateMoveOff(), animalRegistration.getDateMoveOn())) {
+            if (ValidationUtils.dateIsAfter(animalRegistration.getDateMoveOff(), animalRegistration.getDateMoveOn())) {
                 this.setDateMoveOnError(R.string.animal_reg_move_off_date_after_move_on);
             }
         }
 
-        if (ValidationUtil.isEmpty(animalRegistration.getEstablishmentEid())) {
+        if (ValidationUtils.isEmpty(animalRegistration.getEstablishmentEid())) {
             this.setEstablishmentEidError(R.string.animal_reg_field_required);
         }
     }
