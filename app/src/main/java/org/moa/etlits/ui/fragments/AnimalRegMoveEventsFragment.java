@@ -6,9 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.TextView;
 
-import org.moa.etlits.R;
 import org.moa.etlits.data.models.AnimalRegistration;
 import org.moa.etlits.databinding.FragmentAnimalRegMoveEventsBinding;
 import org.moa.etlits.ui.adapters.EstablishmentAdapter;
@@ -18,7 +16,6 @@ import org.moa.etlits.utils.ViewUtils;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
@@ -63,10 +60,7 @@ public class AnimalRegMoveEventsFragment extends Fragment {
         establishmentAdapter = new EstablishmentAdapter(getActivity(), new ArrayList<>());
         viewModel = new ViewModelProvider((ViewModelStoreOwner) getActivity(), (ViewModelProvider.Factory) new AnimalRegViewModel.Factory(getActivity().getApplication(), 0)).get(AnimalRegViewModel.class);
         viewModel.getEstablishments().observe(getActivity(), lst -> {
-            Collections.sort(lst);
-            establishmentAdapter.clear();
-            establishmentAdapter.addAll(lst);
-            establishmentAdapter.notifyDataSetChanged();
+            establishmentAdapter.submitList(lst);
         });
         viewModel.getAnimalRegistration().observe(getActivity(), animalRegistration -> {
             AnimalRegistration ar = animalRegistration;

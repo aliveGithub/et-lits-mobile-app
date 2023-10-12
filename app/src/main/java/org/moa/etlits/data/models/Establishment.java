@@ -181,6 +181,10 @@ public class Establishment implements Comparable<Establishment> {
        return code + " - " + name.substring(0, Math.min(name.length(), 20)) + " ...";
     }
 
+    public String getCodeAndName() {
+        return code + " - " + name;
+    }
+
     public String getPhysicalAddress() {
       return (getCity() + " " + getWoreda() + " " + getZone() + " " + getRegion()).trim();
     }
