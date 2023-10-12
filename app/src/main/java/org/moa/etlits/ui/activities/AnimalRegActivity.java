@@ -1,10 +1,13 @@
 package org.moa.etlits.ui.activities;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -97,6 +100,13 @@ public class AnimalRegActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.default_activity_menu, menu);
+        return true;
+    }
+
     private void setUpNavigation() {
         updateNavigationButtons();
         binding.ivFirst.setOnClickListener(v -> {
@@ -175,15 +185,34 @@ public class AnimalRegActivity extends AppCompatActivity {
     }
 
      @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.onBackPressed();
-                return true;
+     public boolean onOptionsItemSelected(MenuItem item) {
+         if (item.getItemId() == android.R.id.home) {
+             this.onBackPressed();
+             return true;
+         } else if (item.getItemId() == R.id.action_info) {
+             Intent intent = new Intent(this, InfoActivity.class);
+             intent.putExtra("title", getString(R.string.animal_reg_title));
+             intent.putExtra("message", getInfoMessage());
+             startActivity(intent);
+             return true;
+         }
+
+         return super.onOptionsItemSelected(item);
+     }
+
+    private String getInfoMessage() {
+        switch (viewModel.getCurrentStep()) {
+            case REGISTRATION:
+                return getString(R.string.animal_reg_animal_list_info);
+            case MOVE_EVENTS:
+                return getString(R.string.animal_reg_move_events_info);
+            case TREATMENTS:
+                return getString(R.string.animal_reg_treatments_info);
             default:
-                return super.onOptionsItemSelected(item);
+                return "";
         }
     }
+
 
     private void showNoAnimalsDialog() {
         final Dialog customDialog = new Dialog(this);

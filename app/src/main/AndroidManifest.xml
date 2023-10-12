@@ -32,6 +32,9 @@
             android:name=".ui.activities.SyncActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.activities.InfoActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activities.LoginActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="true">
