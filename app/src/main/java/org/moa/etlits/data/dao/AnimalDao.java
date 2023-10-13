@@ -31,4 +31,7 @@ public interface AnimalDao {
 
     @Query("SELECT * FROM animals where animal_registration_id=:animalRegistrationId")
     LiveData<List<Animal>> getByAnimalRegistrationId(long animalRegistrationId);
+
+    @Query("SELECT * FROM animals where animal_registration_id=:animalRegistrationId")
+    List<Animal> getListByAnimalRegistrationId(long animalRegistrationId);
 }

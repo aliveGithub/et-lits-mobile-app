@@ -109,6 +109,14 @@ public class AnimalRegMoveEventsFragment extends Fragment {
             }
         });
 
+        binding.actvMoveOffEid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View arg0) {
+                binding.actvMoveOffEid.showDropDown();
+            }
+        });
+
+
         binding.actvMoveOnEid.setAdapter(moveOnEstablishmentAdapter);
         binding.actvMoveOnEid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -122,6 +130,12 @@ public class AnimalRegMoveEventsFragment extends Fragment {
             }
         });
 
+        binding.actvMoveOnEid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View arg0) {
+                binding.actvMoveOnEid.showDropDown();
+            }
+        });
 
         binding.btnDateMoveOn.setOnClickListener(v -> {
             new DatePickerDialog(getActivity(), (dView, year, month, dayOfMonth) -> {

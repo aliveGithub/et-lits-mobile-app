@@ -37,6 +37,10 @@ public class AnimalRegistrationRepository {
         return animalRegistrationList;
     }
 
+    public List<AnimalRegistration> getAllList() {
+        return animalRegistrationDao.getAllList();
+    }
+
     public void insert(AnimalRegistration animalRegistration, List<Animal> animalList, List<Treatment> treatmentList) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             long animalRegId = animalRegistrationDao.insert(animalRegistration);

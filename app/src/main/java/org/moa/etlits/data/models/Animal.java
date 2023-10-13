@@ -101,4 +101,5 @@ public class Animal implements java.io.Serializable {
     public void setAnimalRegistrationId(long animalRegistrationId) {
         this.animalRegistrationId = animalRegistrationId;
     }
+
 }

@@ -33,5 +33,6 @@ public interface TreatmentDao {
     @Query("SELECT * FROM treatments where animal_registration_id=:animaRegistrationId")
     LiveData<List<Treatment>> getByAnimalRegistrationId(long animaRegistrationId);
 
-
+    @Query("SELECT * FROM treatments where animal_registration_id=:animaRegistrationId")
+    List<Treatment> getListByAnimalRegistrationId(long animaRegistrationId);
 }

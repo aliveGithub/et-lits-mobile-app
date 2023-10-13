@@ -37,4 +37,8 @@ public class TreatmentRepository {
     public LiveData<List<Treatment>> getByAnimalRegistrationId(long animalRegistrationId){
         return treatmentDao.getByAnimalRegistrationId(animalRegistrationId);
     }
+
+    public List<Treatment> getListByAnimalRegistrationId(long animalRegistrationId){
+        return treatmentDao.getListByAnimalRegistrationId(animalRegistrationId);
+    }
 }
