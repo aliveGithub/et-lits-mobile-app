@@ -26,6 +26,9 @@ public class AnimalRegistration {
     @ColumnInfo(name = "establishment_eid")
     private String establishmentEid;
 
+    @ColumnInfo(name = "last_synced")
+    private Date lastSynced;
+
     public long getId() {
         return id;
     }
@@ -38,7 +41,7 @@ public class AnimalRegistration {
         return method;
     }
 
-        public void setMethod(String method) {
+    public void setMethod(String method) {
         this.method = method;
     }
 
@@ -80,5 +83,13 @@ public class AnimalRegistration {
 
     public void setEstablishmentEid(String establishmentEid) {
         this.establishmentEid = establishmentEid;
+    }
+
+    public Date getLastSynced() {
+        return lastSynced;
+    }
+
+    public void setLastSynced(Date lastSynced) {
+        this.lastSynced = lastSynced;
     }
 }

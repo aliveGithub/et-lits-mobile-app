@@ -31,7 +31,6 @@ import org.moa.etlits.utils.EncryptedPreferences;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -75,16 +74,18 @@ public class SyncWorker extends Worker {
         sharedPreferences = context.getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE);
     }
 
-    private List<SyncResult> submitAnimalData() throws IOException, SyncStoppedException {
+    private SyncResult submitAnimalData() throws IOException, SyncStoppedException {
         String username = encryptedPreferences.read(Constants.USERNAME);
         String password = encryptedPreferences.read(Constants.PASSWORD);
         String authorization = Credentials.basic(username, password);
-        List<SyncResult> syncResults = new ArrayList<>();
 
-        List<AnimalRegistration> animalRegistrationList = animalRegistrationRepository.getAllList();
-        for (AnimalRegistration animalRegistration : animalRegistrationList) {
-            checkSyncStatus();
-            try {
+        int recordsSent = 0;
+        int recordsNotSent = 0;
+
+        List<AnimalRegistration> animalRegistrationList = animalRegistrationRepository.getAllNotSynced();
+        if (!animalRegistrationList.isEmpty()) {
+            for (AnimalRegistration animalRegistration : animalRegistrationList) {
+                checkSyncStatus();
                 List<Animal> animals = animalRepository.getListByAnimalRegistrationId(animalRegistration.getId());
                 List<Treatment> treatments = treatmentRepository.getListByAnimalRegistrationId(animalRegistration.getId());
                 AnimalRegRequest animalRegRequest = new AnimalRegRequest(animalRegistration, animals, treatments);
@@ -92,26 +93,31 @@ public class SyncWorker extends Worker {
                 Response<AnimalRegResponse> response = call.execute();
                 if (response.isSuccessful()) {
                     AnimalRegResponse animalRegResponse = response.body();
-                    if (animalRegResponse != null) {
-                        // animalRegistration.setStatus("Synced");
-                        // animalRegistrationRepository.update(animalRegistration);
-                        syncResults.add(new SyncResult(true, 1, 0, 0, ""));
+                    if (animalRegResponse != null ) {
+                        if (animalRegResponse.getType().equals("INFO")) {
+                            animalRegistration.setLastSynced(new Date());
+                            animalRegistrationRepository.update(animalRegistration);
+                            ++recordsSent;
+                        } else {
+                            ++recordsNotSent;
+                             logError(Constants.SYNC_VALIDATION_ERROR, animalRegResponse.getMessage());
+                        }
                     }
                 } else {
-                    syncResults.add(new SyncResult(false, 0, 0, 0, String.valueOf(response.code())));
+                    ++recordsNotSent;
+                    logError(String.valueOf(response.code()), "");
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+
+            return new SyncResult(recordsNotSent == 0, recordsSent, 0, recordsNotSent, "");
         }
 
-        return syncResults;
+        return null;
     }
 
     private SyncResult saveConfigData(ConfigResponse configResponse) {
-        int received = 0;
         if (configResponse != null) {
-
+            int received = 0;
             if (configResponse.getCatalogs() != null) {
                 for (CatalogType catalog : configResponse.getCatalogs()) {
                     for (EntryType entry : catalog.getEntry()) {
@@ -134,10 +140,12 @@ public class SyncWorker extends Worker {
                     ++received;
                 }
             }
+
+            //TODO: save - objectDetail
+            return new SyncResult(true, 0, received, 0, "");
         }
-        //TODO: save - objectUnmovable
-        //TODO: save - objectDetail
-        return new SyncResult(true, 0, received, 0, "");
+
+        return null;
     }
 
      private SyncResult fetchAndSaveConfigData() throws IOException, SyncStoppedException {
@@ -152,6 +160,7 @@ public class SyncWorker extends Worker {
             ConfigResponse configResponse = response.body();
             return saveConfigData(configResponse);
         } else {
+            logError(String.valueOf(response.code()), "");
             return new SyncResult(false, 0, 0, 0, String.valueOf(response.code()));
         }
     }
@@ -162,6 +171,7 @@ public class SyncWorker extends Worker {
         }
     }
 
+
     @NonNull
     @Override
     public Result doWork() {
@@ -169,24 +179,36 @@ public class SyncWorker extends Worker {
             syncLogRepository = new SyncLogRepository((Application) getApplicationContext());
             updateSyncStatus(Constants.SyncStatus.IN_PROGRESS.toString(), null);
             SyncResult configSyncResult = fetchAndSaveConfigData();
-            List<SyncResult> animalSyncResults = submitAnimalData();
-
-            if (configSyncResult.isSuccessful) {
-                updateSyncStatus(Constants.SyncStatus.SUCCESSFUL.toString(), configSyncResult);
-                if (!sharedPreferences.getBoolean(Constants.HAS_INITIALIZED, false)) {
+            SyncResult animalSyncResult = submitAnimalData();
+            SyncResult combinedResult = new SyncResult();
+             boolean configSyncSuccessful = true;
+             boolean animalSyncSuccessful = true;
+            if (configSyncResult != null ) {
+                if (configSyncResult.isSuccessful && !sharedPreferences.getBoolean(Constants.HAS_INITIALIZED, false)) {
                     sharedPreferences.edit().putBoolean(Constants.HAS_INITIALIZED, true).apply();
                 }
-            } else {
-                logError(configSyncResult.errorCode, "");
-                return Result.failure();
+                combinedResult.recordsReceived = configSyncResult.recordsReceived;
+                configSyncSuccessful = configSyncResult.isSuccessful;
             }
 
-           /* if (animalSyncResult.isSuccessful) {
-                updateSyncStatus(Constants.SyncStatus.SUCCESSFUL.toString(), animalSyncResult);
-            } else {
-                logError(animalSyncResult.errorCode, "");
-                return Result.failure();
-            }*/
+            if (animalSyncResult != null) {
+                combinedResult.recordsSent = animalSyncResult.recordsSent;
+                combinedResult.recordsNotSent = animalSyncResult.recordsNotSent;
+                animalSyncSuccessful = animalSyncResult.isSuccessful;
+            }
+
+            String status = Constants.SyncStatus.PARTIAL.toString();
+            if (configSyncSuccessful && animalSyncSuccessful) {
+                status = Constants.SyncStatus.SUCCESSFUL.toString();
+            } else if (!configSyncSuccessful && !animalSyncSuccessful) {
+                status = Constants.SyncStatus.FAILED.toString();
+            }
+
+            updateSyncStatus(status, combinedResult);
+
+            if (!configSyncSuccessful || !animalSyncSuccessful) {
+               return Result.failure();
+            }
 
             return Result.success();
         } catch (SyncStoppedException e) {
@@ -195,18 +217,22 @@ public class SyncWorker extends Worker {
         } catch (UnknownHostException e) {
             if (getRunAttemptCount() < 3) {
                 logError(Constants.SERVER_UNREACHABLE, "Server cannot be reached.");
+                updateSyncStatus(Constants.SyncStatus.FAILED.toString(), null);
                 return Result.retry();
             } else {
                 logError(Constants.SERVER_UNREACHABLE, "Server cannot be reached.");
+                updateSyncStatus(Constants.SyncStatus.FAILED.toString(), null);
                 return Result.failure();
             }
         } catch (Exception e) {
             e.printStackTrace();
             if (getRunAttemptCount() < 3) {
                 logError(Constants.UNKNOWN_SYNC_ERROR, e.toString());
+                updateSyncStatus(Constants.SyncStatus.FAILED.toString(), null);
                 return Result.retry();
             } else {
                 logError(Constants.UNKNOWN_SYNC_ERROR, e.toString());
+                updateSyncStatus(Constants.SyncStatus.FAILED.toString(), null);
                 return Result.failure();
             }
         }
@@ -216,8 +242,9 @@ public class SyncWorker extends Worker {
         String syncLogId = getInputData().getString(Constants.SYNC_LOG_ID);
         SyncError error = new SyncError(syncLogId, errorCode, errorMessage);
         syncLogRepository.insert(error);
-        updateSyncStatus(Constants.SyncStatus.FAILED.toString(), null);
     }
+
+
 
     private void updateSyncStatus(String status, SyncResult syncResult) {
         String syncLogId = getInputData().getString(Constants.SYNC_LOG_ID);
@@ -246,7 +273,9 @@ public class SyncWorker extends Worker {
         private int recordsNotSent;
         private String errorCode;
         private boolean isSuccessful;
+        public SyncResult() {
 
+        }
         public SyncResult(boolean isSuccessful, int recordsSent, int recordsReceived, int recordsNotSent, String errorCode) {
             this.isSuccessful = isSuccessful;
             this.recordsSent = recordsSent;

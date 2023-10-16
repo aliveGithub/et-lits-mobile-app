@@ -41,6 +41,10 @@ public class AnimalRegistrationRepository {
         return animalRegistrationDao.getAllList();
     }
 
+    public List<AnimalRegistration> getAllNotSynced(){
+        return animalRegistrationDao.getAllNotSynced();
+    }
+
     public void insert(AnimalRegistration animalRegistration, List<Animal> animalList, List<Treatment> treatmentList) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             long animalRegId = animalRegistrationDao.insert(animalRegistration);
@@ -59,6 +63,12 @@ public class AnimalRegistrationRepository {
                     treatmentDao.insert(treatment);
                 }
             }
+        });
+    }
+
+    public void update(AnimalRegistration animalRegistration) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            animalRegistrationDao.update(animalRegistration);
         });
     }
 

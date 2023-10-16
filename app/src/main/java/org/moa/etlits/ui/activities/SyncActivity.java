@@ -263,6 +263,8 @@ public class SyncActivity extends AppCompatActivity {
             return getString(R.string.sync_status_stopping);
         } else if (Constants.SyncStatus.STOPPED.toString().equals(status)) {
             return getString(R.string.sync_status_stopped);
+        } else if (Constants.SyncStatus.PARTIAL.toString().equals(status)) {
+            return getString(R.string.sync_status_partial);
         } else {
             return getString(R.string.sync_status_not_started);
         }

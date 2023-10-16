@@ -16,6 +16,7 @@ public class Constants {
 
     //sync error codes
     public static String UNKNOWN_SYNC_ERROR = "UNKNOWN_SYNC_ERROR";
+    public static String   SYNC_VALIDATION_ERROR = "SYNC_VALIDATION_ERROR";
 
     public static String SERVER_UNREACHABLE = "SERVER_UNREACHABLE";
 
@@ -45,6 +46,7 @@ public class Constants {
         IN_PROGRESS,
         STOPPING,
         STOPPED,
+        PARTIAL,
         SUCCESSFUL,
         FAILED
     }

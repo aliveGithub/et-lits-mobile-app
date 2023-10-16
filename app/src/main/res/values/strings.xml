@@ -55,6 +55,7 @@
     <string name="sync_status_completed">Success</string>
     <string name="sync_status_stopping">Stopping</string>
     <string name="sync_status_stopped">Stopped</string>
+    <string name="sync_status_partial">Partial</string>
     <string name="sync_status_failed">Failed</string>
 
 
