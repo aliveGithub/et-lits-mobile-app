@@ -1,7 +1,6 @@
 package org.moa.etlits.data.repositories;
 
 import android.app.Application;
-import android.util.Log;
 
 import org.moa.etlits.api.response.TypeObjectUnmovable;
 import org.moa.etlits.data.dao.AppDatabase;
