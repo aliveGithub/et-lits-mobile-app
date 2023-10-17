@@ -44,9 +44,26 @@ class AnimalViewHolder extends RecyclerView.ViewHolder implements View.OnClickLi
 
     public void bind(Animal animal) {
         tvAnimalId.setText(String.valueOf(animal.getAnimalId()));
-        tvSex.setText(animal.getSex());
-        tvBreed.setText(animal.getBreed());
-        tvAge.setText(tvAge.getContext().getString(R.string.animal_reg_age_months, String.valueOf(animal.getAge())));}
+
+        tvSex.setText(getSex(animal.getSex()));
+        tvBreed.setText(getBreed(animal.getBreed()));
+        tvAge.setText(tvAge.getContext().getString(R.string.animal_reg_age_months, String.valueOf(animal.getAge())));
+    }
+
+    private String getSex(String value) {
+        if (value != null && value.length() > 2 && value.startsWith("cs")) {
+            return String.valueOf(value.substring(2).charAt(0));
+        }
+
+        return value;
+    }
+    private String getBreed(String value) {
+        if (value != null && value.length() > 2 && value.startsWith("cs")) {
+            return value.substring(2);
+        }
+
+        return value;
+    }
 
 
 

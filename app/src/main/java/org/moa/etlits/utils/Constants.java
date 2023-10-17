@@ -23,7 +23,7 @@ public class Constants {
     //Unmovable types
     public static String UNMOVABLE_ESTABLISHMENT = "ESTABLISHMENT";
 
-    public static String CATEGORY_KEY_BREEDS = "csBreedsForEntry";
+    public static String CATEGORY_KEY_BREEDS = "csBreeds";
     public static String CATEGORY_KEY_SEX = "csSexForEntry";
 
     public static String CATEGORY_KEY_SPECIES = "csSpeciesForEntry";

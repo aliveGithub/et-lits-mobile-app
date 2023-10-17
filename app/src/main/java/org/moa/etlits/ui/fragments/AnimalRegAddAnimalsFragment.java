@@ -8,13 +8,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import org.moa.etlits.data.models.Animal;
-import org.moa.etlits.data.models.CategoryValue;
 import org.moa.etlits.databinding.FragmentAnimalRegAddAnimalsBinding;
 import org.moa.etlits.ui.activities.AnimalEntryActivity;
 import org.moa.etlits.ui.adapters.AnimalListAdapter;
 import org.moa.etlits.ui.viewmodels.AnimalRegViewModel;
-
-import java.util.List;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;

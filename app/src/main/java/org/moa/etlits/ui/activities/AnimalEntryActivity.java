@@ -20,6 +20,7 @@ import org.moa.etlits.databinding.ActivityAnimalEntryBinding;
 import org.moa.etlits.ui.viewmodels.AnimalEntryModel;
 import org.moa.etlits.utils.ViewUtils;
 
+
 import java.util.List;
 
 import androidx.appcompat.app.ActionBar;
@@ -57,7 +58,7 @@ public class AnimalEntryActivity extends AppCompatActivity {
             if (animal != null && animal.getBreed() != null) {
                 for (int i = 0; i < binding.sBreed.getAdapter().getCount(); i++) {
                     CategoryValue v = (CategoryValue) binding.sBreed.getAdapter().getItem(i);
-                    if (v.getValue() != null && v.getValue().equals(animal.getBreed())) {
+                    if (v.getValueId() != null && v.getValueId().equals(animal.getBreed())) {
                         binding.sBreed.setSelection(i);
                         break;
                     }
@@ -77,7 +78,7 @@ public class AnimalEntryActivity extends AppCompatActivity {
             if (animal != null && animal.getSex() != null) {
                 for (int i = 0; i < binding.sSex.getAdapter().getCount(); i++) {
                     CategoryValue v = (CategoryValue) binding.sSex.getAdapter().getItem(i);
-                    if (v.getValue() != null && v.getValue().equals(animal.getSex())) {
+                    if (v.getValueId() != null && v.getValueId().equals(animal.getSex())) {
                         binding.sSex.setSelection(i);
                         break;
                     }
@@ -168,12 +169,12 @@ public class AnimalEntryActivity extends AppCompatActivity {
 
         if (binding.sBreed.getSelectedItem() != null) {
             CategoryValue v = (CategoryValue) binding.sBreed.getSelectedItem();
-            animal.setBreed(v.getValue());
+            animal.setBreed(v.getValueId());
         }
 
         if (binding.sSex.getSelectedItem() != null) {
             CategoryValue v = (CategoryValue) binding.sSex.getSelectedItem();
-            animal.setSex(v.getValue());
+            animal.setSex(v.getValueId());
         }
 
         if (!binding.etAge.getText().toString().isEmpty()) {
