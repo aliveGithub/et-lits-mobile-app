@@ -34,8 +34,6 @@ public class RetrofitUtil {
         if (HTTP_CLIENT == null) {
             HTTP_CLIENT = new OkHttpClient();
         }
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         return HTTP_CLIENT.newBuilder()
                .cookieJar(new CookieJar() {
@@ -51,8 +49,14 @@ public class RetrofitUtil {
                         return cookies != null ? cookies : new ArrayList<>();
                     }
                 })
-                .addInterceptor(interceptor)
+               // .addInterceptor(getHttpLoggingInterceptor())
                .build();
+    }
+
+    private HttpLoggingInterceptor getHttpLoggingInterceptor() {
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        return interceptor;
     }
 
     private static Retrofit createRetrofit() {
