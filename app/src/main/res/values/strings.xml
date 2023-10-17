@@ -145,5 +145,9 @@
     <string name="animal_reg_animal_list_info">"Please tap on ‘Add Animal' to enter a new animal in the list or edit icon to change the animal details.\nTap on the 'Next' button or swipe left to continue your activities. "</string>
     <string name="animal_reg_move_events_info">You are in process to register animals on the holding ground.\nFor each animal an Move-Off from holding ground and a Move-On to establishment will be created.\nPlease enter the EID of the holding ground and the dates of tagging and movements.\nEID = Establishment ID\nFields marked with * are mandatory\nTap on the \'Next\' button or swipe left to continue your activities.</string>
     <string name="animal_reg_treatments_info">If the animals were treated with treatments at arrival on the establishment you can indicate the kind of treatment by tapping the respective checkbox.\nPlease note that the treatments indicated will be registered for each animal in the list of animals.\nTap on the \'Finish Registration\' button to complete the animals’ registration.</string>
+    <string name="animal_reg_leave_the_form">Leave the form?</string>
+    <string name="animal_reg_leave_form_msg">Any changes entered will be lost. Are you sure you want to leave?</string>
+    <string name="animal_reg_leave_form_yes">Yes</string>
+    <string name="animal_reg_leave_form_cancel">Cancel</string>
 
 </resources>

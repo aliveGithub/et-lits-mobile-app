@@ -187,7 +187,11 @@ public class AnimalRegActivity extends AppCompatActivity {
      @Override
      public boolean onOptionsItemSelected(MenuItem item) {
          if (item.getItemId() == android.R.id.home) {
-             this.onBackPressed();
+             if (viewModel.getAnimalRegistration().getValue() != null) {
+                 showLeaveDialog();
+             } else {
+                 finish();
+             }
              return true;
          } else if (item.getItemId() == R.id.action_info) {
              Intent intent = new Intent(this, InfoActivity.class);
@@ -228,6 +232,32 @@ public class AnimalRegActivity extends AppCompatActivity {
         positiveButton.setText(R.string.animal_reg_dialog_ok);
         positiveButton.setOnClickListener(v -> {
             customDialog.dismiss();
+        });
+
+        customDialog.show();
+    }
+
+    private void showLeaveDialog() {
+        final Dialog customDialog = new Dialog(this);
+        customDialog.setContentView(R.layout.custom_dialog);
+        customDialog.setCancelable(false);
+
+        TextView title = customDialog.findViewById(R.id.dialog_title);
+        TextView message = customDialog.findViewById(R.id.dialog_message);
+        Button positiveButton = customDialog.findViewById(R.id.positive_button);
+        Button negativeButton = customDialog.findViewById(R.id.negative_button);
+
+        title.setText(R.string.animal_reg_leave_the_form);
+        message.setText(R.string.animal_reg_leave_form_msg);
+        positiveButton.setText(R.string.animal_reg_leave_form_cancel);
+        positiveButton.setOnClickListener(v -> {
+            customDialog.dismiss();
+        });
+
+        negativeButton.setText(R.string.animal_reg_leave_form_yes);
+        negativeButton.setOnClickListener(v -> {
+            customDialog.dismiss();
+            finish();
         });
 
         customDialog.show();
