@@ -6,6 +6,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -150,6 +152,14 @@ public class AnimalEntryActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.default_activity_menu, menu);
+        return true;
+    }
+
+
     public void returnResult(boolean addAnotherAnimal) {
         Intent replyIntent = new Intent();
 
@@ -269,6 +279,12 @@ public class AnimalEntryActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             this.onBackPressed();
+            return true;
+        } else if (item.getItemId() == R.id.action_info) {
+            Intent intent = new Intent(this, InfoActivity.class);
+            intent.putExtra("title", getString(R.string.animal_reg_animal_detail_title));
+            intent.putExtra("message", getString(R.string.animal_reg_animal_detail_info));
+            startActivity(intent);
             return true;
         }
 
