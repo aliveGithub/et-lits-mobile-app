@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -161,15 +162,24 @@ public class AnimalRegMoveEventsFragment extends Fragment {
         });
     }
 
+    private boolean isInCategory(List <String> categories, Set<String> productionTypes) {
+        for (String productionType : productionTypes) {
+            if (categories.contains(productionType)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private List<Establishment> filterEstablishmentsByCategory(List<Establishment> establishments, List<String> categories) {
-        /*List<Establishment> filteredEstablishments = new ArrayList<>();
+        List<Establishment> filteredEstablishments = new ArrayList<>();
         for (Establishment establishment : establishments) {
-            if (establishment.getCategory()!= null && categories.contains(establishment.getCategory())) {
+            if (isInCategory(categories, establishment.getProductionTypes())) {
                 filteredEstablishments.add(establishment);
             }
         }
-        return filteredEstablishments;*/
-        return establishments;
+        return filteredEstablishments;
+
     }
     @Override
     public void onDestroyView() {

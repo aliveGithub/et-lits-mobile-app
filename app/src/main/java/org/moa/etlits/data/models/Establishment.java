@@ -1,5 +1,7 @@
 package org.moa.etlits.data.models;
 
+import java.util.Set;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -42,6 +44,9 @@ public class Establishment implements Comparable<Establishment> {
 
     @ColumnInfo(name = "email")
     private String email;
+
+    @ColumnInfo(name = "production_types")
+    private Set<String> productionTypes;
 
    public String getCode() {
         return code;
@@ -192,6 +197,15 @@ public class Establishment implements Comparable<Establishment> {
     public String getLatLng() {
         return (getLatitude() + " " + getLongitude()).trim();
     }
+
+    public Set<String> getProductionTypes() {
+        return productionTypes;
+    }
+
+    public void setProductionTypes(Set<String> productionTypes) {
+        this.productionTypes = productionTypes;
+    }
+
 
     @Override
     public int compareTo(Establishment est2) {

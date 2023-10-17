@@ -10,6 +10,7 @@ import org.moa.etlits.api.response.AnimalRegResponse;
 import org.moa.etlits.api.response.CatalogType;
 import org.moa.etlits.api.response.ConfigResponse;
 import org.moa.etlits.api.response.EntryType;
+import org.moa.etlits.api.response.TypeObjectDetail;
 import org.moa.etlits.api.response.TypeObjectUnmovable;
 import org.moa.etlits.api.response.ValueType;
 import org.moa.etlits.api.services.AnimalService;
@@ -31,8 +32,11 @@ import org.moa.etlits.utils.EncryptedPreferences;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
@@ -135,8 +139,8 @@ public class SyncWorker extends Worker {
             }
 
             if (configResponse.getObjectUnmovable() != null) {
-                for (TypeObjectUnmovable unmovable : configResponse.getObjectUnmovable()) {
-                    establishmentRepository.insert(unmovable);
+               for (TypeObjectUnmovable unmovable : configResponse.getObjectUnmovable()) {
+                    establishmentRepository.insert(unmovable, getEstablishmentProductionTypes(unmovable, configResponse.getObjectDetail()));
                     ++received;
                 }
             }
@@ -146,6 +150,21 @@ public class SyncWorker extends Worker {
         }
 
         return null;
+    }
+
+    private Set<String> getEstablishmentProductionTypes(TypeObjectUnmovable est, List<TypeObjectDetail> details) {
+        Set<String> types = new HashSet<>();
+        if (details == null) {
+            return types;
+        }
+
+        for (TypeObjectDetail detail : details) {
+            if (detail.getObject().getKey().equals(est.getKey())) {
+                types.add(detail.getCategory());
+            }
+        }
+
+        return types;
     }
 
      private SyncResult fetchAndSaveConfigData() throws IOException, SyncStoppedException {
