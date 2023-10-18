@@ -41,6 +41,8 @@ public class AnimalRegActivity extends AppCompatActivity {
 
     private Dialog confirmLeaveDialog;
     private Dialog noAnimalsDialog;
+
+    public static String REGISTERED_ANIMALS = "registeredAnimals";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

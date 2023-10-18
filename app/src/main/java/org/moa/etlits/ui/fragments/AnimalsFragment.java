@@ -1,25 +1,31 @@
 package org.moa.etlits.ui.fragments;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import org.moa.etlits.R;
 import org.moa.etlits.ui.activities.AnimalRegActivity;
 import org.moa.etlits.ui.activities.AnimalRegListActivity;
+import org.moa.etlits.ui.activities.SyncActivity;
 import org.moa.etlits.utils.Constants;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+
+import static android.app.Activity.RESULT_OK;
 
 public class AnimalsFragment extends Fragment {
     private CardView registerAnimal;
     private CardView viewRegistrations;
     private Fragment searchFragment;
+    private ActivityResultLauncher<Intent> activityResultLauncher;
     public AnimalsFragment() {
     }
 
@@ -43,25 +49,19 @@ public class AnimalsFragment extends Fragment {
             getChildFragmentManager().beginTransaction().add(R.id.animals_search_fragment, searchFragment, "search_animals").commit();
         }
 
-        registerAnimal = v.findViewById(R.id.card_register);
+        registerForResults(v);
+        initViews(v);
+        return v;
+    }
+
+    private void initViews(View v) {
         viewRegistrations = v.findViewById(R.id.card_view_registrations);
-
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE);
-        String defaultEstablishment = sharedPreferences.getString(Constants.DEFAULT_ESTABLISHMENT, "");
-
-       /* if (defaultEstablishment.isEmpty()) {
-            registerAnimal.setVisibility(View.GONE);
-            viewRegistrations.setVisibility(View.GONE);
-        } else {
-            registerAnimal.setVisibility(View.VISIBLE);
-            viewRegistrations.setVisibility(View.VISIBLE);
-        }*/
-
+        registerAnimal = v.findViewById(R.id.card_register);
         registerAnimal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), AnimalRegActivity.class);
-                startActivity(intent);
+                activityResultLauncher.launch(intent);
             }
         });
 
@@ -72,6 +72,30 @@ public class AnimalsFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        return v;
     }
+
+    private void registerForResults(View v) {
+        activityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent data = result.getData();
+                        int registeredAnimals = data.getIntExtra(AnimalRegActivity.REGISTERED_ANIMALS, 0);
+                        if (registeredAnimals > 0) {
+                            Snackbar.make(v, getString(R.string.animal_reg_close_snackbar_msg, String.valueOf(registeredAnimals)), Snackbar.LENGTH_LONG)
+                                    .setAction(R.string.animal_reg_close_snackbar_action, new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            Intent intent = new Intent(getActivity(), SyncActivity.class);
+                                            intent.putExtra("syncType", Constants.SyncType.ALL_DATA.toString());
+                                            startActivity(intent);
+                                        }
+                                    }).show();
+                        }
+
+                    }
+                });
+
+    }
+
 }

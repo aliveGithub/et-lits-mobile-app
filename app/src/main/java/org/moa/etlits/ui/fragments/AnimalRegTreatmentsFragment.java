@@ -1,5 +1,6 @@
 package org.moa.etlits.ui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.CompoundButton;
 import org.moa.etlits.data.models.CategoryValue;
 import org.moa.etlits.data.models.Treatment;
 import org.moa.etlits.databinding.FragmentAnimalRegTreatmentsBinding;
+import org.moa.etlits.ui.activities.AnimalRegActivity;
 import org.moa.etlits.ui.viewmodels.AnimalRegViewModel;
 
 import java.util.List;
@@ -17,6 +19,8 @@ import java.util.List;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
+
+import static android.app.Activity.RESULT_OK;
 
 public class AnimalRegTreatmentsFragment extends Fragment {
     private AnimalRegViewModel viewModel;
@@ -69,6 +73,10 @@ public class AnimalRegTreatmentsFragment extends Fragment {
 
         binding.btnFinishRegistration.setOnClickListener(v -> {
             viewModel.save();
+            Intent replyIntent = new Intent();
+            int registeredAnimals = viewModel.getAnimals().getValue() != null ? viewModel.getAnimals().getValue().size() : 0;
+            replyIntent.putExtra(AnimalRegActivity.REGISTERED_ANIMALS, registeredAnimals);
+            getActivity().setResult(RESULT_OK, replyIntent);
             getActivity().finish();
         });
 

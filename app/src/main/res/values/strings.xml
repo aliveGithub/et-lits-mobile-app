@@ -150,5 +150,6 @@
     <string name="animal_reg_leave_form_msg">Any changes entered will be lost. Are you sure you want to leave?</string>
     <string name="animal_reg_leave_form_yes">Yes</string>
     <string name="animal_reg_leave_form_cancel">Cancel</string>
-
+    <string name="animal_reg_close_snackbar_msg">%1$s animals registered</string>
+    <string name="animal_reg_close_snackbar_action">SYNC</string>
 </resources>
