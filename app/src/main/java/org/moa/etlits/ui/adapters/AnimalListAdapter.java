@@ -21,18 +21,12 @@ public class AnimalListAdapter extends ListAdapter<Animal, AnimalViewHolder> {
     @Override
     public AnimalViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return AnimalViewHolder.create(parent, animalItemEventsListener);
-        //return new AnimalViewHolder(parent, animalItemEventsListener);
     }
 
     @Override
     public void onBindViewHolder(AnimalViewHolder holder, int position) {
         Animal current = getItem(position);
-        String tag = current.getTag() != null ? current.getTag() : "";
-        String method = current.getMethod() != null ? current.getMethod() : "";
-        android.text.format.DateFormat df = new android.text.format.DateFormat();
-
-        String date = current.getDateIdentification() != null ? (String) df.format("yyyy-MM-dd", current.getDateIdentification()) : "";
-        holder.bind(current.getTag() + ":" + method +  ":" + date);
+        holder.bind(current);
     }
 
     public static class AnimalDiff extends DiffUtil.ItemCallback<Animal> {
@@ -49,6 +43,7 @@ public class AnimalListAdapter extends ListAdapter<Animal, AnimalViewHolder> {
     }
 
     public interface AnimalItemEventsListener {
-        void onAnimalClick(int position);
+        void onAnimalItemClick(int position);
+        void onAnimalItemDeleteClick(int position);
     }
 }

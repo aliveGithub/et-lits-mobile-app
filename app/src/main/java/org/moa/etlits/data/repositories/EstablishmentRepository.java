@@ -9,6 +9,7 @@ import org.moa.etlits.data.models.Establishment;
 import org.moa.etlits.utils.Constants;
 
 import java.util.List;
+import java.util.Set;
 
 import androidx.lifecycle.LiveData;
 
@@ -37,12 +38,12 @@ public class EstablishmentRepository {
         });
     }
 
-    public void insert(TypeObjectUnmovable unmovable) {
+    public void insert(TypeObjectUnmovable unmovable, Set<String> productionTypes) {
         Establishment establishment = new Establishment();
         establishment.setCode(unmovable.getKey());
         establishment.setType(Constants.UNMOVABLE_ESTABLISHMENT);
         establishment.setCategory(unmovable.getCategory());
-
+        establishment.setProductionTypes(productionTypes);
         if (unmovable.getEstablishment() != null) {
             establishment.setName(unmovable.getEstablishment().getName());
         }

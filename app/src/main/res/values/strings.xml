@@ -55,6 +55,7 @@
     <string name="sync_status_completed">Success</string>
     <string name="sync_status_stopping">Stopping</string>
     <string name="sync_status_stopped">Stopped</string>
+    <string name="sync_status_partial">Partial</string>
     <string name="sync_status_failed">Failed</string>
 
 
@@ -96,5 +97,59 @@
     <string name="animals_remove">Remove</string>
     <string name="animals_health">Health</string>
     <string name="animals_register_tag">Register/Tag</string>
-
+    <string name="animal_reg_on_holding_ground">On Holding Ground</string>
+    <string name="animal_reg_establishment_eid">Establishment EID*</string>
+    <string name="animal_reg_lookup_eid">Lookup EID</string>
+    <string name="animal_reg_date_move_off">Date Move-Off*</string>
+    <string name="animal_reg_select_date">Select Date ...</string>
+    <string name="animal_reg_establishment">Establishment</string>
+    <string name="animal_reg_date_move_on">Date Move-On*</string>
+    <string name="animal_reg_date_identification">Date Identification*</string>
+    <string name="animal_reg_animals_identified_and_registered">Animals identified and registered</string>
+    <string name="animal_reg_herd_specie">Herd Specie*</string>
+    <string name="animal_reg_add_animal">Add Animal</string>
+    <string name="reg_enter_animal_id">Animal ID</string>
+    <string name="animal_reg_animal_id">Animal ID*</string>
+    <string name="animal_reg_add_next_animal">Add Next Animal</string>
+    <string name="animal_reg_done">Done</string>
+    <string name="animal_reg_breed">Breed*</string>
+    <string name="animal_reg_select">Select...</string>
+    <string name="animal_reg_sex">Sex*</string>
+    <string name="animal_reg_age">Age (Months)</string>
+    <string name="animal_reg_age_hint">Age in months...</string>
+    <string name="animal_reg_dead">Dead</string>
+    <string name="animal_reg_seller">Seller</string>
+    <string name="animal_reg_seller_hint">Seller</string>
+    <string name="animal_reg_field_required">Required</string>
+    <string name="animal_reg_animal_id_required">Animal Id field is required</string>
+    <string name="animal_reg_sex_required">Sex field is required</string>
+    <string name="animal_reg_breed_required">Breed field is required</string>
+    <string name="animal_reg_age_required">Age field is required</string>
+    <string name="animal_reg_animal_id_invalid">Invalid animal Id. Allowed format is: ET 0000000001</string>
+    <string name="animal_reg_age_invalid">Invalid Age. Allowed range is 1 to 300 months.</string>
+    <string name="animal_reg_age_months">%1$s months</string>
+    <string name="animal_reg_animal_detail_title">Animal Details</string>
+    <string name="animal_reg_title">Animal Registrations</string>
+    <string name="animal_reg_date_required">Date required</string>
+    <string name="animal_reg_eid_required">Establishment ID required</string>
+    <string name="animal_reg_date_in_future">Selected date should not be in future.</string>
+    <string name="animal_reg_identification_date_after_move_off">Date Move-Off must be after or same as Date Identification</string>
+    <string name="animal_reg_move_off_date_after_move_on">Date Move-On must be on or after Date Move-Off.</string>
+    <string name="animal_reg_treatments_applied">Treatments Applied</string>
+    <string name="animal_reg_finish_registration">Finish Registration</string>
+    <string name="animal_reg_view_registrations">View Registrations</string>
+    <string name="animal_reg_no_animals_registered">No Animals Registered</string>
+    <string name="animal_reg_animal_list_empty_error">At least one animal must be registered.</string>
+    <string name="animal_reg_dialog_ok">OK</string>
+    <string name="card_animals">Animals</string>
+    <string name="animal_reg_animal_list_info">"Please tap on ‘Add Animal' to enter a new animal in the list or edit icon to change the animal details.\nTap on the 'Next' button or swipe left to continue your activities. "</string>
+    <string name="animal_reg_move_events_info">You are in process to register animals on the holding ground.\nFor each animal an Move-Off from holding ground and a Move-On to establishment will be created.\nPlease enter the EID of the holding ground and the dates of tagging and movements.\nEID = Establishment ID\nFields marked with * are mandatory\nTap on the \'Next\' button or swipe left to continue your activities.</string>
+    <string name="animal_reg_treatments_info">If the animals were treated with treatments at arrival on the establishment you can indicate the kind of treatment by tapping the respective checkbox.\nPlease note that the treatments indicated will be registered for each animal in the list of animals.\nTap on the \'Finish Registration\' button to complete the animals’ registration.</string>
+    <string name="animal_reg_animal_detail_info">Tap on the \'Dead\' animal toggle if the animal was found dead during transport.\nTap on the \'Done\' button to complete current animal data entry and return to the animal registration form.\nTap on the \'Add Next Animal\' to complete the current animal data entry and open new Animal Details to continue registering the next animal.</string>
+    <string name="animal_reg_leave_the_form">Leave the form?</string>
+    <string name="animal_reg_leave_form_msg">Any changes entered will be lost. Are you sure you want to leave?</string>
+    <string name="animal_reg_leave_form_yes">Yes</string>
+    <string name="animal_reg_leave_form_cancel">Cancel</string>
+    <string name="animal_reg_close_snackbar_msg">%1$s animals registered</string>
+    <string name="animal_reg_close_snackbar_action">SYNC</string>
 </resources>

@@ -19,7 +19,6 @@ import com.google.android.material.navigation.NavigationView;
 import org.moa.etlits.R;
 import org.moa.etlits.ui.activities.EstablishmentSummaryActivity;
 import org.moa.etlits.ui.activities.SyncActivity;
-import org.moa.etlits.ui.activities.AnimalListActivity;
 import org.moa.etlits.ui.activities.LoginActivity;
 import org.moa.etlits.ui.activities.MainActivity;
 import org.moa.etlits.utils.Constants;
@@ -47,11 +46,12 @@ public class HomeTabsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home_tabs, container, false);
-        initializeBottomNavigation(v);
+
+        initializeBottomNavigation(v, savedInstanceState);
         return v;
     }
 
-    private void initializeBottomNavigation(View v) {
+    private void initializeBottomNavigation(View v, Bundle savedInstanceState) {
         getActivity().setTitle(R.string.menu_home);
 
         BottomNavigationView bottomNavigationView = v.findViewById(R.id.bottom_navigation);
@@ -78,17 +78,23 @@ public class HomeTabsFragment extends Fragment {
             return false;
         });
 
-        // Initialize fragments
-        homeFragment = new HomeFragment();
-        syncFragment = new SyncFragment();
-        moveFragment = new MoveFragment();
-        animalsFragment = new AnimalsFragment();
-        activeFragment = homeFragment;
+        if (savedInstanceState == null) {
+            homeFragment = new HomeFragment();
+            syncFragment = new SyncFragment();
+            moveFragment = new MoveFragment();
+            animalsFragment = new AnimalsFragment();
+            activeFragment = homeFragment;
 
-        getChildFragmentManager().beginTransaction().add(R.id.home_fragment_container, homeFragment, "home").commit();
-        getChildFragmentManager().beginTransaction().add(R.id.home_fragment_container, syncFragment, "sync").hide(syncFragment).commit();
-        getChildFragmentManager().beginTransaction().add(R.id.home_fragment_container, animalsFragment, "animals").hide(animalsFragment).commit();
-        getChildFragmentManager().beginTransaction().add(R.id.home_fragment_container, moveFragment, "move").hide(moveFragment).commit();
+            getChildFragmentManager().beginTransaction().add(R.id.home_fragment_container, homeFragment, "home").commit();
+            getChildFragmentManager().beginTransaction().add(R.id.home_fragment_container, syncFragment, "sync").hide(syncFragment).commit();
+            getChildFragmentManager().beginTransaction().add(R.id.home_fragment_container, animalsFragment, "animals").hide(animalsFragment).commit();
+            getChildFragmentManager().beginTransaction().add(R.id.home_fragment_container, moveFragment, "move").hide(moveFragment).commit();
+        } else {
+            homeFragment = getChildFragmentManager().findFragmentByTag("home");
+            syncFragment = getChildFragmentManager().findFragmentByTag("sync");
+            animalsFragment = getChildFragmentManager().findFragmentByTag("animals");
+            moveFragment = getChildFragmentManager().findFragmentByTag("move");
+        }
 
     }
 
@@ -145,11 +151,7 @@ public class HomeTabsFragment extends Fragment {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                // Handle navigation view item clicks here.
-                if (item.getItemId() == R.id.nav_settings) {
-                    Intent intent = new Intent(getActivity(), AnimalListActivity.class);
-                    startActivity(intent);
-                } else if (item.getItemId() == R.id.nav_logout) {
+                if (item.getItemId() == R.id.nav_logout) {
                     logout();
                 }
 

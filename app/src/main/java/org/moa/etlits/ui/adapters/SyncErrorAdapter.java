@@ -30,7 +30,11 @@ public class SyncErrorAdapter extends ArrayAdapter<SyncError> {
         TextView errorMsg = convertView.findViewById(R.id.tv_error_msg);
 
         if (error != null) {
-            errorMsg.setText(getErrorMessage(error.getErrorKey()));
+            if (Constants.SYNC_VALIDATION_ERROR.equals(error.getErrorKey()) && error.getMessage() != null) {
+                errorMsg.setText(error.getMessage());
+            } else {
+                errorMsg.setText(getErrorMessage(error.getErrorKey()));
+            }
         }
 
         return convertView;

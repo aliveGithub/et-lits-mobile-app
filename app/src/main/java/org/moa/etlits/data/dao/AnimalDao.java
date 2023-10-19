@@ -20,9 +20,18 @@ public interface AnimalDao {
     @Update
     void update(Animal animal);
 
+    @Query("DELETE FROM animals where id=:id")
+    void deleteById(long id);
+
     @Query("SELECT * FROM animals")
     LiveData<List<Animal>> getAllAnimals();
 
     @Query("SELECT * FROM animals where id=:animalId")
     LiveData<Animal> loadById(long animalId);
+
+    @Query("SELECT * FROM animals where animal_registration_id=:animalRegistrationId")
+    LiveData<List<Animal>> getByAnimalRegistrationId(long animalRegistrationId);
+
+    @Query("SELECT * FROM animals where animal_registration_id=:animalRegistrationId")
+    List<Animal> getListByAnimalRegistrationId(long animalRegistrationId);
 }

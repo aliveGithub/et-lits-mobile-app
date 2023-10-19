@@ -29,8 +29,11 @@ public class MoveFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_move, container, false);
-        searchFragment = new SearchFragment();
-        getChildFragmentManager().beginTransaction().add(R.id.move_search_fragment, searchFragment, "search_move").commit();
+        if (savedInstanceState == null) {
+            searchFragment = new SearchFragment();
+            getChildFragmentManager().beginTransaction().add(R.id.move_search_fragment, searchFragment, "search_move").commit();
+        }
+
         return v;
     }
 }

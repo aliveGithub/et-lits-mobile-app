@@ -54,4 +54,11 @@ public class CategoryValue {
     public void setLanguage(String language) {
         this.language = language;
     }
+
+    public String toString() {
+        if (getValue() != null) {
+            return getValue();
+        }
+        return  "";
+    }
 }

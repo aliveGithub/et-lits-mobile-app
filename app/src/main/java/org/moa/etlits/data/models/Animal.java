@@ -1,46 +1,38 @@
 package org.moa.etlits.data.models;
 
-import java.util.Date;
-
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "animals")
-public class Animal {
+@Entity(tableName = "animals", indices = {@Index(value = {"animal_id"}, unique = true)})
+public class Animal implements java.io.Serializable {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     private long id;
 
+    @NonNull
     @ColumnInfo(name = "animal_id")
-    private String tag;
+    private String animalId;
+    @ColumnInfo(name = "breed")
+    private String breed;
 
-    @ColumnInfo(name = "method")
-    private String method;
+    @ColumnInfo(name = "age")
+    private Integer age;
 
-    @ColumnInfo(name = "date_identification")
-    private Date dateIdentification;
+    @ColumnInfo(name = "dead")
+    private boolean dead;
 
-    public Animal() {
-    }
+    @ColumnInfo(name = "sex")
+    private String sex;
 
-    @Ignore
-    public Animal(long id, String tag, String method, Date dateIdentification) {
-        this.id = id;
-        this.tag = tag;
-        this.method = method;
-        this.dateIdentification = dateIdentification;
-    }
+    @ColumnInfo(name = "seller")
+    private String seller;
 
-
-    public String getTag() {
-        return tag;
-    }
-
-    public void setTag(String tag) {
-        this.tag = tag;
-    }
+    @NonNull
+    @ColumnInfo(name = "animal_registration_id")
+    private long animalRegistrationId;
 
     public long getId() {
         return id;
@@ -50,19 +42,61 @@ public class Animal {
         this.id = id;
     }
 
-    public String getMethod() {
-        return method;
+    public String getAnimalId() {
+        return animalId;
     }
 
-    public void setMethod(String method) {
-        this.method = method;
+
+    public void setAnimalId(String animalId) {
+        this.animalId = animalId;
     }
 
-    public Date getDateIdentification() {
-        return dateIdentification;
+    public String getBreed() {
+        return breed;
     }
 
-    public void setDateIdentification(Date dateIdentification) {
-        this.dateIdentification = dateIdentification;
+    public void setBreed(String breed) {
+        this.breed = breed;
     }
+
+
+    public boolean isDead() {
+        return dead;
+    }
+
+    public void setDead(boolean dead) {
+        this.dead = dead;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public String getSeller() {
+        return seller;
+    }
+
+    public void setSeller(String seller) {
+        this.seller = seller;
+    }
+    public long getAnimalRegistrationId() {
+        return animalRegistrationId;
+    }
+
+    public void setAnimalRegistrationId(long animalRegistrationId) {
+        this.animalRegistrationId = animalRegistrationId;
+    }
+
 }

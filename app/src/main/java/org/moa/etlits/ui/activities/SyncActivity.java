@@ -263,6 +263,8 @@ public class SyncActivity extends AppCompatActivity {
             return getString(R.string.sync_status_stopping);
         } else if (Constants.SyncStatus.STOPPED.toString().equals(status)) {
             return getString(R.string.sync_status_stopped);
+        } else if (Constants.SyncStatus.PARTIAL.toString().equals(status)) {
+            return getString(R.string.sync_status_partial);
         } else {
             return getString(R.string.sync_status_not_started);
         }
@@ -271,7 +273,7 @@ public class SyncActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.sync_menu, menu);
+        inflater.inflate(R.menu.default_activity_menu, menu);
         return true;
     }
 
@@ -282,7 +284,7 @@ public class SyncActivity extends AppCompatActivity {
             if (syncViewModel.getSyncRunning() && !hasInitialized) {
                 showDataInitDialog();
             } else {
-                SyncActivity.super.onBackPressed();
+                this.onBackPressed();
             }
 
             return true;

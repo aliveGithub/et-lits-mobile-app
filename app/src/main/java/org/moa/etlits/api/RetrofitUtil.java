@@ -1,5 +1,6 @@
 package org.moa.etlits.api;
 
+import org.moa.etlits.api.services.AnimalService;
 import org.moa.etlits.api.services.AuthService;
 import org.moa.etlits.api.services.ConfigService;
 
@@ -14,6 +15,7 @@ import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -47,7 +49,14 @@ public class RetrofitUtil {
                         return cookies != null ? cookies : new ArrayList<>();
                     }
                 })
+               // .addInterceptor(getHttpLoggingInterceptor())
                .build();
+    }
+
+    private HttpLoggingInterceptor getHttpLoggingInterceptor() {
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        return interceptor;
     }
 
     private static Retrofit createRetrofit() {
@@ -68,6 +77,10 @@ public class RetrofitUtil {
 
     public static ConfigService createConfigService() {
         return createAPI(ConfigService.class);
+    }
+
+    public static AnimalService createAnimalService() {
+        return createAPI(AnimalService.class);
     }
 
     public static AuthService createAuthService() {

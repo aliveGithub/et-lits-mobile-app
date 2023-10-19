@@ -1,0 +1,47 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".ui.activities.AnimalRegActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/animal_reg_treatments_applied"
+            android:textSize="@dimen/font_size_normal"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:padding="@dimen/small_padding"
+            android:background="@drawable/bg_section_header_green"
+            android:layout_marginBottom="@dimen/small_margin"/>
+
+        <LinearLayout
+            android:id="@+id/ll_treatment_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/big_padding"
+            android:layout_weight="1"
+            >
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_finish_registration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/animal_reg_finish_registration"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/big_padding"
+            android:background="@drawable/bg_primary_green"
+            android:textColor="@color/white"
+            android:padding="@dimen/small_padding"/>
+
+    </LinearLayout>
+</ScrollView>

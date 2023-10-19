@@ -151,7 +151,7 @@
                 android:text="@string/establishment_use_by_default"
                 android:textColor="@color/white"
                 android:padding="@dimen/small_padding"
-                android:background="@drawable/green_rounded_border_green_bg_color"
+                android:background="@drawable/bg_primary_green"
                 />
         </LinearLayout>
     </LinearLayout>

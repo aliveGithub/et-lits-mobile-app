@@ -70,9 +70,7 @@ public class SearchFragment extends Fragment {
 
         searchViewModel = new SearchViewModel((Application) getActivity().getApplicationContext());
         searchViewModel.getEstablishments().observe(getActivity(), lst -> {
-            establishmentAdapter.clear();
-            establishmentAdapter.addAll(lst);
-            establishmentAdapter.notifyDataSetChanged();
+            establishmentAdapter.submitList(lst);
         });
     }
 
