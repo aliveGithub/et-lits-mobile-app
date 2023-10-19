@@ -22,7 +22,7 @@ public interface TreatmentDao {
 
 
     @Query("DELETE FROM treatments where id=:id")
-    void deleteById(long id);
+    void delete(long id);
 
     @Query("SELECT * FROM treatments")
     LiveData<List<Treatment>> getAllTreatments();

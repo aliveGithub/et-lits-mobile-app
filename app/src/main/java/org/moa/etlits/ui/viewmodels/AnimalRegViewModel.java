@@ -1,6 +1,7 @@
 package org.moa.etlits.ui.viewmodels;
 
 import android.app.Application;
+import android.util.Log;
 
 import org.moa.etlits.data.models.Animal;
 import org.moa.etlits.data.models.AnimalRegistration;
@@ -44,11 +45,7 @@ public class AnimalRegViewModel extends AndroidViewModel {
 
     private LiveData<List<Animal>> animalList;
 
-    private MutableLiveData<List<Long>> idsForRemovedAnimals = new MutableLiveData<>(new ArrayList<>());
-
-    private MutableLiveData<List<Long>> idsForRemovedTreatments = new MutableLiveData<>(new ArrayList<>());
-
-   private LiveData<List<Treatment>> treatmentList;
+    private LiveData<List<Treatment>> treatmentList;
 
     private LiveData<List<CategoryValue>> speciesList;
 
@@ -169,8 +166,7 @@ public class AnimalRegViewModel extends AndroidViewModel {
 
     public void update() {
         animalRegistrationRepository.update(getAnimalRegistration().getValue(),
-                getAnimals().getValue(), getTreatmentList().getValue(),
-                getIdsForRemovedAnimals().getValue(), getIdsForRemovedTreatments().getValue());
+                getAnimals().getValue(), getTreatmentList().getValue());
     }
 
     public void save() {
@@ -182,23 +178,27 @@ public class AnimalRegViewModel extends AndroidViewModel {
     }
 
     public void removeAnimal(int position) {
-        Animal animal = getAnimals().getValue().get(position);
-        if (animal.getId() != 0) {
-            List<Long> ids = idsForRemovedAnimals.getValue();
-            ids.add(animal.getId());
-            idsForRemovedAnimals.setValue(ids);
-        }
         getAnimals().getValue().remove(position);
     }
 
-    public void removeTreatment(int position) {
-        Treatment treatment = getTreatments().get(position);
-        if (treatment.getId() != 0) {
-            List<Long> ids = idsForRemovedTreatments.getValue();
-            ids.add(treatment.getId());
-            idsForRemovedTreatments.setValue(ids);
+    public void removeTreatment(String appliedTreatment) {
+        List<Treatment> treatments = treatmentList.getValue();
+        for (int i = 0; i < treatments.size(); i++) {
+            Treatment treatment = treatments.get(i);
+            if (treatment.getTreatmentApplied().equals(appliedTreatment)) {
+                getTreatmentList().getValue().remove(i);
+                break;
+            }
         }
-        getTreatmentList().getValue().remove(position);
+    }
+
+    public void addTreatment(String treatmentTypeId) {
+        if (getTreatmentList().getValue() == null) {
+            return;
+        }
+        Treatment treatment = new Treatment();
+        treatment.setTreatmentApplied(treatmentTypeId);
+        getTreatmentList().getValue().add(treatment);
     }
 
     public void loadById(long id) {
@@ -286,16 +286,14 @@ public class AnimalRegViewModel extends AndroidViewModel {
     public LiveData<List<Treatment>> getTreatmentList() {
         return treatmentList;
     }
-    public List<Treatment> getTreatments() {
-        if (treatmentList.getValue() == null) {
-            treatmentList = new MutableLiveData<>(new ArrayList<>());
-        }
-        return treatmentList.getValue();
-    }
+
 
     public List<String> getSelectedTreatmentTypes() {
-        List<Treatment> treatments = getTreatments();
         List<String> selectedTreatmentTypes = new ArrayList<>();
+        List<Treatment> treatments = getTreatmentList().getValue();
+        if (treatments == null) {
+            return selectedTreatmentTypes;
+        }
         for (int i = 0; i < treatments.size(); i++) {
             Treatment treatment = treatments.get(i);
             selectedTreatmentTypes.add(treatment.getTreatmentApplied());
@@ -315,15 +313,7 @@ public class AnimalRegViewModel extends AndroidViewModel {
         return animalRegFormState;
     }
 
-    public MutableLiveData<List<Long>> getIdsForRemovedAnimals() {
-        return idsForRemovedAnimals;
-    }
-
-    public MutableLiveData<List<Long>> getIdsForRemovedTreatments() {
-        return idsForRemovedTreatments;
-    }
-
-    public static class Factory extends ViewModelProvider.NewInstanceFactory {
+   public static class Factory extends ViewModelProvider.NewInstanceFactory {
         private Application application;
         private long id;
 
