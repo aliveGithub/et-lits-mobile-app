@@ -246,7 +246,10 @@ public class SyncActivity extends AppCompatActivity {
 
             return true;
         } else if (item.getItemId() == R.id.action_info) {
-            startActivity(new Intent(this, SyncInfoActivity.class));
+            Intent intent = new Intent(this, InfoActivity.class);
+            intent.putExtra("title", getString(R.string.title_data_sync));
+            intent.putExtra("message", getString(R.string.sync_info_text));
+            startActivity(intent);
             return true;
         }
 
