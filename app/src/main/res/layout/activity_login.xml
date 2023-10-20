@@ -61,7 +61,7 @@
         android:text="@string/action_sign_in"
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
-        android:background="@drawable/bg_primary_green"
+        android:background="@drawable/btn_primary_green"
         android:textColor="@color/white"
         android:enabled="false"
         android:textStyle="bold"

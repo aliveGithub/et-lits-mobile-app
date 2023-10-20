@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.Menu;
@@ -169,14 +168,9 @@ public class SyncActivity extends AppCompatActivity {
     }
 
     private void updateSyncButton(boolean isRunning) {
-        GradientDrawable border = new GradientDrawable();
-        border.setColor(ContextCompat.getColor(this, isRunning ? R.color.white : R.color.colorPrimary));
-        border.setStroke(5, ContextCompat.getColor(this, R.color.colorPrimary));
-        border.setCornerRadius(50);
-        startSync.setBackground(border);
-        startSync.setTextColor(ContextCompat.getColor(this, isRunning ? R.color.colorPrimary : R.color.white));
         startSync.setText(isRunning ? R.string.btn_sync_stop : R.string.btn_sync_start);
-
+        startSync.setTextColor(ContextCompat.getColor(this, isRunning ? R.color.colorPrimary : R.color.white));
+        startSync.setBackground(ContextCompat.getDrawable(this, isRunning ? R.drawable.btn_green_white : R.drawable.btn_primary_green));
         Drawable drawable = ContextCompat.getDrawable(this, isRunning ? R.drawable.ic_stop_bold : R.drawable.ic_play_bold);
         startSync.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
     }

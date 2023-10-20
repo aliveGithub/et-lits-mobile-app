@@ -74,7 +74,7 @@
             android:id="@+id/btn_add_animal"
             android:layout_gravity="center"
             android:layout_margin="@dimen/small_margin"
-            android:background="@drawable/bg_primary_green"
+            android:background="@drawable/btn_primary_green"
             android:textColor="@color/white"
             android:padding="@dimen/small_padding"
             android:layout_marginTop="@dimen/small_margin"
