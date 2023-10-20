@@ -152,4 +152,5 @@
     <string name="animal_reg_leave_form_cancel">Cancel</string>
     <string name="animal_reg_close_snackbar_msg">%1$s animals registered</string>
     <string name="animal_reg_close_snackbar_action">SYNC</string>
+    <string name="login_alert_ok">OK</string>
 </resources>

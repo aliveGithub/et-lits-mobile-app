@@ -59,13 +59,13 @@ public class LoginActivity extends AppCompatActivity {
                 if (loginFormState == null) {
                     return;
                 }
-                binding.login.setEnabled(loginFormState.isDataValid());
+                binding.btnLogin.setEnabled(loginFormState.isDataValid());
                 if (loginFormState.getUsernameError() != null) {
-                    binding.username.setError(getString(loginFormState.getUsernameError()));
+                    binding.etUsername.setError(getString(loginFormState.getUsernameError()));
                 }
 
                 if (loginFormState.getPasswordError() != null) {
-                    binding.password.setError(getString(loginFormState.getPasswordError()));
+                    binding.etPassword.setError(getString(loginFormState.getPasswordError()));
                 }
             }
         });
@@ -100,18 +100,18 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (binding.password.getText().toString().trim().length() > 0) {
-                    binding.passwordLayout.setEndIconVisible(true);
+                if (binding.etPassword.getText().toString().trim().length() > 0) {
+                    binding.tilPasswordLayout.setEndIconVisible(true);
                 } else {
-                    binding.passwordLayout.setEndIconVisible(false);
+                    binding.tilPasswordLayout.setEndIconVisible(false);
                 }
-                loginViewModel.loginDataChanged(binding.username.getText().toString(),
-                        binding.password.getText().toString());
+                loginViewModel.loginDataChanged(binding.etUsername.getText().toString(),
+                        binding.etPassword.getText().toString());
             }
         };
-        binding.username.addTextChangedListener(afterTextChangedListener);
-        binding.password.addTextChangedListener(afterTextChangedListener);
-        binding.password.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        binding.etUsername.addTextChangedListener(afterTextChangedListener);
+        binding.etPassword.addTextChangedListener(afterTextChangedListener);
+        binding.etPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -121,7 +121,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        binding.login.setOnClickListener(new View.OnClickListener() {
+        binding.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 login();
@@ -132,8 +132,8 @@ public class LoginActivity extends AppCompatActivity {
     private void login() {
         if (NetworkUtils.isInternetConnected(LoginActivity.this)) {
             binding.loading.setVisibility(View.VISIBLE);
-            loginViewModel.login(binding.username.getText().toString().trim(),
-                    binding.password.getText().toString().trim());
+            loginViewModel.login(binding.etUsername.getText().toString().trim(),
+                    binding.etPassword.getText().toString().trim());
         } else {
             showLoginFailed(getString(R.string.no_internet_connection));
         }
@@ -159,7 +159,7 @@ public class LoginActivity extends AppCompatActivity {
     }
     private void showLoginFailed(String message) {
         builder.setTitle(R.string.login_alert_title).setMessage(message);
-        builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.login_alert_ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
