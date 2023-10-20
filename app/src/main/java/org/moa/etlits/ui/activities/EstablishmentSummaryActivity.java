@@ -8,11 +8,11 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.moa.etlits.R;
 import org.moa.etlits.data.repositories.EstablishmentRepository;
+import org.moa.etlits.databinding.ActivityEstablishmentSummaryBinding;
 import org.moa.etlits.utils.Constants;
 
 import androidx.appcompat.app.ActionBar;
@@ -20,44 +20,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 public class EstablishmentSummaryActivity extends AppCompatActivity {
-    private TextView pic;
-    private TextView name;
-    private TextView type;
-    private TextView latLong;
-    private TextView physicalAddress;
-    private TextView postalAddress;
-    private TextView phone;
-    private TextView mobile;
-    private TextView email;
-
-    private Button setDefault;
+    private ActivityEstablishmentSummaryBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_establishment_summary);
+        binding = ActivityEstablishmentSummaryBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         initActionBar();
-
-        pic = findViewById(R.id.tv_pic);
-        name = findViewById(R.id.tv_name);
-        type = findViewById(R.id.tv_type);
-        latLong = findViewById(R.id.tv_lat_lng);
-        physicalAddress = findViewById(R.id.tv_physical_address);
-        postalAddress = findViewById(R.id.tv_postal_address);
-        phone = findViewById(R.id.tv_phone);
-        mobile = findViewById(R.id.tv_mobile);
-        email = findViewById(R.id.tv_email);
-        setDefault = findViewById(R.id.btn_set_default);
 
         String code = getIntent().getStringExtra("code");
         boolean viewMode = getIntent().getBooleanExtra("isViewMode", false);
         if(viewMode) {
-            setDefault.setVisibility(Button.GONE);
-        }
-        else {
-            setDefault.setVisibility(Button.VISIBLE);
+            binding.btnSetDefault.setVisibility(Button.GONE);
+        } else {
+            binding.btnSetDefault.setVisibility(Button.VISIBLE);
         }
 
-        setDefault.setOnClickListener(v -> {
+        binding.btnSetDefault.setOnClickListener(v -> {
             SharedPreferences prefs = getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString(Constants.DEFAULT_ESTABLISHMENT, code);
@@ -70,15 +49,15 @@ public class EstablishmentSummaryActivity extends AppCompatActivity {
         EstablishmentRepository establishmentRepository = new EstablishmentRepository(this.getApplication());
         establishmentRepository.loadByCode(code).observe(this, establishment -> {
             if (establishment != null) {
-                pic.setText(getDisplayText(establishment.getCode()));
-                name.setText(getDisplayText(establishment.getName()));
-                type.setText(getDisplayText(establishment.getType()));
-                latLong.setText(getDisplayText(establishment.getLatLng()));
-                physicalAddress.setText(getDisplayText(establishment.getPhysicalAddress()));
-                postalAddress.setText(getDisplayText(establishment.getAlternativePostalAddress()));
-                phone.setText(getDisplayText(establishment.getTelephoneNumber()));
-                mobile.setText(getDisplayText(establishment.getMobileNumber()));
-                email.setText(getDisplayText(establishment.getEmail()));
+                binding.tvPic.setText(getDisplayText(establishment.getCode()));
+                binding.tvName.setText(getDisplayText(establishment.getName()));
+                binding.tvType.setText(getDisplayText(establishment.getType()));
+                binding.tvLatLng.setText(getDisplayText(establishment.getLatLng()));
+                binding.tvPhysicalAddress.setText(getDisplayText(establishment.getPhysicalAddress()));
+                binding.tvPostalAddress.setText(getDisplayText(establishment.getAlternativePostalAddress()));
+                binding.tvPhone.setText(getDisplayText(establishment.getTelephoneNumber()));
+                binding.tvMobile.setText(getDisplayText(establishment.getMobileNumber()));
+                binding.tvEmail.setText(getDisplayText(establishment.getEmail()));
             }
         });
     }
@@ -110,5 +89,11 @@ public class EstablishmentSummaryActivity extends AppCompatActivity {
         }
 
         return text;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 }
