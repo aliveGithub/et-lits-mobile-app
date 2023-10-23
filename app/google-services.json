@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "491589367554",
+    "project_id": "alive-398716",
+    "storage_bucket": "alive-398716.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:491589367554:android:1a1e0a8c01e7be8740341b",
+        "android_client_info": {
+          "package_name": "org.moa.etlits"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbTb_VRwTnjgKRIofDE-NI7wClO0bc9UE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
