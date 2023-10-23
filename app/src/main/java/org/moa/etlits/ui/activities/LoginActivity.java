@@ -1,7 +1,6 @@
 package org.moa.etlits.ui.activities;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,7 +20,6 @@ import org.moa.etlits.ui.viewmodels.login.LoginViewModelFactory;
 import org.moa.etlits.utils.Constants;
 import org.moa.etlits.utils.EncryptedPreferences;
 import org.moa.etlits.utils.NetworkUtils;
-import org.moa.etlits.utils.ViewUtils;
 
 import java.net.HttpURLConnection;
 
@@ -34,13 +32,14 @@ public class LoginActivity extends AppCompatActivity {
     private ActivityLoginBinding binding;
     private LoginViewModel loginViewModel;
     private EncryptedPreferences encryptedPreferences;
-    private Dialog dialog;
+    private AlertDialog.Builder builder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        builder = new AlertDialog.Builder(LoginActivity.this);
         encryptedPreferences = new EncryptedPreferences(LoginActivity.this);
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
@@ -135,7 +134,7 @@ public class LoginActivity extends AppCompatActivity {
             loginViewModel.login(binding.etUsername.getText().toString().trim(),
                     binding.etPassword.getText().toString().trim());
         } else {
-            showLoginFailed(R.string.no_internet_connection);
+            showLoginFailed(getString(R.string.no_internet_connection));
         }
     }
 
@@ -147,34 +146,28 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-    private int getMessage(Integer errorCode) {
+
+    private String getMessage(Integer errorCode) {
         if (errorCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
-            return R.string.login_unauthorized;
+            return getString(R.string.login_unauthorized);
         } else if (errorCode == HttpURLConnection.HTTP_NOT_FOUND) {
 
-            return R.string.login_server_unreachable;
+            return getString(R.string.login_server_unreachable);
         } else {
-            return R.string.login_generic_error;
+            return getString(R.string.login_generic_error);
         }
     }
-    private void showLoginFailed(int messageRId) {
-        dialog = ViewUtils.showDialog(LoginActivity.this,
-                R.string.login_alert_title,
-                messageRId,
-                R.string.login_alert_ok,
-                R.string.login_alert_ok,
-                R.string.login_alert_ok,
-                false,
-                true,
-                false,
-                null,
-                v -> {
-                   if (dialog != null) {
-                       dialog.cancel();
-                   }
-                },
-                null);
 
+    private void showLoginFailed(String message) {
+        builder.setTitle(R.string.login_alert_title).setMessage(message);
+        builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     @Override
