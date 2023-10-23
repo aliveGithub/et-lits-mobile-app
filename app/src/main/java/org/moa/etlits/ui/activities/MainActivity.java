@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -14,7 +13,6 @@ import org.moa.etlits.R;
 import org.moa.etlits.ui.fragments.HomeTabsFragment;
 import org.moa.etlits.ui.viewmodels.HomeViewModel;
 import org.moa.etlits.utils.Constants;
-import org.moa.etlits.utils.ViewUtils;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -26,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
     private HomeViewModel homeViewModel;
 
     private ActionBarDrawerToggle drawerToggle;
-    private Dialog initDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,27 +56,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showDataInitDialog(boolean syncAttempted) {
-        initDialog = ViewUtils.showDialog(this,
-                R.string.sync_init_dialog_title,
-                syncAttempted ? R.string.sync_init_dialog_msg_resume : R.string.sync_init_dialog_msg,
-                R.string.sync_start_data_download,
-                R.string.sync_exit_app,
-                R.string.sync_view_last_attempt,
-                true,
-                true,
-                false,
-                v -> {
-                    Intent intent = new Intent(MainActivity.this, SyncActivity.class);
-                    intent.putExtra("syncType", Constants.SyncType.ALL_DATA.toString());
-                    intent.putExtra("startSync", true);
-                    startActivity(intent);
-                    initDialog.dismiss();
-                },
-                v -> {
-                    finishAffinity();
-                    System.exit(0);
-                },
-                null);
+        final Dialog customDialog = new Dialog(this);
+        customDialog.setContentView(R.layout.custom_dialog);
+        customDialog.setCancelable(false);
+
+        TextView title = customDialog.findViewById(R.id.dialog_title);
+        TextView message = customDialog.findViewById(R.id.dialog_message);
+
+        Button positiveButton = customDialog.findViewById(R.id.positive_button);
+        Button negativeButton = customDialog.findViewById(R.id.negative_button);
+        Button neutralButton = customDialog.findViewById(R.id.neutral_button);
+
+        title.setText(R.string.sync_init_dialog_title);
+        message.setText(syncAttempted ? R.string.sync_init_dialog_msg_resume : R.string.sync_init_dialog_msg);
+
+        positiveButton.setText(R.string.sync_start_data_download);
+        positiveButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SyncActivity.class);
+            intent.putExtra("syncType", Constants.SyncType.ALL_DATA.toString());
+            intent.putExtra("startSync", true);
+            startActivity(intent);
+            customDialog.dismiss();
+        });
+
+        negativeButton.setText(R.string.sync_exit_app);
+        negativeButton.setOnClickListener(v -> {
+            finishAffinity();
+            System.exit(0);
+        });
+
+        neutralButton.setVisibility(View.GONE);
+
+        customDialog.show();
     }
 
     @Override
