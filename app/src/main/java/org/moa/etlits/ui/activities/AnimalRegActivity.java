@@ -1,6 +1,7 @@
 package org.moa.etlits.ui.activities;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
@@ -9,7 +10,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.moa.etlits.R;
 import org.moa.etlits.databinding.ActivityAnimalRegBinding;
@@ -18,7 +22,6 @@ import org.moa.etlits.ui.fragments.AnimalRegMoveEventsFragment;
 import org.moa.etlits.ui.fragments.AnimalRegTreatmentsFragment;
 import org.moa.etlits.ui.viewmodels.AnimalRegViewModel;
 import org.moa.etlits.utils.Constants;
-import org.moa.etlits.utils.ViewUtils;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,8 +40,6 @@ public class AnimalRegActivity extends AppCompatActivity {
 
     private ActionBar actionBar;
 
-    private Dialog confirmLeaveDialog;
-    private Dialog noAnimalsDialog;
 
     public static String REGISTERED_ANIMALS = "registeredAnimals";
     @Override
@@ -221,44 +222,53 @@ public class AnimalRegActivity extends AppCompatActivity {
     }
 
    private void showNoAnimalsDialog() {
-        noAnimalsDialog = ViewUtils.showDialog(this, R.string.animal_reg_no_animals_registered,
-                R.string.animal_reg_animal_list_empty_error,
-                R.string.animal_reg_dialog_ok,
-                R.string.animal_reg_dialog_ok,
-                R.string.animal_reg_dialog_ok,
-                true,
-                false,
-                false,
-                v -> {
-                 if (noAnimalsDialog != null) {
-                     noAnimalsDialog.dismiss();
-                 }
-                 },
-                null,
-                null);
+       final Dialog customDialog = new Dialog(this);
+       customDialog.setContentView(R.layout.custom_dialog);
+       customDialog.setCancelable(false);
+
+       TextView title = customDialog.findViewById(R.id.dialog_title);
+       title.setText(R.string.animal_reg_no_animals_registered);
+
+       TextView message = customDialog.findViewById(R.id.dialog_message);
+       message.setText(R.string.animal_reg_animal_list_empty_error);
+
+       Button positiveButton = customDialog.findViewById(R.id.positive_button);
+       positiveButton.setVisibility(View.VISIBLE);
+       positiveButton.setText(R.string.animal_reg_dialog_ok);
+       positiveButton.setOnClickListener(v -> {
+           customDialog.dismiss();
+       });
+
+       customDialog.show();
     }
 
     private void showLeaveDialog() {
-        confirmLeaveDialog =  ViewUtils.showDialog(this,
-                R.string.animal_reg_leave_the_form,
-                R.string.animal_reg_leave_form_msg,
-                R.string.animal_reg_leave_form_cancel,
-                R.string.animal_reg_leave_form_yes,
-                R.string.animal_reg_leave_form_yes,
-                true,
-                true,
-                false,
-                v -> {
-                    if (confirmLeaveDialog != null) {
-                        confirmLeaveDialog.dismiss();
-                    }
-                },
-                v -> {
-                    if (confirmLeaveDialog != null) {
-                        confirmLeaveDialog.dismiss();
-                    }
-                    finish();
-                },
-                null);
+        final Dialog customDialog = new Dialog(this);
+        customDialog.setContentView(R.layout.custom_dialog);
+        customDialog.setCancelable(false);
+
+        TextView title = customDialog.findViewById(R.id.dialog_title);
+        title.setText(R.string.animal_reg_leave_the_form);
+
+        TextView message = customDialog.findViewById(R.id.dialog_message);
+        message.setText(R.string.animal_reg_leave_form_msg);
+
+        Button positiveButton = customDialog.findViewById(R.id.positive_button);
+        positiveButton.setVisibility(View.VISIBLE);
+        positiveButton.setText(R.string.animal_reg_leave_form_cancel);
+        positiveButton.setOnClickListener(v -> {
+            customDialog.dismiss();
+        });
+
+
+        Button negativeButton = customDialog.findViewById(R.id.negative_button);
+        negativeButton.setVisibility(View.VISIBLE);
+        negativeButton.setText(R.string.animal_reg_leave_form_yes);
+        negativeButton.setOnClickListener(v -> {
+            customDialog.dismiss();
+            finish();
+        });
+
+        customDialog.show();
     }
 }
