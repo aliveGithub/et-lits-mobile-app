@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private HomeViewModel homeViewModel;
 
     private ActionBarDrawerToggle drawerToggle;
+    private Dialog initDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showDataInitDialog(boolean syncAttempted) {
-        ViewUtils.showDialog(this,
+        initDialog = ViewUtils.showDialog(this,
                 R.string.sync_init_dialog_title,
                 syncAttempted ? R.string.sync_init_dialog_msg_resume : R.string.sync_init_dialog_msg,
                 R.string.sync_start_data_download,
@@ -67,10 +69,13 @@ public class MainActivity extends AppCompatActivity {
                 true,
                 false,
                 v -> {
-                    Intent intent = new Intent(MainActivity.this, SyncActivity.class);
-                    intent.putExtra("syncType", Constants.SyncType.ALL_DATA.toString());
-                    intent.putExtra("startSync", true);
-                    startActivity(intent);
+                  if  (initDialog != null) {
+                      Intent intent = new Intent(MainActivity.this, SyncActivity.class);
+                      intent.putExtra("syncType", Constants.SyncType.ALL_DATA.toString());
+                      intent.putExtra("startSync", true);
+                      startActivity(intent);
+                      initDialog.dismiss();
+                  }
                 },
                 v -> {
                     finishAffinity();
