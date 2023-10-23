@@ -1,8 +1,6 @@
 package org.moa.etlits.data.dao;
 
 
-import android.util.Log;
-
 import org.moa.etlits.data.models.Animal;
 import org.moa.etlits.data.models.AnimalRegistration;
 import org.moa.etlits.data.models.Treatment;
@@ -42,19 +40,16 @@ public abstract class AnimalRegistrationDao {
                                    List<Animal> animalList, List<Treatment> treatmentList,
                                    AnimalDao animalDao,
                                    TreatmentDao treatmentDao) {
+
         long animalRegId = insert(animalRegistration);
-        if (animalList != null) {
-            for (Animal animal : animalList) {
-                animal.setAnimalRegistrationId(animalRegId);
-                animalDao.insert(animal);
-            }
+        for (Animal animal : animalList) {
+            animal.setAnimalRegistrationId(animalRegId);
+            animalDao.insert(animal);
         }
 
-        if (treatmentList != null) {
-            for (Treatment treatment : treatmentList) {
-                treatment.setAnimalRegistrationId(animalRegId);
-                treatmentDao.insert(treatment);
-            }
+        for (Treatment treatment : treatmentList) {
+            treatment.setAnimalRegistrationId(animalRegId);
+            treatmentDao.insert(treatment);
         }
     }
 
@@ -88,15 +83,13 @@ public abstract class AnimalRegistrationDao {
 
     private void updateAnimals(long animalRegistrationId, List<Animal> newList, AnimalDao animalDao) {
         List<Animal> oldAnimalList = animalDao.getListByAnimalRegistrationId(animalRegistrationId);
-        if (oldAnimalList != null) {
+
             for (Animal animal : oldAnimalList) {
                 if (!isInNewAnimalList(newList, animal.getId())) {
                     animalDao.delete(animal.getId());
                 }
             }
-        }
 
-        if (newList != null) {
             for (Animal animal : newList) {
                 if (animal.getId() == 0) {
                     animal.setAnimalRegistrationId(animalRegistrationId);
@@ -105,27 +98,22 @@ public abstract class AnimalRegistrationDao {
                     animalDao.update(animal);
                 }
             }
-        }
     }
 
     private void updateTreatments(long animalRegistrationId, List<Treatment> newList, TreatmentDao treatmentDao) {
         List<Treatment> oldTreatmentList = treatmentDao.getListByAnimalRegistrationId(animalRegistrationId);
-        if (oldTreatmentList != null) {
-            for (Treatment treatment : oldTreatmentList) {
-                if (!isInNewTreatmentList(newList, treatment.getId())) {
-                    treatmentDao.delete(treatment.getId());
-                }
+        for (Treatment treatment : oldTreatmentList) {
+            if (!isInNewTreatmentList(newList, treatment.getId())) {
+                treatmentDao.delete(treatment.getId());
             }
         }
 
-        if (newList != null) {
-            for (Treatment treatment : newList) {
-                if (treatment.getId() == 0) {
-                    treatment.setAnimalRegistrationId(animalRegistrationId);
-                    treatmentDao.insert(treatment);
-                } else {
-                    treatmentDao.update(treatment);
-                }
+        for (Treatment treatment : newList) {
+            if (treatment.getId() == 0) {
+                treatment.setAnimalRegistrationId(animalRegistrationId);
+                treatmentDao.insert(treatment);
+            } else {
+                treatmentDao.update(treatment);
             }
         }
     }
