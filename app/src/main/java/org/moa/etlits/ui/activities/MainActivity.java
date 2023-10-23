@@ -69,13 +69,11 @@ public class MainActivity extends AppCompatActivity {
                 true,
                 false,
                 v -> {
-                  if  (initDialog != null) {
-                      Intent intent = new Intent(MainActivity.this, SyncActivity.class);
-                      intent.putExtra("syncType", Constants.SyncType.ALL_DATA.toString());
-                      intent.putExtra("startSync", true);
-                      startActivity(intent);
-                      initDialog.dismiss();
-                  }
+                    Intent intent = new Intent(MainActivity.this, SyncActivity.class);
+                    intent.putExtra("syncType", Constants.SyncType.ALL_DATA.toString());
+                    intent.putExtra("startSync", true);
+                    startActivity(intent);
+                    initDialog.dismiss();
                 },
                 v -> {
                     finishAffinity();
