@@ -2,6 +2,7 @@ package org.moa.etlits.ui.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,7 +68,6 @@ public class AnimalRegTreatmentsFragment extends Fragment {
                         checkBox.setChecked(true);
                     }
                 }
-
             }
         });
 
@@ -91,18 +91,12 @@ public class AnimalRegTreatmentsFragment extends Fragment {
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                String id = (String) buttonView.getTag();
-                List<Treatment> treatments = viewModel.getTreatments();
-                if (isChecked) {
-                    Treatment treatment = new Treatment();
-                    treatment.setTreatmentApplied(id);
-                    treatments.add(treatment);
-                } else {
-                    for (int i = 0; i < treatments.size(); i++) {
-                        if (treatments.get(i).getTreatmentApplied().equals(id)) {
-                            viewModel.removeTreatment(i);
-                            break;
-                        }
+                if (buttonView.isPressed()) {
+                    String id = (String) buttonView.getTag();
+                    if (isChecked) {
+                        viewModel.addTreatment(id);
+                    } else {
+                        viewModel.removeTreatment(id);
                     }
                 }
             }

@@ -61,10 +61,23 @@ public class MainActivity extends AppCompatActivity {
         customDialog.setCancelable(false);
 
         TextView title = customDialog.findViewById(R.id.dialog_title);
-        Button positiveButton = customDialog.findViewById(R.id.positive_button);
         TextView message = customDialog.findViewById(R.id.dialog_message);
+
+        Button positiveButton = customDialog.findViewById(R.id.positive_button);
         Button negativeButton = customDialog.findViewById(R.id.negative_button);
         Button neutralButton = customDialog.findViewById(R.id.neutral_button);
+
+        title.setText(R.string.sync_init_dialog_title);
+        message.setText(syncAttempted ? R.string.sync_init_dialog_msg_resume : R.string.sync_init_dialog_msg);
+
+        positiveButton.setText(R.string.sync_start_data_download);
+        positiveButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SyncActivity.class);
+            intent.putExtra("syncType", Constants.SyncType.ALL_DATA.toString());
+            intent.putExtra("startSync", true);
+            startActivity(intent);
+            customDialog.dismiss();
+        });
 
         negativeButton.setText(R.string.sync_exit_app);
         negativeButton.setOnClickListener(v -> {
@@ -72,34 +85,7 @@ public class MainActivity extends AppCompatActivity {
             System.exit(0);
         });
 
-        title.setText(R.string.sync_init_dialog_title);
-        if (syncAttempted) {
-            message.setText(R.string.sync_init_dialog_msg_resume);
-            positiveButton.setText(R.string.sync_resume_data_download);
-            positiveButton.setOnClickListener(v -> {
-                Intent intent = new Intent(MainActivity.this, SyncActivity.class);
-                intent.putExtra("syncType", Constants.SyncType.ALL_DATA.toString());
-                intent.putExtra("startSync", true);
-                startActivity(intent);
-                customDialog.dismiss();
-            });
-
-            neutralButton.setVisibility(View.GONE);
-            //neutralButton.setVisibility(View.VISIBLE);
-           // neutralButton.setText(R.string.sync_view_last_attempt);
-           // neutralButton.setOnClickListener(v -> customDialog.dismiss());
-        } else {
-            message.setText(R.string.sync_init_dialog_msg);
-            positiveButton.setText(R.string.sync_start_data_download);
-            positiveButton.setOnClickListener(v -> {
-                Intent intent = new Intent(MainActivity.this, SyncActivity.class);
-                intent.putExtra("syncType", Constants.SyncType.ALL_DATA.toString());
-                intent.putExtra("startSync", true);
-                startActivity(intent);
-                customDialog.dismiss();
-            });
-            neutralButton.setVisibility(View.GONE);
-        }
+        neutralButton.setVisibility(View.GONE);
 
         customDialog.show();
     }

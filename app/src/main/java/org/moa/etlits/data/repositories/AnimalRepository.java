@@ -38,6 +38,11 @@ public class AnimalRepository {
         });
     }
 
+    public void delete(long id) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            animalDao.delete(id);
+        });
+    }
     public LiveData<Animal>loadById(long animalId){
         return animalDao.loadById(animalId);
     }

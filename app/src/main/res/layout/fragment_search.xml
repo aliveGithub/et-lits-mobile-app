@@ -29,7 +29,7 @@ tools:context=".ui.fragments.SearchFragment">
     android:inputType="text"
     android:ellipsize="end"
     android:singleLine="true"
-    android:background="@drawable/bg_green_white"
+    android:background="@drawable/btn_green_white"
     android:text=""
     android:hint="@string/establishment_search_hint"/>
 

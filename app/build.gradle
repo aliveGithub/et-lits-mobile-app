@@ -14,6 +14,10 @@ buildscript {
 plugins {
     id 'com.android.application'
     id 'com.google.firebase.appdistribution'
+    id 'com.google.gms.google-services'
+
+    // Add the Crashlytics Gradle plugin
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
@@ -111,4 +115,10 @@ dependencies {
 
     implementation "androidx.preference:preference:1.2.1"
     implementation "androidx.work:work-runtime:2.8.1"
+
+    implementation(platform("com.google.firebase:firebase-bom:32.4.0"))
+    implementation("com.google.firebase:firebase-crashlytics")
+    implementation("com.google.firebase:firebase-analytics")
+
+    implementation 'com.google.guava:guava:29.0-android'
 }
