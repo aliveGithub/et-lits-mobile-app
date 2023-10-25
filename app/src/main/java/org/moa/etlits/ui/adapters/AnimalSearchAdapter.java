@@ -9,19 +9,19 @@ import android.widget.Filter;
 import android.widget.TextView;
 
 import org.moa.etlits.R;
-import org.moa.etlits.data.models.Establishment;
+import org.moa.etlits.data.models.AnimalSearchResult;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class EstablishmentAdapter extends ArrayAdapter<Establishment> {
-    private List<Establishment> originalList;
+public class AnimalSearchAdapter extends ArrayAdapter<AnimalSearchResult> {
+    private List<AnimalSearchResult> originalList;
     private CustomFilter filter;
 
-    public EstablishmentAdapter(Context context, ArrayList<Establishment> establishments) {
-        super(context, 0, establishments);
-        originalList = new ArrayList<>(establishments);
+    public AnimalSearchAdapter(Context context, ArrayList<AnimalSearchResult> animals) {
+        super(context, 0, animals);
+        originalList = new ArrayList<>(animals);
         filter = new CustomFilter();
     }
 
@@ -33,20 +33,20 @@ public class EstablishmentAdapter extends ArrayAdapter<Establishment> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.establishment_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.autocomplete_result_item, parent, false);
         }
 
-        Establishment establishment = getItem(position);
-        TextView establishmentText = convertView.findViewById(R.id.tv_establishment);
+        AnimalSearchResult animal = getItem(position);
+        TextView animalText = convertView.findViewById(R.id.tv_autocomplete_result_item);
 
-        if (establishment != null) {
-            establishmentText.setText(establishment.toString());
+        if (animal != null) {
+            animalText.setText(animal.toString());
         }
 
         return convertView;
     }
 
-    public void submitList(List<Establishment> list) {
+    public void submitList(List<AnimalSearchResult> list) {
         Collections.sort(list);
         originalList.clear();
         originalList.addAll(list);
@@ -61,13 +61,13 @@ public class EstablishmentAdapter extends ArrayAdapter<Establishment> {
         protected FilterResults performFiltering(CharSequence constraint) {
 
             FilterResults results = new FilterResults();
-            List<Establishment> suggestions = new ArrayList<>();
+            List<AnimalSearchResult> suggestions = new ArrayList<>();
             if (constraint == null || constraint.length() == 0) {
                 suggestions.addAll(originalList);
             } else {
                 String filterPattern = constraint.toString().toLowerCase().trim();
-                for (Establishment item : originalList) {
-                    if (item.getCodeAndName().toLowerCase().trim().contains(filterPattern)) {
+                for (AnimalSearchResult item : originalList) {
+                    if (item.getAnimalId().toLowerCase().trim().contains(filterPattern)) {
                         suggestions.add(item);
                     }
                 }
@@ -81,7 +81,7 @@ public class EstablishmentAdapter extends ArrayAdapter<Establishment> {
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             clear();
-            addAll((List<Establishment>) results.values);
+            addAll((List<AnimalSearchResult>) results.values);
             notifyDataSetChanged();
         }
     }
