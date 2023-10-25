@@ -20,7 +20,7 @@ tools:context=".ui.fragments.SearchFragment">
     android:text="@string/home_establishment_search"
     android:textColor="@color/white"
     android:padding="@dimen/big_padding"
-      android:background="@drawable/bg_search_inactive"
+      android:background="@drawable/bg_search_active"
     android:textStyle="bold"
       android:layout_weight="1"
       />
@@ -31,7 +31,7 @@ tools:context=".ui.fragments.SearchFragment">
         android:text="@string/home_animal_search"
         android:textColor="@color/colorPrimaryDark"
         android:padding="@dimen/big_padding"
-        android:background="@drawable/bg_search_active"
+        android:background="@drawable/bg_search_inactive"
         android:textStyle="bold"
         android:layout_toEndOf="@+id/tv_establishment_search"
         android:layout_weight="1"
@@ -65,7 +65,7 @@ tools:context=".ui.fragments.SearchFragment">
       android:layout_marginTop="-10dp"
       android:text=""
       android:hint="@string/animal_id_lookup_hint"
-        android:visibility="gone"
+      android:visibility="gone"
       />
 
 </LinearLayout>
