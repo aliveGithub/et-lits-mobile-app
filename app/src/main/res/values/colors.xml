@@ -15,4 +15,6 @@
     <color name="black_overlay">#66000000</color>
     <color name="icon_in_active">#646970</color>
     <color name="input_background">#F5F5F5</color>
+    <color name="search_tab_active">#000000</color>
+    <color name="search_tab_inactive">#cadab4</color>
 </resources>

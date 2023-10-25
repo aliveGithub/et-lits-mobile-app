@@ -10,7 +10,7 @@ import android.widget.AdapterView;
 import org.moa.etlits.data.models.AnimalRegistration;
 import org.moa.etlits.data.models.Establishment;
 import org.moa.etlits.databinding.FragmentAnimalRegMoveEventsBinding;
-import org.moa.etlits.ui.adapters.EstablishmentAdapter;
+import org.moa.etlits.ui.adapters.EstablishmentSearchAdapter;
 import org.moa.etlits.ui.viewmodels.AnimalRegViewModel;
 import org.moa.etlits.utils.Constants;
 import org.moa.etlits.utils.ViewUtils;
@@ -32,9 +32,9 @@ public class AnimalRegMoveEventsFragment extends Fragment {
 
     private AnimalRegViewModel viewModel;
     private FragmentAnimalRegMoveEventsBinding binding;
-    private EstablishmentAdapter holdingGroundEstablishmentAdapter;
+    private EstablishmentSearchAdapter holdingGroundEstablishmentAdapter;
 
-    private EstablishmentAdapter moveOnEstablishmentAdapter;
+    private EstablishmentSearchAdapter moveOnEstablishmentAdapter;
 
     private DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, Locale.getDefault());
 
@@ -63,8 +63,8 @@ public class AnimalRegMoveEventsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        holdingGroundEstablishmentAdapter = new EstablishmentAdapter(getActivity(), new ArrayList<>());
-        moveOnEstablishmentAdapter = new EstablishmentAdapter(getActivity(), new ArrayList<>());
+        holdingGroundEstablishmentAdapter = new EstablishmentSearchAdapter(getActivity(), new ArrayList<>());
+        moveOnEstablishmentAdapter = new EstablishmentSearchAdapter(getActivity(), new ArrayList<>());
 
         viewModel = new ViewModelProvider((ViewModelStoreOwner) getActivity(), (ViewModelProvider.Factory) new AnimalRegViewModel.Factory(getActivity().getApplication(), 0)).get(AnimalRegViewModel.class);
         viewModel.getEstablishments().observe(getActivity(), lst -> {

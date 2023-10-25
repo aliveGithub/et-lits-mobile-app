@@ -8,17 +8,35 @@ android:orientation="vertical"
 android:layout_margin="@dimen/big_padding"
 android:layout_centerInParent="true"
 tools:context=".ui.fragments.SearchFragment">
-
-<TextView
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    >
+  <TextView
+    android:id="@+id/tv_establishment_search"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="@string/home_establishment_search"
-    android:textColor="@color/colorPrimaryDark"
+    android:textColor="@color/white"
     android:padding="@dimen/big_padding"
-    android:background="@drawable/bg_light_green"
+      android:background="@drawable/bg_search_active"
     android:textStyle="bold"
-    android:layout_marginBottom="-10dp"
-    />
+      android:layout_weight="1"
+      />
+    <TextView
+        android:id="@+id/tv_animal_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/home_animal_search"
+        android:textColor="@color/colorPrimaryDark"
+        android:padding="@dimen/big_padding"
+        android:background="@drawable/bg_search_inactive"
+        android:textStyle="bold"
+        android:layout_toEndOf="@+id/tv_establishment_search"
+        android:layout_weight="1"
+        />
+</LinearLayout>
 <AutoCompleteTextView
     android:id="@+id/acv_establishment_search"
     android:layout_width="match_parent"
@@ -30,7 +48,24 @@ tools:context=".ui.fragments.SearchFragment">
     android:ellipsize="end"
     android:singleLine="true"
     android:background="@drawable/btn_green_white"
+    android:layout_marginTop="-10dp"
     android:text=""
     android:hint="@string/establishment_search_hint"/>
+  <AutoCompleteTextView
+      android:id="@+id/acv_animal_search"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:drawableStart="@drawable/ic_search"
+      android:padding="@dimen/small_padding"
+      android:drawablePadding="@dimen/small_padding"
+      android:inputType="text"
+      android:ellipsize="end"
+      android:singleLine="true"
+      android:background="@drawable/btn_green_white"
+      android:layout_marginTop="-10dp"
+      android:text=""
+      android:hint="@string/animal_id_lookup_hint"
+      android:visibility="gone"
+      />
 
 </LinearLayout>
