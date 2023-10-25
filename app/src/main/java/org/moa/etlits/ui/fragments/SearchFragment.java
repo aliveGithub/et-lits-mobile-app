@@ -126,8 +126,9 @@ public class SearchFragment extends Fragment {
                 binding.acvEstablishmentSearch.setVisibility(View.VISIBLE);
                 binding.acvAnimalSearch.setVisibility(View.GONE);
             } else {
-                updateTab(binding.tvEstablishmentSearch, false);
                 updateTab(binding.tvAnimalSearch, true);
+                updateTab(binding.tvEstablishmentSearch, false);
+                
                 binding.acvAnimalSearch.setVisibility(View.VISIBLE);
                 binding.acvEstablishmentSearch.setVisibility(View.GONE);
             }
