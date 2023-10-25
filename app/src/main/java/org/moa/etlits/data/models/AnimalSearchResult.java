@@ -47,6 +47,6 @@ public class AnimalSearchResult implements Comparable<AnimalSearchResult> {
 
     @Override
     public String toString() {
-        return animalId + " " + species + " - " + eid;
+        return animalId + " " + species + " - EID " + eid;
     }
 }

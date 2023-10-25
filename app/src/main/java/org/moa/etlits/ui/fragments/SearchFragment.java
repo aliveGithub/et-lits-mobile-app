@@ -3,6 +3,8 @@ package org.moa.etlits.ui.fragments;
 import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,9 +62,45 @@ public class SearchFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        establishmentAdapter = new EstablishmentSearchAdapter((MainActivity) getActivity(), new ArrayList<>());
-        animalAdapter = new AnimalSearchAdapter((MainActivity) getActivity(), new ArrayList<>());
+        searchViewModel = new SearchViewModel((Application) getActivity().getApplicationContext());
+        setUpAnimalSearch();
+        setupEstablishmentSearch();
+        setupSearchTabs();
+    }
 
+    private void setUpAnimalSearch() {
+        animalAdapter = new AnimalSearchAdapter((MainActivity) getActivity(), new ArrayList<>());
+        binding.acvAnimalSearch.setAdapter(animalAdapter);
+        binding.acvAnimalSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String query = s.toString();
+                if (query.length() >= 2) {
+                    searchViewModel.searchAnimals("%" + query.trim() + "%").observe(getActivity(), lst -> {
+                        animalAdapter.submitList(lst);
+                        if (lst.size() > 0) {
+                            binding.acvAnimalSearch.showDropDown();
+                        }
+
+                    });
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+    }
+
+    private void setupEstablishmentSearch() {
+        establishmentAdapter = new EstablishmentSearchAdapter((MainActivity) getActivity(), new ArrayList<>());
+        searchViewModel.getEstablishments().observe(getActivity(), lst -> {
+            establishmentAdapter.submitList(lst);
+        });
 
         binding.acvEstablishmentSearch.setAdapter(establishmentAdapter);
         binding.acvEstablishmentSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -77,18 +115,9 @@ public class SearchFragment extends Fragment {
                 }
             }
         });
+    }
 
-        binding.acvAnimalSearch.setAdapter(animalAdapter);
-
-        searchViewModel = new SearchViewModel((Application) getActivity().getApplicationContext());
-        searchViewModel.getEstablishments().observe(getActivity(), lst -> {
-            establishmentAdapter.submitList(lst);
-        });
-
-        searchViewModel.getAnimals().observe(getActivity(), lst -> {
-            animalAdapter.submitList(lst);
-        });
-
+    private void setupSearchTabs() {
         searchViewModel.getSearchView().observe(getActivity(), viewName -> {
             if (viewName.equals(ESTABLISHMENT_VIEW)) {
                 updateTab(binding.tvEstablishmentSearch, true);
@@ -107,6 +136,7 @@ public class SearchFragment extends Fragment {
         binding.tvEstablishmentSearch.setOnClickListener(v -> {
             searchViewModel.switchView(ESTABLISHMENT_VIEW);
         });
+
         binding.tvAnimalSearch.setOnClickListener(v -> {
             searchViewModel.switchView(ANIMAL_VIEW);
         });
@@ -126,5 +156,6 @@ public class SearchFragment extends Fragment {
     public void onResume() {
         super.onResume();
         binding.acvEstablishmentSearch.setText("");
+        binding.acvAnimalSearch.setText("");
     }
 }

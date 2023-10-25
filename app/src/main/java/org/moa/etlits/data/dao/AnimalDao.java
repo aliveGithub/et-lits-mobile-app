@@ -39,6 +39,7 @@ public interface AnimalDao {
 
     @Transaction
     @Query("SELECT animals.id, animals.animal_id as animalId, establishment_eid as eid FROM animals " +
-            "JOIN animal_registrations ON animals.animal_registration_id = animal_registrations.id LIMIT 10")
-    LiveData<List<AnimalSearchResult>> searchAnimals();
+            "JOIN animal_registrations ON animals.animal_registration_id = animal_registrations.id " +
+            " WHERE animals.animal_id LIKE :query LIMIT 10")
+    LiveData<List<AnimalSearchResult>> searchAnimals(String query);
 }

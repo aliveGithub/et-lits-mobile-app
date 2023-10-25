@@ -55,7 +55,7 @@ public class AnimalRepository {
         return animalDao.getListByAnimalRegistrationId(animalRegistrationId);
     }
 
-    public LiveData<List<AnimalSearchResult>> searchAnimals(){
-        return animalDao.searchAnimals();
+    public LiveData<List<AnimalSearchResult>> searchAnimals(String query){
+        return animalDao.searchAnimals(query);
     }
 }
