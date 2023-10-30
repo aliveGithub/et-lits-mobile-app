@@ -22,9 +22,9 @@ public class AnimalRepository {
        animalList = animalDao.getAllAnimals();
     }
 
-    public LiveData<List<Animal>> getAll() {
+   /* public LiveData<List<Animal>> getAll() {
         return animalList;
-    }
+    }*/
 
     public void insert(Animal animal) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
@@ -57,5 +57,9 @@ public class AnimalRepository {
 
     public LiveData<List<AnimalSearchResult>> searchAnimals(String query){
         return animalDao.searchAnimals(query);
+    }
+
+    public LiveData<List<AnimalSearchResult>> getAll(){
+        return animalDao.getAll();
     }
 }

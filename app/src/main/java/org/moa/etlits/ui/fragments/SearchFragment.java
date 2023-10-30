@@ -14,7 +14,6 @@ import android.widget.TextView;
 import org.moa.etlits.R;
 import org.moa.etlits.databinding.FragmentSearchBinding;
 import org.moa.etlits.ui.activities.EstablishmentSummaryActivity;
-import org.moa.etlits.ui.activities.MainActivity;
 import org.moa.etlits.ui.adapters.AnimalSearchAdapter;
 import org.moa.etlits.ui.adapters.EstablishmentSearchAdapter;
 import org.moa.etlits.ui.viewmodels.SearchViewModel;
@@ -41,9 +40,8 @@ public class SearchFragment extends Fragment {
     public SearchFragment() {
     }
 
-     public static SearchFragment newInstance(String param1, String param2) {
-        SearchFragment fragment = new SearchFragment();
-        return fragment;
+    public static SearchFragment newInstance() {
+        return new SearchFragment();
     }
 
     @Override
@@ -69,7 +67,7 @@ public class SearchFragment extends Fragment {
     }
 
     private void setUpAnimalSearch() {
-        animalAdapter = new AnimalSearchAdapter((MainActivity) getActivity(), new ArrayList<>());
+        animalAdapter = new AnimalSearchAdapter(getActivity(), new ArrayList<>());
         binding.acvAnimalSearch.setAdapter(animalAdapter);
         binding.acvAnimalSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -97,7 +95,7 @@ public class SearchFragment extends Fragment {
     }
 
     private void setupEstablishmentSearch() {
-        establishmentAdapter = new EstablishmentSearchAdapter((MainActivity) getActivity(), new ArrayList<>());
+        establishmentAdapter = new EstablishmentSearchAdapter(getActivity(), new ArrayList<>());
         searchViewModel.getEstablishments().observe(getActivity(), lst -> {
             establishmentAdapter.submitList(lst);
         });

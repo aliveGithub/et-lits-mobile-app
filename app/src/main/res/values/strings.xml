@@ -155,4 +155,6 @@
     <string name="login_alert_ok">OK</string>
     <string name="home_animal_search">Animal Search</string>
     <string name="animal_id_lookup_hint">Animal ID Lookup</string>
+    <string name="animals_list_title">Animals</string>
+    <string name="animals_list_info">By default, the animals listed and the animals search is limited to the animals stored locally on the device.</string>
 </resources>
