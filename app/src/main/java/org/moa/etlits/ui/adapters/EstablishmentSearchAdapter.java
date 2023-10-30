@@ -15,11 +15,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class EstablishmentAdapter extends ArrayAdapter<Establishment> {
+public class EstablishmentSearchAdapter extends ArrayAdapter<Establishment> {
     private List<Establishment> originalList;
     private CustomFilter filter;
 
-    public EstablishmentAdapter(Context context, ArrayList<Establishment> establishments) {
+    public EstablishmentSearchAdapter(Context context, ArrayList<Establishment> establishments) {
         super(context, 0, establishments);
         originalList = new ArrayList<>(establishments);
         filter = new CustomFilter();
@@ -33,11 +33,11 @@ public class EstablishmentAdapter extends ArrayAdapter<Establishment> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.establishment_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.autocomplete_result_item, parent, false);
         }
 
         Establishment establishment = getItem(position);
-        TextView establishmentText = convertView.findViewById(R.id.tv_establishment);
+        TextView establishmentText = convertView.findViewById(R.id.tv_autocomplete_result_item);
 
         if (establishment != null) {
             establishmentText.setText(establishment.toString());

@@ -7,7 +7,7 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "animals", indices = {@Index(value = {"animal_id"}, unique = true)})
-public class Animal implements java.io.Serializable {
+public class Animal implements java.io.Serializable, Comparable<Animal> {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     private long id;
@@ -99,4 +99,13 @@ public class Animal implements java.io.Serializable {
         this.animalRegistrationId = animalRegistrationId;
     }
 
+    @Override
+    public String toString() {
+        return animalId + " - " + breed;
+    }
+
+    @Override
+    public int compareTo(Animal o) {
+        return this.animalId.compareTo(o.animalId);
+    }
 }

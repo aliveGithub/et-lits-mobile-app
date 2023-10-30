@@ -153,6 +153,7 @@
     <string name="animal_reg_close_snackbar_msg">%1$s animals registered</string>
     <string name="animal_reg_close_snackbar_action">SYNC</string>
 
+
     <!--Terms of Use - Placeholder content-->
     <string name="ToU_welcome_txt">Welcome to our site. We maintain this web site as a service to our members. By using our site, you are agreeing to comply with and be bound by the following terms of use. Please review the following terms carefully. If you do not agree to these terms, you should not use this site.</string>
     <string name="ToU_AoA_title">1. Acceptance of Agreement.</string>
@@ -195,4 +196,9 @@
     <string name="ToU_miscellaneous_txt">This Agreement shall be treated as though it were executed and performed in Los Angeles, CA, and shall be governed by and construed in accordance with the laws of the State of California (without regard to conflict of law principles). Any cause of action by you with respect to the Site (and/or any information, products or services related thereto) must be instituted within one (1) year after the cause of action arose or be forever waived and barred. All actions shall be subject to the limitations set forth in Section 8 and Section 10. The language in this Agreement shall be interpreted as to its fair meaning and not strictly for or against either party. All legal proceedings arising out of or in connection with this Agreement shall be brought solely in Los Angeles, CA. You expressly submit to the exclusive jurisdiction of said courts and consents to extra-territorial service of process. Should any part of this Agreement be held invalid or unenforceable, that portion shall be construed consistent with applicable law and the remaining portions shall remain in full force and effect. To the extent that anything in or associated with the Site is in conflict or inconsistent with this Agreement, this Agreement shall take precedence. Our failure to enforce any provision of this Agreement shall not be deemed a waiver of such provision nor of the right to enforce such provision.</string>
     <string name="ToU_disagree_btn_txt">I DISAGREE</string>
     <string name="ToU_agree_btn_txt">I AGREE</string>
+
+    <string name="login_alert_ok">OK</string>
+    <string name="home_animal_search">Animal Search</string>
+    <string name="animal_id_lookup_hint">Animal ID Lookup</string>
+
 </resources>

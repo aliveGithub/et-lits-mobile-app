@@ -1,7 +1,6 @@
 package org.moa.etlits.data.repositories;
 
 import android.app.Application;
-import android.util.Log;
 
 import org.moa.etlits.data.dao.AnimalDao;
 import org.moa.etlits.data.dao.AnimalRegistrationDao;
@@ -47,22 +46,7 @@ public class AnimalRegistrationRepository {
 
     public void insert(AnimalRegistration animalRegistration, List<Animal> animalList, List<Treatment> treatmentList) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
-            long animalRegId = animalRegistrationDao.insert(animalRegistration);
-            Log.d("AnimalRegRepo", "insert: " + animalRegId);
-            if (animalList != null) {
-                for (Animal animal : animalList) {
-                    animal.setAnimalRegistrationId(animalRegId);
-                    animalDao.insert(animal);
-                }
-            }
-
-            if (treatmentList != null){
-                for (Treatment treatment : treatmentList) {
-                    treatment.setAnimalRegistrationId(animalRegId);
-                    Log.d("AnimalRegRepo", "insert: " + treatment.getTreatmentApplied());
-                    treatmentDao.insert(treatment);
-                }
-            }
+            animalRegistrationDao.insertRegistration(animalRegistration, animalList, treatmentList, animalDao, treatmentDao);
         });
     }
 
@@ -71,40 +55,10 @@ public class AnimalRegistrationRepository {
             animalRegistrationDao.update(animalRegistration);
         });
     }
-
     public void update(AnimalRegistration animalRegistration,
-                       List<Animal> animalList, List<Treatment> treatmentList,
-                       List<Long> idsForRemovedAnimals, List<Long> idsForRemovedTreatments) {
+                       List<Animal> animalList, List<Treatment> treatmentList) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
-            animalRegistrationDao.update(animalRegistration);
-            if (animalList != null) {
-                for (Animal animal : animalList) {
-                    if (animal.getId() == 0) {
-                        animal.setAnimalRegistrationId(animalRegistration.getId());
-                        animalDao.insert(animal);
-                    } else {
-                        animalDao.update(animal);
-                    }
-                }
-            }
-            for (Long id : idsForRemovedAnimals) {
-                animalDao.deleteById(id);
-            }
-
-            if (treatmentList != null) {
-                for (Treatment treatment : treatmentList) {
-                    if (treatment.getId() == 0) {
-                        treatment.setAnimalRegistrationId(animalRegistration.getId());
-                        treatmentDao.insert(treatment);
-                    } else {
-                        treatmentDao.update(treatment);
-                    }
-
-                }
-            }
-            for (Long id : idsForRemovedTreatments) {
-                treatmentDao.deleteById(id);
-            }
+            animalRegistrationDao.updateRegistration(animalRegistration, animalList, treatmentList, animalDao, treatmentDao);
         });
     }
 

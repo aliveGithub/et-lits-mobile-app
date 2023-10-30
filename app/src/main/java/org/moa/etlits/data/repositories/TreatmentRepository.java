@@ -30,6 +30,12 @@ public class TreatmentRepository {
         });
     }
 
+    public void delete(long id) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            treatmentDao.delete(id);
+        });
+    }
+
     public LiveData<Treatment>loadById(long treatmentId){
         return treatmentDao.loadById(treatmentId);
     }
