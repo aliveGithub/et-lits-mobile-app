@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -37,15 +38,27 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        encryptedPreferences = new EncryptedPreferences(LoginActivity.this);
+        if (isUserLoggedIn()) {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         builder = new AlertDialog.Builder(LoginActivity.this);
-        encryptedPreferences = new EncryptedPreferences(LoginActivity.this);
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
         initViewModels();
         attachEventListeners();
+    }
+
+    private boolean isUserLoggedIn() {
+        Log.d("LoginActivity", "isUserLoggedIn: " + encryptedPreferences.read(Constants.IS_USER_LOGGED_IN));
+        return encryptedPreferences.read(Constants.IS_USER_LOGGED_IN).equals("true");
     }
 
     private void initViewModels() {
@@ -141,6 +154,7 @@ public class LoginActivity extends AppCompatActivity {
     private void onLoginSuccess(LoginResult loginResult) {
         encryptedPreferences.write(Constants.USERNAME, loginResult.getUsername());
         encryptedPreferences.write(Constants.PASSWORD, loginResult.getPassword());
+        encryptedPreferences.write(Constants.IS_USER_LOGGED_IN, "true");
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
