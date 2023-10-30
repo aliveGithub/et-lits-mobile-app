@@ -88,7 +88,7 @@ public class TermsOfUseActivity extends AppCompatActivity {
 
         if(actionBar != null) {
 
-            actionBar.setTitle("Terms of Use");
+            actionBar.setTitle(getString(R.string.ToU));
             actionBar.setDisplayHomeAsUpEnabled(true);
 
             final Drawable upArrow = ContextCompat.getDrawable(this, androidx.appcompat.R.drawable.abc_ic_ab_back_material);

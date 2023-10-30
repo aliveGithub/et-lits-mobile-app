@@ -154,6 +154,7 @@
     <string name="animal_reg_close_snackbar_action">SYNC</string>
 
     <!--Terms of Use - Placeholder content-->
+    <string name="ToU">Terms of Use</string>
     <string name="ToU_welcome_txt">Welcome to our site. We maintain this web site as a service to our members. By using our site, you are agreeing to comply with and be bound by the following terms of use. Please review the following terms carefully. If you do not agree to these terms, you should not use this site.</string>
     <string name="ToU_AoA_title">1. Acceptance of Agreement.</string>
     <string name="ToU_AoA_txt">You agree to the terms and conditions outlined in this Terms of Use Agreement ("Agreement") with respect to our site (the "Site"). This Agreement constitutes the entire and only agreement between us and you, and supersedes all prior or contemporaneous agreements, representations, warranties and understandings with respect to the Site, the content, products or services provided by or through the Site, and the subject matter of this Agreement. This Agreement may be amended at any time by us from time to time without specific notice to you. The latest Agreement will be posted on the Site, and you should review this Agreement prior to using the Site.</string>
