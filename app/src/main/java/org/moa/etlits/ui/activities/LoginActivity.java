@@ -57,7 +57,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean isUserLoggedIn() {
-        Log.d("LoginActivity", "isUserLoggedIn: " + encryptedPreferences.read(Constants.IS_USER_LOGGED_IN));
         return encryptedPreferences.read(Constants.IS_USER_LOGGED_IN).equals("true");
     }
 
