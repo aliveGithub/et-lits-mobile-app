@@ -10,12 +10,7 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.google.android.material.textfield.TextInputLayout;
 
 import org.moa.etlits.R;
 import org.moa.etlits.databinding.ActivityLoginBinding;
@@ -35,17 +30,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 public class LoginActivity extends AppCompatActivity {
-    private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
-    private AlertDialog.Builder builder;
-
-    private EditText usernameEditText;
-    private EditText passwordEditText;
-    private Button loginButton;
-    private ProgressBar loadingProgressBar;
-    private TextInputLayout passwordLayout;
-
+    private LoginViewModel loginViewModel;
     private EncryptedPreferences encryptedPreferences;
+    private AlertDialog.Builder builder;
 
     private SharedPreferences sharedPreferences;
 
@@ -54,11 +42,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        usernameEditText = binding.username;
-        passwordEditText = binding.password;
-        loginButton = binding.login;
-        loadingProgressBar = binding.loading;
-        passwordLayout = binding.passwordLayout;
         builder = new AlertDialog.Builder(LoginActivity.this);
         encryptedPreferences = new EncryptedPreferences(LoginActivity.this);
 
@@ -81,13 +64,13 @@ public class LoginActivity extends AppCompatActivity {
                 if (loginFormState == null) {
                     return;
                 }
-                loginButton.setEnabled(loginFormState.isDataValid());
+                binding.btnLogin.setEnabled(loginFormState.isDataValid());
                 if (loginFormState.getUsernameError() != null) {
-                    usernameEditText.setError(getString(loginFormState.getUsernameError()));
+                    binding.etUsername.setError(getString(loginFormState.getUsernameError()));
                 }
 
                 if (loginFormState.getPasswordError() != null) {
-                    passwordEditText.setError(getString(loginFormState.getPasswordError()));
+                    binding.etPassword.setError(getString(loginFormState.getPasswordError()));
                 }
             }
         });
@@ -98,7 +81,8 @@ public class LoginActivity extends AppCompatActivity {
                 if (loginResult == null) {
                     return;
                 }
-                loadingProgressBar.setVisibility(View.GONE);
+
+                binding.loading.setVisibility(View.GONE);
                 if (loginResult.getLoginStatus().equals(LoginResult.LoginStatus.FAIL) && loginResult.getError() != null) {
                     showLoginFailed(getMessage(loginResult.getError()));
                 }
@@ -121,18 +105,18 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (passwordEditText.getText().toString().trim().length() > 0) {
-                    passwordLayout.setEndIconVisible(true);
+                if (binding.etPassword.getText().toString().trim().length() > 0) {
+                    binding.tilPasswordLayout.setEndIconVisible(true);
                 } else {
-                    passwordLayout.setEndIconVisible(false);
+                    binding.tilPasswordLayout.setEndIconVisible(false);
                 }
-                loginViewModel.loginDataChanged(usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
+                loginViewModel.loginDataChanged(binding.etUsername.getText().toString(),
+                        binding.etPassword.getText().toString());
             }
         };
-        usernameEditText.addTextChangedListener(afterTextChangedListener);
-        passwordEditText.addTextChangedListener(afterTextChangedListener);
-        passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        binding.etUsername.addTextChangedListener(afterTextChangedListener);
+        binding.etPassword.addTextChangedListener(afterTextChangedListener);
+        binding.etPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -142,7 +126,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        binding.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 login();
@@ -152,9 +136,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private void login() {
         if (NetworkUtils.isInternetConnected(LoginActivity.this)) {
-            loadingProgressBar.setVisibility(View.VISIBLE);
-            loginViewModel.login(usernameEditText.getText().toString().trim(),
-                    passwordEditText.getText().toString().trim());
+            binding.loading.setVisibility(View.VISIBLE);
+            loginViewModel.login(binding.etUsername.getText().toString().trim(),
+                    binding.etPassword.getText().toString().trim());
         } else {
             showLoginFailed(getString(R.string.no_internet_connection));
         }
@@ -182,6 +166,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+
     private String getMessage(Integer errorCode) {
         if (errorCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
             return getString(R.string.login_unauthorized);
@@ -192,6 +177,7 @@ public class LoginActivity extends AppCompatActivity {
             return getString(R.string.login_generic_error);
         }
     }
+
     private void showLoginFailed(String message) {
         builder.setTitle(R.string.login_alert_title).setMessage(message);
         builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {

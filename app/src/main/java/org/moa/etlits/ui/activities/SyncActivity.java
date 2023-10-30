@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,13 +13,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.moa.etlits.R;
 import org.moa.etlits.data.models.SyncLog;
 import org.moa.etlits.data.models.SyncLogWithErrors;
+import org.moa.etlits.databinding.ActivitySyncBinding;
 import org.moa.etlits.jobs.SyncWorkManager;
 import org.moa.etlits.ui.adapters.SyncErrorAdapter;
 import org.moa.etlits.ui.viewmodels.SyncViewModel;
@@ -44,29 +42,8 @@ import androidx.work.WorkManager;
 
 
 public class SyncActivity extends AppCompatActivity {
-    private TextView statusTextView;
 
-    private TextView lastSync;
-
-    private TextView internetStatus;
-
-    private TextView recordsToSend;
-
-    private TextView stoppedByUser;
-
-    private Button startSync;
-
-    private ProgressBar loadingSpinner;
-
-    private TextView recordsSent;
-
-    private TextView recordsNotSent;
-
-    private TextView recordsReceived;
-
-    private TextView staleData;
-
-    private ListView errorsList;
+    private ActivitySyncBinding binding;
 
     private SyncViewModel syncViewModel;
     private SyncErrorAdapter syncErrorAdapter;
@@ -76,7 +53,9 @@ public class SyncActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sync);
+        binding = ActivitySyncBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
         initViews();
         initViewModels();
         addEventListeners();
@@ -91,28 +70,15 @@ public class SyncActivity extends AppCompatActivity {
 
     private void initViews() {
         setUpActionBar();
-        startSync = findViewById(R.id.btn_sync);
-        statusTextView = findViewById(R.id.tv_status);
-        lastSync = findViewById(R.id.tv_last_sync);
-        internetStatus = findViewById(R.id.tv_network_status);
-        recordsToSend = findViewById(R.id.tv_records_count);
-        stoppedByUser = findViewById(R.id.tv_stopped_by_user);
-        loadingSpinner = findViewById(R.id.pb_loading);
-        recordsSent = findViewById(R.id.tv_records_sent);
-        recordsNotSent = findViewById(R.id.tv_records_not_sent);
-        recordsReceived = findViewById(R.id.tv_records_received);
-        staleData = findViewById(R.id.tv_stale_data);
-        errorsList = findViewById(R.id.lst_errors);
-
         syncErrorAdapter = new SyncErrorAdapter(this, new ArrayList<>());
-        errorsList.setAdapter(syncErrorAdapter);
+        binding.lstErrors.setAdapter(syncErrorAdapter);
 
         InternetConnectionChecker internetConnectionCheck = new InternetConnectionChecker((ConnectivityManager) getApplication().getSystemService(Context.CONNECTIVITY_SERVICE));
         internetConnectionCheck.observe(this, isConnected -> {
             if (isConnected) {
-                internetStatus.setVisibility(View.INVISIBLE);
+                binding.tvNetworkStatus.setVisibility(View.INVISIBLE);
             } else {
-                internetStatus.setVisibility(View.VISIBLE);
+                binding.tvNetworkStatus.setVisibility(View.VISIBLE);
             }
         });
 
@@ -138,7 +104,7 @@ public class SyncActivity extends AppCompatActivity {
     }
 
     private void addEventListeners() {
-        startSync.setOnClickListener(v -> {
+        binding.btnSync.setOnClickListener(v -> {
             if (!syncViewModel.getSyncRunning()) {
                 startSync();
                 trackWorkStatus();
@@ -169,27 +135,22 @@ public class SyncActivity extends AppCompatActivity {
     }
 
     private void updateSyncButton(boolean isRunning) {
-        GradientDrawable border = new GradientDrawable();
-        border.setColor(ContextCompat.getColor(this, isRunning ? R.color.white : R.color.colorPrimary));
-        border.setStroke(5, ContextCompat.getColor(this, R.color.colorPrimary));
-        border.setCornerRadius(50);
-        startSync.setBackground(border);
-        startSync.setTextColor(ContextCompat.getColor(this, isRunning ? R.color.colorPrimary : R.color.white));
-        startSync.setText(isRunning ? R.string.btn_sync_stop : R.string.btn_sync_start);
-
+        binding.btnSync.setText(isRunning ? R.string.btn_sync_stop : R.string.btn_sync_start);
+        binding.btnSync.setTextColor(ContextCompat.getColor(this, isRunning ? R.color.colorPrimary : R.color.white));
+        binding.btnSync.setBackground(ContextCompat.getDrawable(this, isRunning ? R.drawable.btn_green_white : R.drawable.btn_primary_green));
         Drawable drawable = ContextCompat.getDrawable(this, isRunning ? R.drawable.ic_stop_bold : R.drawable.ic_play_bold);
-        startSync.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+        binding.btnSync.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
     }
 
     private void trackWorkStatus() {
         WorkManager.getInstance(this).getWorkInfosByTagLiveData(Constants.SyncType.ALL_DATA.toString()).observe(this, workInfos -> {
             if (hasRunningWork(workInfos)) {
                 syncViewModel.setSyncRunning(true);
-                loadingSpinner.setVisibility(View.VISIBLE);
+                binding.pbLoading.setVisibility(View.VISIBLE);
                 updateSyncButton(true);
             } else {
                 syncViewModel.setSyncRunning(false);
-                loadingSpinner.setVisibility(View.INVISIBLE);
+                binding.pbLoading.setVisibility(View.INVISIBLE);
                 updateSyncButton(false);
             }
         });
@@ -213,22 +174,21 @@ public class SyncActivity extends AppCompatActivity {
 
     private void updateUI(SyncLogWithErrors log) {
         if (log != null && log.syncLog != null) {
-            statusTextView.setText(getStatusMessage(log.syncLog.getStatus()));
+            binding.tvStatus.setText(getStatusMessage(log.syncLog.getStatus()));
 
-            lastSync.setVisibility(View.VISIBLE);
             String formattedDate = log.syncLog.getLastSync() == null ? "" : dateFormat.format(log.syncLog.getLastSync());
-            lastSync.setText(getString(R.string.sync_date,formattedDate));
+            binding.tvLastSync.setVisibility(View.VISIBLE);
+            binding.tvLastSync.setText(getString(R.string.sync_date,formattedDate));
 
             boolean wasStopped =  Constants.SyncStatus.STOPPED.toString().equals(log.syncLog.getStatus());
-            stoppedByUser.setVisibility( wasStopped ? View.VISIBLE : View.GONE);
-
-            recordsToSend.setText(String.valueOf(log.syncLog.getRecordsToSend()));
-            recordsSent.setText(getString(R.string.sync_records_sent, String.valueOf(log.syncLog.getRecordsSent())));
-            recordsNotSent.setText(getString(R.string.sync_records_not_sent, String.valueOf(log.syncLog.getRecordsNotSent())));
-            recordsReceived.setText(getString(R.string.sync_records_received, String.valueOf(log.syncLog.getRecordsReceived())));
+            binding.tvStoppedByUser.setVisibility( wasStopped ? View.VISIBLE : View.GONE);
+            binding.tvRecordsCount.setText(String.valueOf(log.syncLog.getRecordsToSend()));
+            binding.tvRecordsSent.setText(getString(R.string.sync_records_sent, String.valueOf(log.syncLog.getRecordsSent())));
+            binding.tvRecordsNotSent.setText(getString(R.string.sync_records_not_sent, String.valueOf(log.syncLog.getRecordsNotSent())));
+            binding.tvRecordsReceived.setText(getString(R.string.sync_records_received, String.valueOf(log.syncLog.getRecordsReceived())));
 
             long daysSinceLastSync = DateUtils.daysBetweenDates(log.syncLog.getLastSync(), new Date());
-            staleData.setVisibility(daysSinceLastSync > 5 ? View.VISIBLE : View.GONE);
+            binding.tvStaleData.setVisibility(daysSinceLastSync > 5 ? View.VISIBLE : View.GONE);
 
             syncErrorAdapter.clear();
             if (log.errors != null) {
@@ -238,14 +198,11 @@ public class SyncActivity extends AppCompatActivity {
 
             updateSyncButton(syncViewModel.getSyncRunning());
         } else {
-            staleData.setVisibility(View.GONE);
-
-            lastSync.setVisibility(View.INVISIBLE);
-            stoppedByUser.setVisibility(View.GONE);
-
-            recordsSent.setText(getString(R.string.sync_records_sent, String.valueOf(0)));
-            recordsNotSent.setText(getString(R.string.sync_records_not_sent, String.valueOf(0)));
-            recordsReceived.setText(getString(R.string.sync_records_received, String.valueOf(0)));
+            binding.tvStaleData.setVisibility(View.GONE);
+            binding.tvLastSync.setVisibility(View.INVISIBLE);
+            binding.tvRecordsSent.setText(getString(R.string.sync_records_sent, String.valueOf(0)));
+            binding.tvRecordsNotSent.setText(getString(R.string.sync_records_not_sent, String.valueOf(0)));
+            binding.tvRecordsReceived.setText(getString(R.string.sync_records_received, String.valueOf(0)));
             updateSyncButton(false);
         }
     }
@@ -289,7 +246,10 @@ public class SyncActivity extends AppCompatActivity {
 
             return true;
         } else if (item.getItemId() == R.id.action_info) {
-            startActivity(new Intent(this, SyncInfoActivity.class));
+            Intent intent = new Intent(this, InfoActivity.class);
+            intent.putExtra("title", getString(R.string.title_data_sync));
+            intent.putExtra("message", getString(R.string.sync_info_text));
+            startActivity(intent);
             return true;
         }
 
@@ -322,5 +282,12 @@ public class SyncActivity extends AppCompatActivity {
         positiveButton.setOnClickListener(v -> customDialog.dismiss());
 
         customDialog.show();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 }

@@ -1,6 +1,7 @@
 package org.moa.etlits.ui.activities;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
@@ -39,8 +40,6 @@ public class AnimalRegActivity extends AppCompatActivity {
 
     private ActionBar actionBar;
 
-    private Dialog confirmLeaveDialog;
-    private Dialog noAnimalsDialog;
 
     public static String REGISTERED_ANIMALS = "registeredAnimals";
     @Override
@@ -222,68 +221,54 @@ public class AnimalRegActivity extends AppCompatActivity {
         }
     }
 
-    private Dialog showDialog(int titleRId, int messageRId,
-                            int positiveButtonRId,
-                            int negativeButtonRId,
-                            boolean showPositiveButton, boolean showNegativeButton,
-                            View.OnClickListener positiveButtonListener,
-                            View.OnClickListener negativeButtonListener) {
+   private void showNoAnimalsDialog() {
+       final Dialog customDialog = new Dialog(this);
+       customDialog.setContentView(R.layout.custom_dialog);
+       customDialog.setCancelable(false);
 
+       TextView title = customDialog.findViewById(R.id.dialog_title);
+       title.setText(R.string.animal_reg_no_animals_registered);
+
+       TextView message = customDialog.findViewById(R.id.dialog_message);
+       message.setText(R.string.animal_reg_animal_list_empty_error);
+
+       Button positiveButton = customDialog.findViewById(R.id.positive_button);
+       positiveButton.setVisibility(View.VISIBLE);
+       positiveButton.setText(R.string.animal_reg_dialog_ok);
+       positiveButton.setOnClickListener(v -> {
+           customDialog.dismiss();
+       });
+
+       customDialog.show();
+    }
+
+    private void showLeaveDialog() {
         final Dialog customDialog = new Dialog(this);
         customDialog.setContentView(R.layout.custom_dialog);
         customDialog.setCancelable(false);
 
         TextView title = customDialog.findViewById(R.id.dialog_title);
-        title.setText(titleRId);
+        title.setText(R.string.animal_reg_leave_the_form);
 
         TextView message = customDialog.findViewById(R.id.dialog_message);
-        message.setText(messageRId);
+        message.setText(R.string.animal_reg_leave_form_msg);
 
         Button positiveButton = customDialog.findViewById(R.id.positive_button);
-        positiveButton.setVisibility(showPositiveButton ? View.VISIBLE : View.GONE);
-        positiveButton.setText(positiveButtonRId);
-        positiveButton.setOnClickListener(positiveButtonListener);
+        positiveButton.setVisibility(View.VISIBLE);
+        positiveButton.setText(R.string.animal_reg_leave_form_cancel);
+        positiveButton.setOnClickListener(v -> {
+            customDialog.dismiss();
+        });
+
 
         Button negativeButton = customDialog.findViewById(R.id.negative_button);
-        negativeButton.setVisibility(showNegativeButton ? View.VISIBLE : View.GONE);
-        negativeButton.setText(negativeButtonRId);
-        negativeButton.setOnClickListener(negativeButtonListener);
+        negativeButton.setVisibility(View.VISIBLE);
+        negativeButton.setText(R.string.animal_reg_leave_form_yes);
+        negativeButton.setOnClickListener(v -> {
+            customDialog.dismiss();
+            finish();
+        });
+
         customDialog.show();
-        return customDialog;
-    }
-
-    private void showNoAnimalsDialog() {
-        noAnimalsDialog = showDialog(R.string.animal_reg_no_animals_registered,
-                R.string.animal_reg_animal_list_empty_error,
-                R.string.animal_reg_dialog_ok,
-                R.string.animal_reg_dialog_ok,
-                true,
-                false,
-                v -> {
-                 if (noAnimalsDialog != null) {
-                     noAnimalsDialog.dismiss();
-                 }
-                 },
-                null);
-    }
-
-    private void showLeaveDialog() {
-        confirmLeaveDialog =  showDialog(R.string.animal_reg_leave_the_form,
-                R.string.animal_reg_leave_form_msg,
-                R.string.animal_reg_leave_form_cancel,
-                R.string.animal_reg_leave_form_yes,
-                true,
-                true,
-                v -> {
-                    if (confirmLeaveDialog != null) {
-                        confirmLeaveDialog.dismiss();
-                    }
-                },
-                v -> {
-                    if (confirmLeaveDialog != null) {
-                        confirmLeaveDialog.dismiss();
-                    }
-                    finish();
-                });
     }
 }
