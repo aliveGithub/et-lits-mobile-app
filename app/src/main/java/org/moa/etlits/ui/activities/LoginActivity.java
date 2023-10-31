@@ -40,18 +40,28 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        encryptedPreferences = new EncryptedPreferences(LoginActivity.this);
+        sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES, MODE_PRIVATE);
+
+        if (isUserLoggedIn()) {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         builder = new AlertDialog.Builder(LoginActivity.this);
-        encryptedPreferences = new EncryptedPreferences(LoginActivity.this);
-
-        sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES, MODE_PRIVATE);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
         initViewModels();
         attachEventListeners();
+    }
+
+    private boolean isUserLoggedIn() {
+        return encryptedPreferences.read(Constants.IS_USER_LOGGED_IN).equals("true");
     }
 
     private void initViewModels() {
@@ -148,23 +158,19 @@ public class LoginActivity extends AppCompatActivity {
     private void onLoginSuccess(LoginResult loginResult) {
         encryptedPreferences.write(Constants.USERNAME, loginResult.getUsername());
         encryptedPreferences.write(Constants.PASSWORD, loginResult.getPassword());
-
-
+        encryptedPreferences.write(Constants.IS_USER_LOGGED_IN, "true");
         boolean hasTermsOfUseAccepted = sharedPreferences.getBoolean(Constants.HAS_TERMS_OR_USE_ACCEPTED, false);
 
         Intent intent;
-
         if(hasTermsOfUseAccepted) {
             intent = new Intent(LoginActivity.this, MainActivity.class);
         } else {
             intent = new Intent(LoginActivity.this, TermsOfUseActivity.class);
             intent.putExtra("screenModeAccept", true);
-
         }
 
         startActivity(intent);
         finish();
-
     }
 
 

@@ -121,6 +121,7 @@ public class HomeTabsFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which){
                 encryptedPreferences.remove(Constants.USERNAME);
                 encryptedPreferences.remove(Constants.PASSWORD);
+                encryptedPreferences.remove(Constants.IS_USER_LOGGED_IN);
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 startActivity(intent);
                 getActivity().finish();
