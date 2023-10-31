@@ -85,6 +85,7 @@ public class LoginActivity extends AppCompatActivity {
                 binding.loading.setVisibility(View.GONE);
                 if (loginResult.getLoginStatus().equals(LoginResult.LoginStatus.FAIL) && loginResult.getError() != null) {
                     showLoginFailed(getMessage(loginResult.getError()));
+
                 }
                 if (loginResult.getLoginStatus().equals(LoginResult.LoginStatus.SUCCESS)) {
                     onLoginSuccess(loginResult);
