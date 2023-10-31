@@ -13,6 +13,9 @@
         android:theme="@style/Theme.LITSMobileApp"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activities.AboutActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activities.TermsOfUseActivity"
             android:exported="false" />
         <activity
