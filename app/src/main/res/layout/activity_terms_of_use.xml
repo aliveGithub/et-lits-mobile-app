@@ -355,7 +355,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/small_margin"
                     android:layout_weight="1"
-                    android:background="@drawable/bg_primary_green"
+                    android:background="@drawable/btn_primary_green"
                     android:text="@string/ToU_disagree_btn_txt"
                     android:textColor="@color/white"
                     android:textStyle="bold" />
@@ -367,7 +367,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/small_margin"
                     android:layout_weight="1"
-                    android:background="@drawable/bg_primary_green"
+                    android:background="@drawable/btn_primary_green"
                     android:text="@string/ToU_agree_btn_txt"
                     android:textColor="@color/white"
                     android:textStyle="bold" />
