@@ -3,6 +3,7 @@ package org.moa.etlits.ui.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -34,6 +35,8 @@ public class LoginActivity extends AppCompatActivity {
     private EncryptedPreferences encryptedPreferences;
     private AlertDialog.Builder builder;
 
+    private SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +44,9 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         builder = new AlertDialog.Builder(LoginActivity.this);
         encryptedPreferences = new EncryptedPreferences(LoginActivity.this);
+
+        sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES, MODE_PRIVATE);
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
@@ -141,9 +147,23 @@ public class LoginActivity extends AppCompatActivity {
     private void onLoginSuccess(LoginResult loginResult) {
         encryptedPreferences.write(Constants.USERNAME, loginResult.getUsername());
         encryptedPreferences.write(Constants.PASSWORD, loginResult.getPassword());
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+
+
+        boolean hasTermsOfUseAccepted = sharedPreferences.getBoolean(Constants.HAS_TERMS_OR_USE_ACCEPTED, false);
+
+        Intent intent;
+
+        if(hasTermsOfUseAccepted) {
+            intent = new Intent(LoginActivity.this, MainActivity.class);
+        } else {
+            intent = new Intent(LoginActivity.this, TermsOfUseActivity.class);
+            intent.putExtra("screenModeAccept", true);
+
+        }
+
         startActivity(intent);
         finish();
+
     }
 
 
