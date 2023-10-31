@@ -87,7 +87,6 @@ public class TermsOfUseActivity extends AppCompatActivity {
         actionBar = getSupportActionBar();
 
         if(actionBar != null) {
-
             actionBar.setTitle(getString(R.string.ToU));
             actionBar.setDisplayHomeAsUpEnabled(true);
 
