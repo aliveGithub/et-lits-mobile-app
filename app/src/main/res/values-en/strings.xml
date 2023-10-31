@@ -28,4 +28,5 @@
     <string name="menu_about">About</string>
     <string name="menu_logout">Sign out</string>
     <string name="menu_move">Move</string>
+
 </resources>

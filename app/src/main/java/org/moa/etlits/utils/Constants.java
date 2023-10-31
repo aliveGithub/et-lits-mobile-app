@@ -11,6 +11,8 @@ public class Constants {
     public static final String PASSWORD = "password";
     public static final String IS_USER_LOGGED_IN = "isUserLoggedIn";
     public static final String HAS_INITIALIZED = "hasInitialized";
+
+    public static final String HAS_TERMS_OR_USE_ACCEPTED = "hasTermsOfUseAccepted";
     public static final String INITIAL_SYNC_STARTED = "initialSyncStarted";
     public static String DEFAULT_ESTABLISHMENT = "defaultEstablishment";
 

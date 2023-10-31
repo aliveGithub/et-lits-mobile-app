@@ -17,10 +17,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 import org.moa.etlits.R;
+import org.moa.etlits.ui.activities.AboutActivity;
 import org.moa.etlits.ui.activities.EstablishmentSummaryActivity;
 import org.moa.etlits.ui.activities.SyncActivity;
 import org.moa.etlits.ui.activities.LoginActivity;
 import org.moa.etlits.ui.activities.MainActivity;
+import org.moa.etlits.ui.activities.TermsOfUseActivity;
 import org.moa.etlits.utils.Constants;
 import org.moa.etlits.utils.EncryptedPreferences;
 
@@ -130,6 +132,11 @@ public class HomeTabsFragment extends Fragment {
         alert.show();
     }
 
+    private void about() {
+        Intent intent = new Intent(getActivity(), AboutActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -154,6 +161,10 @@ public class HomeTabsFragment extends Fragment {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.nav_logout) {
                     logout();
+                }
+
+                if(item.getItemId() == R.id.nav_about) {
+                    about();
                 }
 
                 // Close the navigation drawer when an item is selected.
