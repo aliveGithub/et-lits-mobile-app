@@ -21,10 +21,10 @@ public class AnimalSearchResult implements Comparable<AnimalSearchResult> {
     @Nullable
     private String eid;
 
-    private String event = "Move On";
+    private String lasEvent;
 
     @Nullable
-    private Date eventDate;
+    private Date lastEventDate;
     public long getId() {
         return id;
     }
@@ -80,20 +80,22 @@ public class AnimalSearchResult implements Comparable<AnimalSearchResult> {
         this.age = age;
     }
 
-    public Date getEventDate() {
-        return eventDate;
+
+    public String getLasEvent() {
+        return lasEvent;
     }
 
-    public void setEventDate(Date eventDate) {
-        this.eventDate = eventDate;
+    public void setLasEvent(String lasEvent) {
+        this.lasEvent = lasEvent;
     }
 
-    public String getEvent() {
-        return event;
+    @Nullable
+    public Date getLastEventDate() {
+        return lastEventDate;
     }
 
-    public void setEvent(String event) {
-        this.event = event;
+    public void setLastEventDate(@Nullable Date lastEventDate) {
+        this.lastEventDate = lastEventDate;
     }
 
     @Override

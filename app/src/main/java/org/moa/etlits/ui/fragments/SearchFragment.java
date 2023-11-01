@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,13 +41,21 @@ public class SearchFragment extends Fragment {
     public SearchFragment() {
     }
 
-    public static SearchFragment newInstance() {
-        return new SearchFragment();
+    private static String DEFAULT_VIEW_PARAM = "defaultView";
+    private static String ANIMALS_QUERY_PARAM = "animalsQuery";
+    public static SearchFragment newInstance( String defaultView, String animalsQuery) {
+        SearchFragment fragment = new SearchFragment();
+        Bundle args = new Bundle();
+        args.putString(DEFAULT_VIEW_PARAM, defaultView);
+        args.putString(ANIMALS_QUERY_PARAM, animalsQuery);
+                fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -64,6 +73,19 @@ public class SearchFragment extends Fragment {
         setUpAnimalSearch();
         setupEstablishmentSearch();
         setupSearchTabs();
+
+        if (getArguments() != null) {
+
+            String defaultView = getArguments().getString(DEFAULT_VIEW_PARAM);
+            String animalsQuery = getArguments().getString(ANIMALS_QUERY_PARAM);
+            Log.d("SearchFragment", "defaultView: " + defaultView);
+            if (animalsQuery != null) {
+                binding.acvAnimalSearch.setText(animalsQuery);
+            }
+            if (defaultView != null) {
+                searchViewModel.switchView(defaultView);
+            }
+        }
     }
 
     private void setUpAnimalSearch() {

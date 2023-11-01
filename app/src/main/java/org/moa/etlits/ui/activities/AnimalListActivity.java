@@ -16,6 +16,7 @@ import org.moa.etlits.ui.viewmodels.AnimalsViewModel;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
@@ -69,7 +70,8 @@ public class AnimalListActivity extends AppCompatActivity implements AnimalsAdap
     private void addSearchFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.fl_animal_search, new SearchFragment());
+        Fragment searchFragment = SearchFragment.newInstance(SearchFragment.ANIMAL_VIEW, null);
+        fragmentTransaction.add(R.id.fl_animal_search, searchFragment, "search_animals");
         fragmentTransaction.commit();
     }
 

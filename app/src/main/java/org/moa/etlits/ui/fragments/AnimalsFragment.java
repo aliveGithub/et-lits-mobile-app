@@ -49,7 +49,7 @@ public class AnimalsFragment extends Fragment {
        binding = FragmentAnimalsBinding.inflate(inflater, container, false);
        View v = binding.getRoot();
         if (savedInstanceState == null) {
-            searchFragment = new SearchFragment();
+            searchFragment = SearchFragment.newInstance(SearchFragment.ANIMAL_VIEW, null);
             getChildFragmentManager().beginTransaction().add(R.id.animals_search_fragment, searchFragment, "search_animals").commit();
         }
 

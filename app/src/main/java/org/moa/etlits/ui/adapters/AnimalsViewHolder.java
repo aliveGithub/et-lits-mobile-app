@@ -6,11 +6,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.moa.etlits.R;
-import org.moa.etlits.data.models.Animal;
 import org.moa.etlits.data.models.AnimalSearchResult;
+import org.moa.etlits.utils.Constants;
 import org.moa.etlits.utils.DateUtils;
-
-import java.util.Date;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -48,8 +46,18 @@ class AnimalsViewHolder extends RecyclerView.ViewHolder implements View.OnClickL
         tvBreed.setText(animal.getBreed());
         tvAge.setText(tvAge.getContext().getString(R.string.animal_reg_age_months, String.valueOf(animal.getAge())));
         tvSpecies.setText(animal.getSpecies());
-        tvEvent.setText(animal.getEvent());
-        tvEventDate.setText(DateUtils.formatDate(animal.getEventDate()));
+        tvEventDate.setText(animal.getLastEventDate() != null ? DateUtils.formatDate(animal.getLastEventDate()) : "");
+
+        if (animal.getLasEvent() != null) {
+            tvEvent.setText(animal.getLasEvent());
+        } else {
+            tvEvent.setText(R.string.animal_list_status_pending_sync);
+        }
+    }
+
+    private String getEvent(String event) {
+        String eventStatus = Constants.EVENT_STATUS_MAP.get(event);
+        return eventStatus != null ? eventStatus : event;
     }
 
     private String getSex(String value) {
