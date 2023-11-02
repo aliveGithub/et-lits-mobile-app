@@ -3,7 +3,6 @@ package org.moa.etlits.ui.adapters;
 
 import android.view.ViewGroup;
 
-import org.moa.etlits.data.models.Animal;
 import org.moa.etlits.data.models.AnimalSearchResult;
 
 import androidx.annotation.NonNull;

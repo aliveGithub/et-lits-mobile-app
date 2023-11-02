@@ -18,7 +18,6 @@ import org.moa.etlits.utils.Constants;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import static android.app.Activity.RESULT_OK;
