@@ -33,7 +33,7 @@ public class AnimalsAdapter extends ListAdapter<AnimalSearchResult, AnimalsViewH
 
         @Override
         public boolean areItemsTheSame(@NonNull AnimalSearchResult oldItem, @NonNull AnimalSearchResult newItem) {
-            return oldItem == newItem;
+            return oldItem.getId().equals(newItem.getId());
         }
 
         @Override
