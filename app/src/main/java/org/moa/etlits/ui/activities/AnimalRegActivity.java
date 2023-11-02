@@ -37,10 +37,7 @@ public class AnimalRegActivity extends AppCompatActivity {
     private ActivityAnimalRegBinding binding;
     private AnimalRegViewModel viewModel;
     private SharedPreferences sharedPreferences;
-
     private ActionBar actionBar;
-
-
     public static String REGISTERED_ANIMALS = "registeredAnimals";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
