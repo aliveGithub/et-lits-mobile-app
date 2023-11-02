@@ -40,6 +40,7 @@ public class LoginViewModel extends ViewModel {
             authService = RetrofitUtil.createAuthService();
         }
 
+        RetrofitUtil.clearCookies();
         Call call = authService.login(Credentials.basic(username, password));
         call.enqueue(new Callback() {
             @Override
@@ -60,7 +61,7 @@ public class LoginViewModel extends ViewModel {
 
     public void logout() {
         loginResult.setValue(null);
-        //TODO: clear shared prefs
+        RetrofitUtil.clearCookies();
     }
 
     public void loginDataChanged(String username, String password) {
