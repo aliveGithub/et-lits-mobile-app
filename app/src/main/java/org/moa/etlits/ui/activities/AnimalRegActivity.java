@@ -1,7 +1,6 @@
 package org.moa.etlits.ui.activities;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
@@ -27,6 +26,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
@@ -37,10 +37,7 @@ public class AnimalRegActivity extends AppCompatActivity {
     private ActivityAnimalRegBinding binding;
     private AnimalRegViewModel viewModel;
     private SharedPreferences sharedPreferences;
-
     private ActionBar actionBar;
-
-
     public static String REGISTERED_ANIMALS = "registeredAnimals";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +51,10 @@ public class AnimalRegActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             addFragments();
+        } else {
+            animalRegFragment = getSupportFragmentManager().findFragmentByTag(Constants.AnimalRegStep.REGISTRATION.toString());
+            moveEventsFragment = getSupportFragmentManager().findFragmentByTag(Constants.AnimalRegStep.MOVE_EVENTS.toString());
+            treatmentsFragment = getSupportFragmentManager().findFragmentByTag(Constants.AnimalRegStep.TREATMENTS.toString());
         }
         setUpNavigation();
         setUpActionBar();
@@ -72,23 +73,26 @@ public class AnimalRegActivity extends AppCompatActivity {
     }
 
     public void showFragment(Constants.AnimalRegStep step) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         switch (step) {
             case REGISTRATION:
-                getSupportFragmentManager().beginTransaction().hide(moveEventsFragment).commit();
-                getSupportFragmentManager().beginTransaction().hide(treatmentsFragment).commit();
-                getSupportFragmentManager().beginTransaction().show(animalRegFragment).commit();
+                ft.hide(moveEventsFragment);
+                ft.hide(treatmentsFragment);
+                ft.show(animalRegFragment);
                 break;
             case MOVE_EVENTS:
-                getSupportFragmentManager().beginTransaction().hide(animalRegFragment).commit();
-                getSupportFragmentManager().beginTransaction().hide(treatmentsFragment).commit();
-                getSupportFragmentManager().beginTransaction().show(moveEventsFragment).commit();
+                ft.hide(animalRegFragment);
+                ft.hide(treatmentsFragment);
+                ft.show(moveEventsFragment);
                 break;
             case TREATMENTS:
-                getSupportFragmentManager().beginTransaction().hide(animalRegFragment).commit();
-                getSupportFragmentManager().beginTransaction().hide(moveEventsFragment).commit();
-                getSupportFragmentManager().beginTransaction().show(treatmentsFragment).commit();
+                ft.hide(animalRegFragment);
+                ft.hide(moveEventsFragment);
+                ft.show(treatmentsFragment);
                 break;
         }
+
+        ft.commit();
     }
 
     private void setUpActionBar() {
