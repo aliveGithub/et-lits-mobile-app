@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.moa.etlits.R;
+import org.moa.etlits.databinding.FragmentAnimalsBinding;
+import org.moa.etlits.ui.activities.AnimalListActivity;
 import org.moa.etlits.ui.activities.AnimalRegActivity;
 import org.moa.etlits.ui.activities.AnimalRegListActivity;
 import org.moa.etlits.ui.activities.SyncActivity;
@@ -16,16 +18,16 @@ import org.moa.etlits.utils.Constants;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import static android.app.Activity.RESULT_OK;
 
 public class AnimalsFragment extends Fragment {
-    private CardView registerAnimal;
-    private CardView viewRegistrations;
-    private Fragment searchFragment;
+   private Fragment searchFragment;
     private ActivityResultLauncher<Intent> activityResultLauncher;
+
+    private FragmentAnimalsBinding binding;
+
     public AnimalsFragment() {
     }
 
@@ -43,9 +45,10 @@ public class AnimalsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_animals, container, false);
+       binding = FragmentAnimalsBinding.inflate(inflater, container, false);
+       View v = binding.getRoot();
         if (savedInstanceState == null) {
-            searchFragment = new SearchFragment();
+            searchFragment = SearchFragment.newInstance(SearchFragment.ANIMAL_VIEW, null);
             getChildFragmentManager().beginTransaction().add(R.id.animals_search_fragment, searchFragment, "search_animals").commit();
         }
 
@@ -55,9 +58,8 @@ public class AnimalsFragment extends Fragment {
     }
 
     private void initViews(View v) {
-        viewRegistrations = v.findViewById(R.id.card_view_registrations);
-        registerAnimal = v.findViewById(R.id.card_register);
-        registerAnimal.setOnClickListener(new View.OnClickListener() {
+
+        binding.cardRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), AnimalRegActivity.class);
@@ -65,10 +67,18 @@ public class AnimalsFragment extends Fragment {
             }
         });
 
-        viewRegistrations.setOnClickListener(new View.OnClickListener() {
+        binding.cardViewRegistrations.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), AnimalRegListActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        binding.cardAnimals.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AnimalListActivity.class);
                 startActivity(intent);
             }
         });
@@ -92,10 +102,8 @@ public class AnimalsFragment extends Fragment {
                                         }
                                     }).show();
                         }
-
                     }
                 });
-
     }
 
 }

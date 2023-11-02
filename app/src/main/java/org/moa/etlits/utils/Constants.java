@@ -2,7 +2,9 @@ package org.moa.etlits.utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Constants {
     public static final String SHARED_PREFERENCES = "et-lits-shared-prefs";
@@ -38,6 +40,23 @@ public class Constants {
     public static List<String> PRODUCTION_TYPE_ESTABLISHMENT_CATEGORIES = new ArrayList<>(Arrays.asList("kcFeedlot", "kcLairageQuarantineStation",
             "kcLairagePreQuarantineStation", "kcSlaughteringExportAbattoir"));
 
+
+    public static Map<String,String> EVENT_STATUS_MAP;
+    static {
+        EVENT_STATUS_MAP = new HashMap<>();
+        EVENT_STATUS_MAP.put("kcEventsMObIdentification", "Registered");
+        EVENT_STATUS_MAP.put("kcEventsMObLocationDateFromRegistrationNewBorn", "Registered");
+        EVENT_STATUS_MAP.put("kcEventsMObLocationDateFromFirstReg", "Registered");
+        EVENT_STATUS_MAP.put("kcEventsMObLocationDateToMoveOff", "Moved Off");
+        EVENT_STATUS_MAP.put("kcEventsMObLocationDateFromMoveOn", "Moved On");
+        EVENT_STATUS_MAP.put("kcEventsMObAHApplicationTreatment", "Treated");
+        EVENT_STATUS_MAP.put("kcEventsMObVacc", "Vaccinated");
+        EVENT_STATUS_MAP.put("kcEventsMObAHSampleResult", "Sampled");
+        EVENT_STATUS_MAP.put("kcEventsMObAHInsp", "Sampled");
+        EVENT_STATUS_MAP.put("kcEventsMObIdentificationImport", "Imported");
+        EVENT_STATUS_MAP.put("kcEventsMObLocationDateFromMoveOnImport", "Imported");
+        EVENT_STATUS_MAP.put("kcEventsMObLocationDateToRemoval", "Terminated");
+    }
 
     public enum SyncType {
         CONFIG_DATA,

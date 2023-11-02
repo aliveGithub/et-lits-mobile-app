@@ -26,6 +26,7 @@ limitations under the License. -->
     <dimen name="card_item_elevation">8dp</dimen>
     <dimen name="card_item_corner_radius">8dp</dimen>
 
+    <dimen name="font_size_small">10sp</dimen>
     <dimen name="font_size_smaller">12sp</dimen>
     <dimen name="font_size_normal">14sp</dimen>
     <dimen name="font_size_bigger">16sp</dimen>

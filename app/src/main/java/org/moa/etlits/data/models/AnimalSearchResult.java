@@ -1,18 +1,35 @@
 package org.moa.etlits.data.models;
 
+import java.util.Date;
+
+import javax.annotation.Nullable;
+
 public class AnimalSearchResult implements Comparable<AnimalSearchResult> {
 
-    private long id;
-    private String animalId;
+    private Long id = 0L;
+
+    @Nullable
+    private String animalId = "";
 
     private String species = "Cattle";
 
+    private String breed;
+
+    private String sex;
+    @Nullable
+    private Integer age = 0;
+    @Nullable
     private String eid;
-    public long getId() {
+
+    private String lasEvent;
+
+    @Nullable
+    private Date lastEventDate;
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
     public String getAnimalId() {
@@ -37,6 +54,48 @@ public class AnimalSearchResult implements Comparable<AnimalSearchResult> {
 
     public void setSpecies(String species) {
         this.species = species;
+    }
+
+    public String getBreed() {
+        return breed;
+    }
+
+    public void setBreed(String breed) {
+        this.breed = breed;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+
+    public String getLasEvent() {
+        return lasEvent;
+    }
+
+    public void setLasEvent(String lasEvent) {
+        this.lasEvent = lasEvent;
+    }
+
+    @Nullable
+    public Date getLastEventDate() {
+        return lastEventDate;
+    }
+
+    public void setLastEventDate(@Nullable Date lastEventDate) {
+        this.lastEventDate = lastEventDate;
     }
 
     @Override

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <application
         android:name=".LitsApp"
         android:allowBackup="true"
@@ -12,6 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LITSMobileApp"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.activities.AnimalListActivity"
+            android:exported="false"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".ui.activities.AboutActivity"
             android:exported="false" />
@@ -30,7 +35,7 @@
         <activity
             android:name=".ui.activities.EstablishmentSummaryActivity"
             android:exported="false" />
-       <activity
+        <activity
             android:name=".ui.activities.SyncActivity"
             android:exported="false" />
         <activity
@@ -51,5 +56,6 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false" />
     </application>
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>
