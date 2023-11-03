@@ -112,10 +112,9 @@ public class TermsOfUseActivity extends AppCompatActivity {
     private void disagreeTermsOfUse() {
         encryptedPreferences.remove(Constants.USERNAME);
         encryptedPreferences.remove(Constants.PASSWORD);
+        encryptedPreferences.remove(Constants.IS_USER_LOGGED_IN);
         Intent intent = new Intent(TermsOfUseActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
     }
-
-
 }
