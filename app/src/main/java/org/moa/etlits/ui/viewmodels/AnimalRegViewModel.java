@@ -96,7 +96,7 @@ public class AnimalRegViewModel extends AndroidViewModel {
         speciesList = new MutableLiveData<>(species);
     }
 
-    public void initAnimalRegistration() {
+    public void initAnimalRegistration(String eid) {
         Calendar yesterdayCal = Calendar.getInstance();
         yesterdayCal.add(Calendar.DAY_OF_MONTH, -1);
 
@@ -104,6 +104,7 @@ public class AnimalRegViewModel extends AndroidViewModel {
         newAnimalRegistration.setDateIdentification(yesterdayCal.getTime());
         newAnimalRegistration.setDateMoveOff(yesterdayCal.getTime());
         newAnimalRegistration.setDateMoveOn(Calendar.getInstance().getTime());
+        newAnimalRegistration.setEstablishmentEid(eid);
 
         animalRegistration = new MutableLiveData<>(newAnimalRegistration);
     }

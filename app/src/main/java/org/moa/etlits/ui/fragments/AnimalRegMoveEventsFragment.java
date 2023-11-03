@@ -1,6 +1,8 @@
 package org.moa.etlits.ui.fragments;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +37,7 @@ public class AnimalRegMoveEventsFragment extends Fragment {
     private EstablishmentSearchAdapter holdingGroundEstablishmentAdapter;
 
     private EstablishmentSearchAdapter moveOnEstablishmentAdapter;
+    private SharedPreferences sharedPreferences;
 
     private DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, Locale.getDefault());
 
@@ -62,6 +65,7 @@ public class AnimalRegMoveEventsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        sharedPreferences = getActivity().getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE);
 
         holdingGroundEstablishmentAdapter = new EstablishmentSearchAdapter(getActivity(), new ArrayList<>());
         moveOnEstablishmentAdapter = new EstablishmentSearchAdapter(getActivity(), new ArrayList<>());
@@ -75,11 +79,12 @@ public class AnimalRegMoveEventsFragment extends Fragment {
             AnimalRegistration ar = animalRegistration;
             if (ar != null) {
                 binding.actvMoveOffEid.setText(ar.getHoldingGroundEid());
-                binding.actvMoveOnEid.setText(ar.getEstablishmentEid());
             } else {
-                viewModel.initAnimalRegistration();
+                String eid = sharedPreferences.getString(Constants.DEFAULT_ESTABLISHMENT, "");
+                viewModel.initAnimalRegistration(eid);
                 ar = viewModel.getAnimalRegistration().getValue();
             }
+            binding.actvMoveOnEid.setText(ar.getEstablishmentEid());
             binding.btnDateMoveOff.setText(dateFormat.format(ar.getDateMoveOff().getTime()));
             binding.btnDateMoveOn.setText(dateFormat.format(ar.getDateMoveOn().getTime()));
             binding.btnDateIdentification.setText(dateFormat.format(ar.getDateIdentification().getTime()));
