@@ -23,8 +23,10 @@ public class AnimalSearchResult implements Comparable<AnimalSearchResult> {
 
     private String lasEvent;
 
-    @Nullable
+        @Nullable
     private Date lastEventDate;
+    @Nullable
+    private Boolean dead = false;
     public Long getId() {
         return id;
     }
@@ -98,6 +100,13 @@ public class AnimalSearchResult implements Comparable<AnimalSearchResult> {
         this.lastEventDate = lastEventDate;
     }
 
+    public boolean isDead() {
+        return dead;
+    }
+
+    public void setDead(boolean dead) {
+        this.dead = dead;
+    }
     @Override
     public int compareTo(AnimalSearchResult o) {
         return this.getAnimalId().compareTo(o.getAnimalId());
