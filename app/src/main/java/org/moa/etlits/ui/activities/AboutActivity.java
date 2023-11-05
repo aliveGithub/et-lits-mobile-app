@@ -16,7 +16,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.gson.internal.GsonBuildConfig;
+import com.jaredrummler.android.device.DeviceName;
 
+import org.moa.etlits.BuildConfig;
 import org.moa.etlits.R;
 
 import java.text.SimpleDateFormat;
@@ -56,6 +58,7 @@ public class AboutActivity extends AppCompatActivity {
 
         displayPhoneInfo();
         setUpActionBar();
+        DeviceName.init(this);
     }
 
     private void showTermsOfUse() {
@@ -65,18 +68,30 @@ public class AboutActivity extends AppCompatActivity {
     }
 
     private void displayPhoneInfo() {
-         String deviceModel = Build.MODEL;
-         String androidVersion = Build.VERSION.RELEASE;
-         String buildVersion = GsonBuildConfig.VERSION;
-         long buildDate = Build.TIME;
 
-         deviceModelTxt.setText(getString(R.string.device_model, deviceModel));
+         String androidVersion = Build.VERSION.RELEASE;
+         String buildVersion = BuildConfig.VERSION_NAME;
+         String buildDate = BuildConfig.BUILD_TIME;
+
+
+
+         deviceModelTxt.setText(getString(R.string.device_model, getDeviceNameAndOrModel()));
          androidVersionTxt.setText(getString(R.string.android_virsion, androidVersion));
          buildVersionTxt.setText(getString(R.string.build_virsion, buildVersion));
 
-        SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy hh:mm");
-        buildDateTxt.setText(getString(R.string.build_date, format.format(buildDate)));
+        buildDateTxt.setText(getString(R.string.build_date, buildDate));
 
+    }
+
+    private String getDeviceNameAndOrModel () {
+        String deviceName = DeviceName.getDeviceName();
+        String deviceModel = Build.MODEL;
+
+        if(deviceName.toLowerCase().startsWith(deviceModel.toLowerCase())) {
+            return deviceModel;
+        }
+
+        return deviceModel + " (" + deviceName +")";
     }
 
     private void setUpActionBar() {
