@@ -76,7 +76,7 @@
     <string name="sync_info_close">Close</string>
     <string name="home_establishment_search">Establishment Search</string>
     <string name="establishment_title">Establishment</string>
-    <string name="establishment_summary_pic">PIC</string>
+    <string name="establishment_summary_eid">EID</string>
     <string name="establishment_type">Type</string>
     <string name="establishment_phone">Phone</string>
     <string name="establishment_not_specified">not specified</string>
