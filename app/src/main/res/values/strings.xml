@@ -152,6 +152,13 @@
     <string name="animal_reg_leave_form_cancel">Cancel</string>
     <string name="animal_reg_close_snackbar_msg">%1$s animals registered</string>
     <string name="animal_reg_close_snackbar_action">SYNC</string>
+
+    <string name="animal_delete_confirmation_dialog_title">Remove Animal</string>
+    <string name="animal_delete_confirmation_dialog_message">Are you sure you want to remove %1$s animal?</string>
+
+    <string name="label_ok">OK</string>
+    <string name="label_cancel">Cancel</string>
+
     <!--Terms of Use - Placeholder content-->
     <string name="ToU">Terms of Use</string>
     <string name="ToU_welcome_txt">Welcome to our site. We maintain this web site as a service to our members. By using our site, you are agreeing to comply with and be bound by the following terms of use. Please review the following terms carefully. If you do not agree to these terms, you should not use this site.</string>
