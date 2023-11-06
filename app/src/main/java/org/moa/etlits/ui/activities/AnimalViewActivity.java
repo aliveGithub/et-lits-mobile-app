@@ -12,6 +12,10 @@ import android.view.MenuItem;
 import org.moa.etlits.R;
 import org.moa.etlits.data.repositories.AnimalRepository;
 import org.moa.etlits.databinding.ActivityAnimalViewBinding;
+import org.moa.etlits.utils.DateUtils;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class AnimalViewActivity extends AppCompatActivity {
     private ActivityAnimalViewBinding binding = null;
@@ -29,16 +33,24 @@ public class AnimalViewActivity extends AppCompatActivity {
             if (animal != null) {
                 binding.tvAnimalId.setText(animal.getAnimalId());
                 binding.tvSex.setText(getSex(animal.getSex()));
-                binding.tvAge.setText(String.valueOf(animal.getAge()));
+                binding.tvAge.setText(getString(R.string.animal_reg_age_months, String.valueOf(animal.getAge())));
+                binding.tvBirthDate.setText(getDateOfBirth(animal.getAge()));
                 binding.tvBreed.setText(animal.getBreed());
                 binding.tvSpecies.setText(animal.getSpecies());
-                binding.tvEstablishment.setText(animal.getEid());
+                binding.tvEstablishment.setText(animal.getEid() + " - " + animal.getEstablishmentName());
                 binding.tvTerminated.setText(animal.isDead() ? R.string.animal_view_terminated_yes : R.string.animal_view_terminated_no);
             }
         });
     }
 
-    private String getSex(String value){
+    private String getDateOfBirth(int months) {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, -months);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        return DateUtils.formatDate(cal.getTime());
+    }
+
+   private String getSex(String value){
         if (value != null && value.length() > 2 && value.startsWith("cs")) {
             return String.valueOf(value.substring(2).charAt(0));
         }

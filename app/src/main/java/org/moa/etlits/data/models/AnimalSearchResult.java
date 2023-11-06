@@ -21,6 +21,9 @@ public class AnimalSearchResult implements Comparable<AnimalSearchResult> {
     @Nullable
     private String eid;
 
+    @Nullable
+    private String establishmentName;
+
     private String lasEvent;
 
         @Nullable
@@ -98,6 +101,14 @@ public class AnimalSearchResult implements Comparable<AnimalSearchResult> {
 
     public void setLastEventDate(@Nullable Date lastEventDate) {
         this.lastEventDate = lastEventDate;
+    }
+
+    public String getEstablishmentName() {
+        return establishmentName;
+    }
+
+    public void setEstablishmentName(@Nullable String establishmentName) {
+        this.establishmentName = establishmentName;
     }
 
     public boolean isDead() {

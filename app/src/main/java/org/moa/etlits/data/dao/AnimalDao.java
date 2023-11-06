@@ -51,8 +51,10 @@ public interface AnimalDao {
             "JOIN category_values cv ON animals.breed = cv.value_id WHERE cv.language='en' AND cv.category_key='csBreeds'")
     LiveData<List<AnimalSearchResult>> getAll();
 
-    @Query("SELECT animals.id, animals.animal_id as animalId, animals.sex, animals.age, animals.dead, date_move_on as eventDate, establishment_eid as eid, cv.value as breed FROM animals " +
-            "JOIN animal_registrations ON animals.animal_registration_id = animal_registrations.id " +
-            "JOIN category_values cv ON animals.breed = cv.value_id WHERE cv.language='en' AND cv.category_key='csBreeds' AND animals.animal_id=:animalId")
+    @Query("SELECT animals.id, animals.animal_id as animalId, animals.sex, animals.age, animals.dead, date_move_on as eventDate, ar.establishment_eid as eid, cv.value as breed,est.name as establishmentName FROM animals " +
+            "JOIN animal_registrations ar ON animals.animal_registration_id = ar.id " +
+            "JOIN category_values cv ON animals.breed = cv.value_id " +
+            "JOIN establishments est ON est.code = ar.establishment_eid " +
+            "WHERE cv.language='en' AND cv.category_key='csBreeds' AND animals.animal_id=:animalId")
     LiveData<AnimalSearchResult> loadByAnimalId(String animalId);
 }
