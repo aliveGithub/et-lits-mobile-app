@@ -1,6 +1,7 @@
 package org.moa.etlits.ui.activities;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -10,6 +11,7 @@ import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -99,6 +101,21 @@ public class TermsOfUseActivity extends AppCompatActivity {
 
         }
     }
+
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == android.R.id.home) {
+
+            if(screenModeAccept) {
+                disagreeTermsOfUse();
+            } else {
+                finish();
+            }
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     private void agreeTermsOfUse() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(Constants.HAS_TERMS_OR_USE_ACCEPTED, true);
