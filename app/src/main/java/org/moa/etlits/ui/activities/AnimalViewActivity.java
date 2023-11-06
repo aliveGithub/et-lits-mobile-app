@@ -1,9 +1,5 @@
 package org.moa.etlits.ui.activities;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -15,7 +11,10 @@ import org.moa.etlits.databinding.ActivityAnimalViewBinding;
 import org.moa.etlits.utils.DateUtils;
 
 import java.util.Calendar;
-import java.util.Date;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 public class AnimalViewActivity extends AppCompatActivity {
     private ActivityAnimalViewBinding binding = null;
@@ -79,7 +78,6 @@ public class AnimalViewActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
 
     @Override
     protected void onDestroy() {

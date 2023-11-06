@@ -55,7 +55,7 @@ class AnimalEditViewHolder extends RecyclerView.ViewHolder implements View.OnCli
 
         return value;
     }
-    
+
     private String getBreed(String value) {
         if (value != null && value.length() > 2 && value.startsWith("cs")) {
             return value.substring(2);

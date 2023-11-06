@@ -99,6 +99,8 @@ public class AnimalListActivity extends AppCompatActivity implements AnimalViewL
     }
     @Override
     public void onAnimalItemClick(int position) {
-
+        Intent intent = new Intent(this, AnimalViewActivity.class);
+        intent.putExtra("animalId", viewModel.getAnimalList().getValue().get(position).getAnimalId());
+        startActivity(intent);
     }
 }
