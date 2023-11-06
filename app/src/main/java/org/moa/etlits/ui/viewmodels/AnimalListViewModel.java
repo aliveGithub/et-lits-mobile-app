@@ -2,7 +2,6 @@ package org.moa.etlits.ui.viewmodels;
 
 import android.app.Application;
 
-import org.moa.etlits.data.models.Animal;
 import org.moa.etlits.data.models.AnimalSearchResult;
 import org.moa.etlits.data.repositories.AnimalRepository;
 
@@ -13,10 +12,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-public class AnimalsViewModel extends AndroidViewModel {
+public class AnimalListViewModel extends AndroidViewModel {
     private AnimalRepository animalRepository;
     private LiveData<List<AnimalSearchResult>> animalList;
-    public AnimalsViewModel(Application application) {
+    public AnimalListViewModel(Application application) {
         super(application);
         animalRepository = new AnimalRepository(application);
         animalList = animalRepository.getAll();
@@ -31,7 +30,7 @@ public class AnimalsViewModel extends AndroidViewModel {
         }
         @Override
         public <T extends ViewModel> T create(Class<T> modelClass) {
-            return (T) new AnimalsViewModel(application);
+            return (T) new AnimalListViewModel(application);
         }
     }
 }
