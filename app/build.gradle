@@ -54,7 +54,7 @@ android {
                 releaseNotes="${buildTime()}:This is a sample release note."
                 groups="qa-group"
             }
-            versionNameSuffix=" (${Objects.toString(System.getenv("BUILD_TAG"), "dev")})"
+            versionNameSuffix=" (${Objects.toString(System.getenv("BUILD_TAG_PRETTY"), "dev")})"
         }
         release {
             // Caution! In production, you need to generate your own keystore file, and store it safely.

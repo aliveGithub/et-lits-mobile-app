@@ -13,7 +13,9 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import org.moa.etlits.R;
+import org.moa.etlits.data.models.AnimalSearchResult;
 import org.moa.etlits.databinding.FragmentSearchBinding;
+import org.moa.etlits.ui.activities.AnimalViewActivity;
 import org.moa.etlits.ui.activities.EstablishmentSummaryActivity;
 import org.moa.etlits.ui.adapters.AnimalSearchAdapter;
 import org.moa.etlits.ui.adapters.EstablishmentSearchAdapter;
@@ -75,10 +77,9 @@ public class SearchFragment extends Fragment {
         setupSearchTabs();
 
         if (getArguments() != null) {
-
             String defaultView = getArguments().getString(DEFAULT_VIEW_PARAM);
             String animalsQuery = getArguments().getString(ANIMALS_QUERY_PARAM);
-            Log.d("SearchFragment", "defaultView: " + defaultView);
+
             if (animalsQuery != null) {
                 binding.acvAnimalSearch.setText(animalsQuery);
             }
@@ -112,6 +113,18 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+            }
+        });
+
+        binding.acvAnimalSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                AnimalSearchResult selectedItem = (AnimalSearchResult)parent.getItemAtPosition(position);
+                if (selectedItem != null) {
+                    Intent intent = new Intent(getActivity(), AnimalViewActivity.class);
+                    intent.putExtra("animalId", selectedItem.getAnimalId());
+                    startActivity(intent);
+                }
             }
         });
     }
