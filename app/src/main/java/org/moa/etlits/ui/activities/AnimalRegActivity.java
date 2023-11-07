@@ -127,6 +127,7 @@ public class AnimalRegActivity extends AppCompatActivity {
             showFragment(viewModel.getCurrentStep());
             updateNavigationButtons();
         });
+
         binding.ivNext.setOnClickListener(v -> {
             if (viewModel.getCurrentStep() == Constants.AnimalRegStep.REGISTRATION) {
                 if (viewModel.getAnimals().getValue() == null || viewModel.getAnimals().getValue().isEmpty()) {
@@ -138,13 +139,16 @@ public class AnimalRegActivity extends AppCompatActivity {
             showFragment(viewModel.getCurrentStep());
             updateNavigationButtons();
         });
+
         binding.ivLast.setOnClickListener(v -> {
-            if (viewModel.getCurrentStep() == Constants.AnimalRegStep.REGISTRATION) {
+            if (viewModel.getCurrentStep() == Constants.AnimalRegStep.REGISTRATION
+                    || viewModel.getCurrentStep() == Constants.AnimalRegStep.MOVE_EVENTS) {
                 if (viewModel.getAnimals().getValue() == null || viewModel.getAnimals().getValue().isEmpty()) {
                     showNoAnimalsDialog();
                     return;
                 }
             }
+
             viewModel.moveLast();
             showFragment(viewModel.getCurrentStep());
             updateNavigationButtons();
@@ -192,14 +196,18 @@ public class AnimalRegActivity extends AppCompatActivity {
         binding = null;
     }
 
+    private void onLeaveForm() {
+        if (viewModel.getAnimalRegistration().getValue() != null) {
+            showLeaveDialog();
+        } else {
+            finish();
+        }
+    }
+
      @Override
      public boolean onOptionsItemSelected(MenuItem item) {
          if (item.getItemId() == android.R.id.home) {
-             if (viewModel.getAnimalRegistration().getValue() != null) {
-                 showLeaveDialog();
-             } else {
-                 finish();
-             }
+             onLeaveForm();
              return true;
          } else if (item.getItemId() == R.id.action_info) {
              Intent intent = new Intent(this, InfoActivity.class);
@@ -211,6 +219,11 @@ public class AnimalRegActivity extends AppCompatActivity {
 
          return super.onOptionsItemSelected(item);
      }
+
+    @Override
+    public void onBackPressed() {
+        onLeaveForm();
+    }
 
     private String getInfoMessage() {
         switch (viewModel.getCurrentStep()) {
