@@ -58,6 +58,8 @@
                 android:layout_below="@+id/et_animal_id"
                 android:text=""
                 android:textColor="@android:color/holo_red_light"
+                android:drawableStart="@drawable/ic_error"
+                android:drawablePadding="@dimen/very_small_padding"
                 android:visibility="gone"
                 android:paddingLeft="@dimen/very_small_padding"
                 android:paddingBottom="@dimen/small_padding"
@@ -104,6 +106,8 @@
                     android:layout_below="@+id/s_breed"
                     android:text=""
                     android:textColor="@android:color/holo_red_light"
+                    android:drawableStart="@drawable/ic_error"
+                    android:drawablePadding="@dimen/very_small_padding"
                     android:visibility="gone"
                     android:paddingLeft="@dimen/very_small_padding"
                     android:paddingBottom="@dimen/small_padding"
@@ -152,6 +156,8 @@
                     android:layout_below="@+id/s_sex"
                     android:text=""
                     android:textColor="@android:color/holo_red_light"
+                    android:drawableStart="@drawable/ic_error"
+                    android:drawablePadding="@dimen/very_small_padding"
                     android:visibility="gone"
                     android:paddingLeft="@dimen/very_small_padding"
                     android:paddingBottom="@dimen/small_padding"
@@ -201,6 +207,8 @@
                     android:layout_below="@+id/et_age"
                     android:text=""
                     android:textColor="@android:color/holo_red_light"
+                    android:drawableStart="@drawable/ic_error"
+                    android:drawablePadding="@dimen/very_small_padding"
                     android:visibility="gone"
                     android:paddingLeft="@dimen/very_small_padding"
                     android:paddingBottom="@dimen/small_padding"
@@ -242,7 +250,6 @@
             </RelativeLayout>
         </LinearLayout>
 
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -273,8 +280,7 @@
                     android:hint="@string/animal_reg_seller_hint"
                     android:minHeight="@dimen/min_touch_target_size"
                     android:background="@drawable/bg_input_default"
-                    android:paddingLeft="@dimen/very_small_padding"
-                    />
+                    android:paddingLeft="@dimen/very_small_padding" />
 
             </RelativeLayout>
         </LinearLayout>
