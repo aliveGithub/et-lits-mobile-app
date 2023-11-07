@@ -10,21 +10,21 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 
 
-public class AnimalListAdapter extends ListAdapter<Animal, AnimalViewHolder> {
+public class AnimalEditListAdapter extends ListAdapter<Animal, AnimalEditViewHolder> {
     private AnimalItemEventsListener animalItemEventsListener;
 
-    public AnimalListAdapter(@NonNull DiffUtil.ItemCallback<Animal> diffCallback, AnimalItemEventsListener animalItemEventsListener) {
+    public AnimalEditListAdapter(@NonNull DiffUtil.ItemCallback<Animal> diffCallback, AnimalItemEventsListener animalItemEventsListener) {
         super(diffCallback);
         this.animalItemEventsListener = animalItemEventsListener;
     }
 
     @Override
-    public AnimalViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return AnimalViewHolder.create(parent, animalItemEventsListener);
+    public AnimalEditViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return AnimalEditViewHolder.create(parent, animalItemEventsListener);
     }
 
     @Override
-    public void onBindViewHolder(AnimalViewHolder holder, int position) {
+    public void onBindViewHolder(AnimalEditViewHolder holder, int position) {
         Animal current = getItem(position);
         holder.bind(current);
     }

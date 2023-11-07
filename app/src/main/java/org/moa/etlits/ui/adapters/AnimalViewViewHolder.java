@@ -12,7 +12,7 @@ import org.moa.etlits.utils.DateUtils;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-class AnimalsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+class AnimalViewViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     private final TextView tvAnimalId;
     private final TextView tvEid;
     private final TextView tvSex;
@@ -24,8 +24,8 @@ class AnimalsViewHolder extends RecyclerView.ViewHolder implements View.OnClickL
 
 
 
-    private AnimalsAdapter.AnimalItemEventsListener animalItemEventsListener;
-    private AnimalsViewHolder(View itemView, AnimalsAdapter.AnimalItemEventsListener animalItemEventsListener) {
+    private AnimalViewListAdapter.AnimalItemEventsListener animalItemEventsListener;
+    private AnimalViewViewHolder(View itemView, AnimalViewListAdapter.AnimalItemEventsListener animalItemEventsListener) {
         super(itemView);
         itemView.setOnClickListener(this);
         this.animalItemEventsListener = animalItemEventsListener;
@@ -69,11 +69,11 @@ class AnimalsViewHolder extends RecyclerView.ViewHolder implements View.OnClickL
     }
 
 
-    public static AnimalsViewHolder create(ViewGroup parent, AnimalsAdapter.AnimalItemEventsListener animalItemEventsListener) {
+    public static AnimalViewViewHolder create(ViewGroup parent, AnimalViewListAdapter.AnimalItemEventsListener animalItemEventsListener) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recyclerview_animals_item, parent, false);
 
-        return new AnimalsViewHolder(view, animalItemEventsListener);
+        return new AnimalViewViewHolder(view, animalItemEventsListener);
     }
 
         @Override
