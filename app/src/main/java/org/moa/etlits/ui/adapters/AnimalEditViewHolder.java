@@ -12,7 +12,7 @@ import org.moa.etlits.data.models.Animal;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-class AnimalViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+class AnimalEditViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     private final TextView tvAnimalId;
     private final TextView tvSex;
     private final TextView tvBreed;
@@ -20,8 +20,8 @@ class AnimalViewHolder extends RecyclerView.ViewHolder implements View.OnClickLi
 
     private ImageView ivDelete;
 
-    private AnimalListAdapter.AnimalItemEventsListener animalItemEventsListener;
-    private AnimalViewHolder(View itemView, AnimalListAdapter.AnimalItemEventsListener animalItemEventsListener) {
+    private AnimalEditListAdapter.AnimalItemEventsListener animalItemEventsListener;
+    private AnimalEditViewHolder(View itemView, AnimalEditListAdapter.AnimalItemEventsListener animalItemEventsListener) {
         super(itemView);
         itemView.setOnClickListener(this);
         this.animalItemEventsListener = animalItemEventsListener;
@@ -38,8 +38,6 @@ class AnimalViewHolder extends RecyclerView.ViewHolder implements View.OnClickLi
                 }
             }
         });
-
-
     }
 
     public void bind(Animal animal) {
@@ -57,6 +55,7 @@ class AnimalViewHolder extends RecyclerView.ViewHolder implements View.OnClickLi
 
         return value;
     }
+
     private String getBreed(String value) {
         if (value != null && value.length() > 2 && value.startsWith("cs")) {
             return value.substring(2);
@@ -65,13 +64,11 @@ class AnimalViewHolder extends RecyclerView.ViewHolder implements View.OnClickLi
         return value;
     }
 
-
-
-    public static AnimalViewHolder create(ViewGroup parent, AnimalListAdapter.AnimalItemEventsListener animalItemEventsListener) {
+    public static AnimalEditViewHolder create(ViewGroup parent, AnimalEditListAdapter.AnimalItemEventsListener animalItemEventsListener) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recyclerview_animal_item, parent, false);
 
-        return new AnimalViewHolder(view, animalItemEventsListener);
+        return new AnimalEditViewHolder(view, animalItemEventsListener);
     }
 
         @Override

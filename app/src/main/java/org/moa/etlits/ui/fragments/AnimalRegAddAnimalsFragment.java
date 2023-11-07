@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter;
 import org.moa.etlits.data.models.Animal;
 import org.moa.etlits.databinding.FragmentAnimalRegAddAnimalsBinding;
 import org.moa.etlits.ui.activities.AnimalEntryActivity;
-import org.moa.etlits.ui.adapters.AnimalListAdapter;
+import org.moa.etlits.ui.adapters.AnimalEditListAdapter;
 import org.moa.etlits.ui.viewmodels.AnimalRegViewModel;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -25,9 +25,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import static android.app.Activity.RESULT_OK;
 
 
-public class AnimalRegAddAnimalsFragment extends Fragment implements AnimalListAdapter.AnimalItemEventsListener {
+public class AnimalRegAddAnimalsFragment extends Fragment implements AnimalEditListAdapter.AnimalItemEventsListener {
     private AnimalRegViewModel viewModel;
-    private AnimalListAdapter adapter;
+    private AnimalEditListAdapter adapter;
 
     private ActivityResultLauncher<Intent> activityResultLauncher;
 
@@ -59,7 +59,7 @@ public class AnimalRegAddAnimalsFragment extends Fragment implements AnimalListA
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider((ViewModelStoreOwner) getActivity(), (ViewModelProvider.Factory) new AnimalRegViewModel.Factory(getActivity().getApplication(), 0)).get(AnimalRegViewModel.class);
 
-        adapter = new AnimalListAdapter(new AnimalListAdapter.AnimalDiff(), this);
+        adapter = new AnimalEditListAdapter(new AnimalEditListAdapter.AnimalDiff(), this);
         binding.rvAnimals.setAdapter(adapter);
         binding.rvAnimals.setLayoutManager(new LinearLayoutManager(requireActivity()));
         viewModel.getAnimals().observe(getViewLifecycleOwner(), animals -> {

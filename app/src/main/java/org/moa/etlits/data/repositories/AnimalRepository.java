@@ -62,4 +62,8 @@ public class AnimalRepository {
     public LiveData<List<AnimalSearchResult>> getAll(){
         return animalDao.getAll();
     }
+
+    public LiveData<AnimalSearchResult> loadByAnimalId(String animalId){
+        return animalDao.loadByAnimalId(animalId);
+    }
 }
