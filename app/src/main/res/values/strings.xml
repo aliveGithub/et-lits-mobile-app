@@ -115,7 +115,7 @@
     <string name="animal_reg_breed">Breed*</string>
     <string name="animal_reg_select">Select...</string>
     <string name="animal_reg_sex">Sex*</string>
-    <string name="animal_reg_age">Age (Months)</string>
+    <string name="animal_reg_age">Age (Months)*</string>
     <string name="animal_reg_age_hint">Age in months...</string>
     <string name="animal_reg_dead">Dead</string>
     <string name="animal_reg_seller">Seller</string>
