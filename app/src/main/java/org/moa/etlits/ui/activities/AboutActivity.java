@@ -15,13 +15,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.gson.internal.GsonBuildConfig;
-import com.jaredrummler.android.device.DeviceName;
-
 import org.moa.etlits.BuildConfig;
 import org.moa.etlits.R;
-
-import java.text.SimpleDateFormat;
 
 public class AboutActivity extends AppCompatActivity {
 
@@ -58,7 +53,6 @@ public class AboutActivity extends AppCompatActivity {
 
         displayPhoneInfo();
         setUpActionBar();
-        DeviceName.init(this);
     }
 
     private void showTermsOfUse() {
@@ -68,14 +62,14 @@ public class AboutActivity extends AppCompatActivity {
     }
 
     private void displayPhoneInfo() {
-
+        String deviceModel = Build.MODEL;
          String androidVersion = Build.VERSION.RELEASE;
          String buildVersion = BuildConfig.VERSION_NAME;
          String buildDate = BuildConfig.BUILD_TIME;
 
 
 
-         deviceModelTxt.setText(getString(R.string.device_model, getDeviceNameAndOrModel()));
+         deviceModelTxt.setText(getString(R.string.device_model, deviceModel));
          androidVersionTxt.setText(getString(R.string.android_virsion, androidVersion));
          buildVersionTxt.setText(getString(R.string.build_virsion, buildVersion));
 
@@ -83,16 +77,6 @@ public class AboutActivity extends AppCompatActivity {
 
     }
 
-    private String getDeviceNameAndOrModel () {
-        String deviceName = DeviceName.getDeviceName();
-        String deviceModel = Build.MODEL;
-
-        if(deviceName.toLowerCase().startsWith(deviceModel.toLowerCase())) {
-            return deviceModel;
-        }
-
-        return deviceModel + " (" + deviceName +")";
-    }
 
     private void setUpActionBar() {
         actionBar = getSupportActionBar();

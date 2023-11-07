@@ -125,5 +125,4 @@ dependencies {
 
     implementation 'com.google.guava:guava:29.0-android'
 
-    implementation('com.jaredrummler:android-device-names:2.1.1')
 }
