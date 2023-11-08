@@ -1,5 +1,7 @@
 package org.moa.etlits.ui.fragments;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,17 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.moa.etlits.R;
-import org.moa.etlits.data.models.Animal;
-import org.moa.etlits.databinding.FragmentAnimalRegAddAnimalsBinding;
-import org.moa.etlits.ui.activities.AnimalEntryActivity;
-import org.moa.etlits.ui.adapters.AnimalListAdapter;
-
-import org.moa.etlits.ui.adapters.AnimalEditListAdapter;
-
-import org.moa.etlits.ui.viewmodels.AnimalRegViewModel;
-import org.moa.etlits.utils.Constants;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -30,7 +21,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import static android.app.Activity.RESULT_OK;
+import org.moa.etlits.R;
+import org.moa.etlits.data.models.Animal;
+import org.moa.etlits.databinding.FragmentAnimalRegAddAnimalsBinding;
+import org.moa.etlits.ui.activities.AnimalEntryActivity;
+import org.moa.etlits.ui.adapters.AnimalEditListAdapter;
+import org.moa.etlits.ui.viewmodels.AnimalRegViewModel;
 
 
 public class AnimalRegAddAnimalsFragment extends Fragment implements AnimalEditListAdapter.AnimalItemEventsListener {
