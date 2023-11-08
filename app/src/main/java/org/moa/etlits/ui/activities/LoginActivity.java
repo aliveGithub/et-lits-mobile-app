@@ -44,7 +44,13 @@ public class LoginActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES, MODE_PRIVATE);
 
         if (isUserLoggedIn()) {
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            Intent intent;
+            if(isUserAcceptedTermsOfUse()) {
+                intent = new Intent(LoginActivity.this, MainActivity.class);
+            } else {
+                intent = new Intent(LoginActivity.this, TermsOfUseActivity.class);
+                intent.putExtra("screenModeAccept", true);
+            }
             startActivity(intent);
             finish();
         }
@@ -62,6 +68,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean isUserLoggedIn() {
         return encryptedPreferences.read(Constants.IS_USER_LOGGED_IN).equals("true");
+    }
+
+    private boolean isUserAcceptedTermsOfUse() {
+        return sharedPreferences.getBoolean(Constants.HAS_TERMS_OR_USE_ACCEPTED, false);
     }
 
     private void initViewModels() {

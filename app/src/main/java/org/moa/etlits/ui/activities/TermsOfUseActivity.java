@@ -59,15 +59,6 @@ public class TermsOfUseActivity extends AppCompatActivity {
                     agreeTermsOfUse();
                 }
             });
-
-            disagreeBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    disagreeTermsOfUse();
-                }
-            });
-
-
         }
 
 //        custom back navigation implementation
@@ -116,5 +107,21 @@ public class TermsOfUseActivity extends AppCompatActivity {
         Intent intent = new Intent(TermsOfUseActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if(screenModeAccept) {
+
+            disagreeTermsOfUse();
+
+        } else {
+
+            finish();
+
+        }
+
+        super.onBackPressed();
     }
 }
