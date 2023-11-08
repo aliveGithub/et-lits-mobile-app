@@ -92,12 +92,13 @@
                 android:id="@+id/tv_breed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Afar"
+                android:text=""
                 android:textSize="@dimen/font_size_small"
                 android:layout_marginRight="@dimen/small_margin"
                 android:layout_marginLeft="@dimen/small_margin"
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="@dimen/small_margin"
+                android:visibility="gone"
                 />
         </LinearLayout>
     </LinearLayout>
