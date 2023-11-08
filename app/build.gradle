@@ -1,7 +1,7 @@
 import java.text.SimpleDateFormat
 
-def buildTime() {
-    def df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'")
+def buildTime(String pattern) {
+    def df = new SimpleDateFormat(pattern)
     df.setTimeZone(TimeZone.getTimeZone("UTC"))
     return df.format(new Date())
 }
@@ -51,10 +51,14 @@ android {
                 appId=System.getenv("FIREBASE_APP_ID")
                 artifactType="APK"
                 artifactPath="$rootDir/app/build/outputs/apk/debug/app-debug.apk"
-                releaseNotes="${buildTime()}:This is a sample release note."
+                releaseNotes="${buildTime("yyyy-MM-dd'T'HH:mm'Z'")}:This is a sample release note."
                 groups="qa-group"
             }
+
+            buildConfigField("String", "BUILD_TIME", "\"${buildTime("dd/MM/yyyy hh:mm")}\"")
+
             versionNameSuffix=" (${Objects.toString(System.getenv("BUILD_TAG_PRETTY"), "dev")})"
+
         }
         release {
             // Caution! In production, you need to generate your own keystore file, and store it safely.
@@ -80,6 +84,7 @@ android {
     }
     buildFeatures {
         viewBinding true
+        buildConfig = true
     }
 }
 
@@ -122,4 +127,5 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
 
     implementation 'com.google.guava:guava:29.0-android'
+
 }

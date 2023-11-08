@@ -15,11 +15,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.gson.internal.GsonBuildConfig;
-
+import org.moa.etlits.BuildConfig;
 import org.moa.etlits.R;
-
-import java.text.SimpleDateFormat;
 
 public class AboutActivity extends AppCompatActivity {
 
@@ -65,19 +62,21 @@ public class AboutActivity extends AppCompatActivity {
     }
 
     private void displayPhoneInfo() {
-         String deviceModel = Build.MODEL;
+        String deviceModel = Build.MODEL;
          String androidVersion = Build.VERSION.RELEASE;
-         String buildVersion = GsonBuildConfig.VERSION;
-         long buildDate = Build.TIME;
+         String buildVersion = BuildConfig.VERSION_NAME;
+         String buildDate = BuildConfig.BUILD_TIME;
+
+
 
          deviceModelTxt.setText(getString(R.string.device_model, deviceModel));
          androidVersionTxt.setText(getString(R.string.android_virsion, androidVersion));
          buildVersionTxt.setText(getString(R.string.build_virsion, buildVersion));
 
-        SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy hh:mm");
-        buildDateTxt.setText(getString(R.string.build_date, format.format(buildDate)));
+        buildDateTxt.setText(getString(R.string.build_date, buildDate));
 
     }
+
 
     private void setUpActionBar() {
         actionBar = getSupportActionBar();
