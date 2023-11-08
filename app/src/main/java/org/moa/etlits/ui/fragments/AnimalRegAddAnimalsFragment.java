@@ -14,12 +14,8 @@ import org.moa.etlits.R;
 import org.moa.etlits.data.models.Animal;
 import org.moa.etlits.databinding.FragmentAnimalRegAddAnimalsBinding;
 import org.moa.etlits.ui.activities.AnimalEntryActivity;
-import org.moa.etlits.ui.adapters.AnimalListAdapter;
-
 import org.moa.etlits.ui.adapters.AnimalEditListAdapter;
-
 import org.moa.etlits.ui.viewmodels.AnimalRegViewModel;
-import org.moa.etlits.utils.Constants;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
