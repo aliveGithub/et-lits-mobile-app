@@ -1,17 +1,25 @@
 package org.moa.etlits.ui.fragments;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.TextView;
 
+import org.moa.etlits.R;
 import org.moa.etlits.data.models.Animal;
 import org.moa.etlits.databinding.FragmentAnimalRegAddAnimalsBinding;
 import org.moa.etlits.ui.activities.AnimalEntryActivity;
+import org.moa.etlits.ui.adapters.AnimalListAdapter;
+
 import org.moa.etlits.ui.adapters.AnimalEditListAdapter;
+
 import org.moa.etlits.ui.viewmodels.AnimalRegViewModel;
+import org.moa.etlits.utils.Constants;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -122,7 +130,42 @@ public class AnimalRegAddAnimalsFragment extends Fragment implements AnimalEditL
 
     @Override
     public void onAnimalItemDeleteClick(int position) {
-        viewModel.removeAnimal(position);
-        adapter.notifyDataSetChanged();
+        showConfirmationDialog(position);
+    }
+
+    private void showConfirmationDialog(int position) {
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.setContentView(R.layout.custom_dialog);
+        dialog.setCancelable(false);
+
+        TextView title = dialog.findViewById(R.id.dialog_title);
+        TextView message = dialog.findViewById(R.id.dialog_message);
+
+        Button positiveButton = dialog.findViewById(R.id.positive_button);
+        Button negativeButton = dialog.findViewById(R.id.negative_button);
+        Button neutralButton = dialog.findViewById(R.id.neutral_button);
+
+        title.setText(R.string.animal_delete_confirmation_dialog_title);
+
+        Animal animal = (Animal) viewModel.getAnimals().getValue().get(position);
+
+        message.setText(getString(R.string.animal_delete_confirmation_dialog_message, animal.getAnimalId()));
+
+        positiveButton.setText(R.string.label_cancel);
+        positiveButton.setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+
+        negativeButton.setText(R.string.label_ok);
+        negativeButton.setOnClickListener(v -> {
+            viewModel.removeAnimal(position);
+            adapter.notifyDataSetChanged();
+            dialog.dismiss();
+        });
+
+        neutralButton.setVisibility(View.GONE);
+
+        dialog.show();
+
     }
 }
