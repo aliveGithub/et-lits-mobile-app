@@ -35,6 +35,9 @@ public abstract class AnimalRegistrationDao {
     @Query("SELECT * FROM animal_registrations WHERE id=:id")
     public abstract LiveData<AnimalRegistration> loadById(long id);
 
+    @Query("SELECT COUNT(id) FROM animal_registrations WHERE last_synced IS NULL")
+    public abstract LiveData<Integer> getPendingSyncCount();
+
     @Transaction
     public void insertRegistration(AnimalRegistration animalRegistration,
                                    List<Animal> animalList, List<Treatment> treatmentList,
@@ -117,4 +120,6 @@ public abstract class AnimalRegistrationDao {
             }
         }
     }
+
+
 }

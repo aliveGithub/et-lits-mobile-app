@@ -8,6 +8,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -101,6 +102,11 @@ public class SyncActivity extends AppCompatActivity {
     private void initViewModels() {
         syncViewModel = new ViewModelProvider(this, new SyncViewModel.SyncViewModelFactory(getApplication())).get(SyncViewModel.class);
         syncViewModel.getSyncLog().observe(this, this::updateUI);
+        syncViewModel.getRecordsPendingSync().observe(this, pendingSyncCount -> {
+            if (pendingSyncCount != null) {
+                binding.tvRecordsCount.setText(String.valueOf(pendingSyncCount));
+            }
+        });
     }
 
     private void addEventListeners() {
@@ -182,8 +188,8 @@ public class SyncActivity extends AppCompatActivity {
 
             boolean wasStopped =  Constants.SyncStatus.STOPPED.toString().equals(log.syncLog.getStatus());
             binding.tvStoppedByUser.setVisibility( wasStopped ? View.VISIBLE : View.GONE);
-            binding.tvRecordsCount.setText(String.valueOf(log.syncLog.getRecordsToSend()));
             binding.tvRecordsSent.setText(getString(R.string.sync_records_sent, String.valueOf(log.syncLog.getRecordsSent())));
+            binding.tvRecordsNotSent.setVisibility(log.syncLog.getRecordsNotSent() == 0 ? View.GONE : View.VISIBLE);
             binding.tvRecordsNotSent.setText(getString(R.string.sync_records_not_sent, String.valueOf(log.syncLog.getRecordsNotSent())));
             binding.tvRecordsReceived.setText(getString(R.string.sync_records_received, String.valueOf(log.syncLog.getRecordsReceived())));
 

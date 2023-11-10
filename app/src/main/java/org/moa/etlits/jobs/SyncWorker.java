@@ -190,7 +190,6 @@ public class SyncWorker extends Worker {
         }
     }
 
-
     @NonNull
     @Override
     public Result doWork() {

@@ -65,4 +65,8 @@ public class AnimalRegistrationRepository {
     public LiveData<AnimalRegistration>loadById(long id){
         return animalRegistrationDao.loadById(id);
     }
+
+    public LiveData<Integer> getPendingSyncCount(){
+        return animalRegistrationDao.getPendingSyncCount();
+    }
 }

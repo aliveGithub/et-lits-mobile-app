@@ -231,4 +231,5 @@
     <string name="animal_view_birth_date">Birth Date</string>
     <string name="animal_view_age">Age</string>
     <string name="animal_view_age_months">%1$s months</string>
+    <string name="animl_search_eid">EID %1$s</string>
 </resources>
