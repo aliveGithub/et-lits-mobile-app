@@ -59,6 +59,13 @@ public class TermsOfUseActivity extends AppCompatActivity {
                     agreeTermsOfUse();
                 }
             });
+
+            disagreeBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    disagreeTermsOfUse();
+                }
+            });
         }
 
         setUpActionBar();
