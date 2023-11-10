@@ -109,15 +109,7 @@ public class TermsOfUseActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        if(screenModeAccept) {
-
-            disagreeTermsOfUse();
-
-        } else {
-
-            finish();
-
-        }
+        if(screenModeAccept) disagreeTermsOfUse();
 
         super.onBackPressed();
     }
