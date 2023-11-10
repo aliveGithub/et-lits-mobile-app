@@ -61,16 +61,6 @@ public class TermsOfUseActivity extends AppCompatActivity {
             });
         }
 
-//        custom back navigation implementation
-        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                disagreeTermsOfUse();
-
-            }
-        };
-
-
         setUpActionBar();
     }
 
