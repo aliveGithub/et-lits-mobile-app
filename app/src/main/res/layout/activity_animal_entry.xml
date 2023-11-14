@@ -38,7 +38,8 @@
                 android:id="@+id/tv_animal_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/animal_reg_animal_id" />
+                android:text="@string/animal_reg_animal_id"
+                style="@style/FieldLabelStyle"/>
 
             <EditText
                 android:id="@+id/et_animal_id"
@@ -49,6 +50,7 @@
                 android:minHeight="@dimen/min_touch_target_size"
                 android:background="@drawable/bg_input_default"
                 android:paddingLeft="@dimen/very_small_padding"
+                style="@style/EditTextStyle"
                 />
 
             <TextView
@@ -57,14 +59,12 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/et_animal_id"
                 android:text=""
-                android:textColor="@android:color/holo_red_light"
                 android:drawableStart="@drawable/ic_error"
                 android:drawablePadding="@dimen/very_small_padding"
                 android:visibility="gone"
                 android:paddingLeft="@dimen/very_small_padding"
                 android:paddingBottom="@dimen/small_padding"
-                android:textSize="@dimen/font_size_smaller"
-                />
+                style="@style/FieldErrorStyle" />
 
         </RelativeLayout>
     </LinearLayout>
@@ -72,8 +72,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_gravity="center"
-            >
+            android:layout_gravity="center">
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
@@ -88,7 +87,9 @@
                     android:id="@+id/tv_breed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/animal_reg_breed" />
+                    android:text="@string/animal_reg_breed"
+                    style="@style/FieldLabelStyle"
+                    />
                 <Spinner
                     android:id="@+id/s_breed"
                     android:layout_width="match_parent"
@@ -98,6 +99,7 @@
                     android:minHeight="@dimen/min_touch_target_size"
                     android:background="@drawable/bg_dropdown_default"
                     android:paddingRight="@dimen/big_padding"
+                    style="@style/SpinnerStyle"
                     />
                 <TextView
                     android:id="@+id/tv_breed_error"
@@ -105,13 +107,12 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/s_breed"
                     android:text=""
-                    android:textColor="@android:color/holo_red_light"
                     android:drawableStart="@drawable/ic_error"
                     android:drawablePadding="@dimen/very_small_padding"
                     android:visibility="gone"
                     android:paddingLeft="@dimen/very_small_padding"
                     android:paddingBottom="@dimen/small_padding"
-                    android:textSize="@dimen/font_size_smaller"
+                    style="@style/FieldErrorStyle"
                     />
             </RelativeLayout>
         </LinearLayout>
@@ -137,6 +138,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/animal_reg_sex"
+                    style="@style/FieldLabelStyle"
                     />
 
                 <Spinner
@@ -148,6 +150,7 @@
                     android:minHeight="@dimen/min_touch_target_size"
                     android:background="@drawable/bg_dropdown_default"
                     android:paddingRight="@dimen/big_padding"
+                    style="@style/SpinnerStyle"
                     />
                 <TextView
                     android:id="@+id/tv_sex_error"
@@ -155,14 +158,12 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/s_sex"
                     android:text=""
-                    android:textColor="@android:color/holo_red_light"
                     android:drawableStart="@drawable/ic_error"
                     android:drawablePadding="@dimen/very_small_padding"
                     android:visibility="gone"
                     android:paddingLeft="@dimen/very_small_padding"
                     android:paddingBottom="@dimen/small_padding"
-                    android:textSize="@dimen/font_size_smaller"
-                    />
+                    style="@style/FieldErrorStyle" />
             </RelativeLayout>
         </LinearLayout>
 
@@ -187,7 +188,9 @@
                     android:id="@+id/tv_age"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/animal_reg_age" />
+                    android:text="@string/animal_reg_age"
+                    style="@style/FieldLabelStyle"
+                    />
 
                 <EditText
                     android:id="@+id/et_age"
@@ -199,6 +202,7 @@
                     android:inputType="number"
                     android:paddingLeft="@dimen/very_small_padding"
                     android:background="@drawable/bg_input_default"
+                    style="@style/EditTextStyle"
                     />
                 <TextView
                     android:id="@+id/tv_age_error"
@@ -206,14 +210,12 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/et_age"
                     android:text=""
-                    android:textColor="@android:color/holo_red_light"
                     android:drawableStart="@drawable/ic_error"
                     android:drawablePadding="@dimen/very_small_padding"
                     android:visibility="gone"
                     android:paddingLeft="@dimen/very_small_padding"
                     android:paddingBottom="@dimen/small_padding"
-                    android:textSize="@dimen/font_size_smaller"
-                    />
+                    style="@style/FieldErrorStyle" />
 
             </RelativeLayout>
         </LinearLayout>
@@ -238,7 +240,9 @@
                     android:id="@+id/tv_dead"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/animal_reg_dead" />
+                    android:text="@string/animal_reg_dead"
+                    style="@style/FieldLabelStyle"
+                    />
                 <Switch
                     android:id="@+id/sw_dead"
                     android:layout_width="wrap_content"
@@ -270,7 +274,8 @@
                     android:id="@+id/tv_seller"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/animal_reg_seller"/>
+                    android:text="@string/animal_reg_seller"
+                    style="@style/FieldLabelStyle"/>
 
                 <EditText
                     android:id="@+id/et_seller"
@@ -280,7 +285,8 @@
                     android:hint="@string/animal_reg_seller_hint"
                     android:minHeight="@dimen/min_touch_target_size"
                     android:background="@drawable/bg_input_default"
-                    android:paddingLeft="@dimen/very_small_padding" />
+                    android:paddingLeft="@dimen/very_small_padding"
+                    style="@style/EditTextStyle"/>
 
             </RelativeLayout>
         </LinearLayout>
@@ -317,8 +323,7 @@
                     android:layout_marginTop="@dimen/small_margin"
                     android:layout_marginBottom="@dimen/small_margin"
                     android:drawableLeft="@drawable/ic_tick_square"
-                    android:drawablePadding="@dimen/small_padding"
-                    />
+                    android:drawablePadding="@dimen/small_padding" />
 
                 <Button
                     android:layout_width="wrap_content"
@@ -333,8 +338,7 @@
                     android:layout_marginTop="@dimen/small_margin"
                     android:layout_marginBottom="@dimen/small_margin"
                     android:drawableLeft="@drawable/ic_plus"
-                    android:drawablePadding="@dimen/small_padding"
-                    />
+                    android:drawablePadding="@dimen/small_padding" />
 
             </LinearLayout>
         </LinearLayout>

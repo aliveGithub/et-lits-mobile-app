@@ -53,6 +53,15 @@
         <item name="fontFamily">@font/inter</item>
         <item name="android:textColor">@android:color/holo_red_light</item>
     </style>
+
+    <style name="EditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:textSize">@dimen/font_size_normal</item>
+        <item name="fontFamily">@font/inter</item>
+    </style>
+    <style name="SpinnerStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:textSize">@dimen/font_size_normal</item>
+        <item name="fontFamily">@font/inter</item>
+    </style>
     <!-- End Data Entry Form Styles -->
 
 </resources>
