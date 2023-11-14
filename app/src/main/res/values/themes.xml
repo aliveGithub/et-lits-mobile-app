@@ -62,6 +62,12 @@
         <item name="android:textSize">@dimen/font_size_normal</item>
         <item name="fontFamily">@font/inter</item>
     </style>
+
+    <style name="FormSectionHeaderStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">@dimen/font_size_normal</item>
+        <item name="fontFamily">@font/inter</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
     <!-- End Data Entry Form Styles -->
 
 </resources>
