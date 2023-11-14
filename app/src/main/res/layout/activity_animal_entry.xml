@@ -317,13 +317,12 @@
                     android:id="@+id/btn_done"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/small_margin"
-                    android:background="@drawable/bg_white_round_corners"
-                    android:textColor="@color/colorPrimary"
                     android:padding="@dimen/small_padding"
                     android:layout_marginTop="@dimen/small_margin"
                     android:layout_marginBottom="@dimen/small_margin"
                     android:drawableLeft="@drawable/ic_tick_square"
-                    android:drawablePadding="@dimen/small_padding" />
+                    android:drawablePadding="@dimen/small_padding"
+                    style="@style/ButtonWhiteStyle"/>
 
                 <Button
                     android:layout_width="wrap_content"
@@ -332,13 +331,13 @@
                     android:id="@+id/btn_add_next_animal"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/small_margin"
-                    android:background="@drawable/bg_white_round_corners"
-                    android:textColor="@color/colorPrimary"
                     android:padding="@dimen/small_padding"
                     android:layout_marginTop="@dimen/small_margin"
                     android:layout_marginBottom="@dimen/small_margin"
                     android:drawableLeft="@drawable/ic_plus"
-                    android:drawablePadding="@dimen/small_padding" />
+                    android:drawablePadding="@dimen/small_padding"
+                    style="@style/ButtonWhiteStyle"
+                    />
 
             </LinearLayout>
         </LinearLayout>
