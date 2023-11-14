@@ -58,7 +58,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/animals_register_tag"
-                            android:textSize="@dimen/font_size_bigger"
+                            android:textSize="@dimen/font_size_normal"
                             android:paddingTop="@dimen/small_padding"
                             android:gravity="center"/>
 
@@ -96,7 +96,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/animal_reg_view_registrations"
-                            android:textSize="@dimen/font_size_bigger"
+                            android:textSize="@dimen/font_size_normal"
                             android:paddingTop="@dimen/small_padding"
                             android:gravity="center"/>
 
@@ -134,7 +134,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/animals_health"
-                            android:textSize="@dimen/font_size_bigger"
+                            android:textSize="@dimen/font_size_normal"
                             android:paddingTop="@dimen/small_padding"
                             android:gravity="center"/>
 
@@ -173,7 +173,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/animals_remove"
-                            android:textSize="@dimen/font_size_bigger"
+                            android:textSize="@dimen/font_size_normal"
                             android:paddingTop="@dimen/small_padding"
                             android:gravity="center"/>
 
@@ -211,7 +211,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/animals_trace"
-                            android:textSize="@dimen/font_size_bigger"
+                            android:textSize="@dimen/font_size_normal"
                             android:paddingTop="@dimen/small_padding"
                             android:gravity="center"/>
 
@@ -249,7 +249,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/card_animals"
-                            android:textSize="@dimen/font_size_bigger"
+                            android:textSize="@dimen/font_size_normal"
                             android:paddingTop="@dimen/small_padding"
                             android:gravity="center"/>
 
