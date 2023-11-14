@@ -3,6 +3,7 @@ package org.moa.etlits.ui.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.moa.etlits.R;
@@ -22,6 +23,7 @@ class AnimalViewViewHolder extends RecyclerView.ViewHolder implements View.OnCli
     private final TextView tvEvent;
     private final TextView tvEventDate;
 
+    private final ImageView ivAnimalImage;
 
 
     private AnimalViewListAdapter.AnimalItemEventsListener animalItemEventsListener;
@@ -37,6 +39,7 @@ class AnimalViewViewHolder extends RecyclerView.ViewHolder implements View.OnCli
         tvSpecies = itemView.findViewById(R.id.tv_species);
         tvEvent = itemView.findViewById(R.id.tv_event);
         tvEventDate = itemView.findViewById(R.id.tv_event_date);
+        ivAnimalImage = itemView.findViewById(R.id.iv_animal_image);
     }
 
     public void bind(AnimalSearchResult animal) {
@@ -52,6 +55,11 @@ class AnimalViewViewHolder extends RecyclerView.ViewHolder implements View.OnCli
             tvEvent.setText(animal.getLasEvent());
         } else {
             tvEvent.setText(R.string.animal_list_status_pending_sync);
+        }
+        if (animal.isDead()) {
+            ivAnimalImage.setImageResource(R.drawable.ic_animal_filled_dead);
+        } else {
+            ivAnimalImage.setImageResource(R.drawable.ic_animal_filled);
         }
     }
 
