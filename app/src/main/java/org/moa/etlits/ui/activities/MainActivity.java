@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES, MODE_PRIVATE);
         boolean hasInitialized = sharedPreferences.getBoolean(Constants.HAS_INITIALIZED, false);
         if (!hasInitialized) {
-            boolean initialSyncStarted = sharedPreferences.getBoolean(Constants.INITIAL_SYNC_STARTED, false);
+            boolean initialSyncStarted = sharedPreferences.getBoolean(Constants.INITIAL_SYNC_COMPLETED, false);
             showDataInitDialog(initialSyncStarted);
             homeViewModel.setInitDialogShown(true);
         }

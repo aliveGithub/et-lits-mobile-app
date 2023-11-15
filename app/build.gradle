@@ -32,6 +32,16 @@ android {
         versionName "0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "USERNAME",
+                "\"${project.properties['ETLITS_TEST_USERNAME'] ?: ""}\"")
+        buildConfigField("String", "PASSWORD",
+                "\"${project.properties['ETLITS_TEST_PASSWORD'] ?: ""}\"")
+
+        buildConfigField("boolean", "CRASHLYTICS_DISABLED",
+                project.properties['CRASHLYTICS_DISABLED'] ?: "false")
+
+        buildConfigField("String", "BUILD_TIME", "\"${buildTime("dd/MM/yyyy hh:mm")}\"")
     }
 
     signingConfigs {
@@ -55,10 +65,7 @@ android {
                 groups="qa-group"
             }
 
-            buildConfigField("String", "BUILD_TIME", "\"${buildTime("dd/MM/yyyy hh:mm")}\"")
-
             versionNameSuffix=" (${Objects.toString(System.getenv("BUILD_TAG_PRETTY"), "dev")})"
-
         }
         release {
             // Caution! In production, you need to generate your own keystore file, and store it safely.
@@ -98,12 +105,14 @@ dependencies {
     def lifecycleVersion = '2.3.1'
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-guava:$room_version"
 
     // Lifecycle components
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
 
+    implementation "androidx.core:core-splashscreen:1.0.1"
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.5.0'

@@ -32,7 +32,6 @@ import org.moa.etlits.utils.EncryptedPreferences;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -280,8 +279,8 @@ public class SyncWorker extends Worker {
         syncLog.setStatus(status);
         syncLogRepository.update(syncLog);
 
-        if (!sharedPreferences.getBoolean(Constants.INITIAL_SYNC_STARTED, false)) {
-            sharedPreferences.edit().putBoolean(Constants.INITIAL_SYNC_STARTED, true).apply();
+        if (!sharedPreferences.getBoolean(Constants.INITIAL_SYNC_COMPLETED, false)) {
+            sharedPreferences.edit().putBoolean(Constants.INITIAL_SYNC_COMPLETED, true).apply();
         }
     }
 

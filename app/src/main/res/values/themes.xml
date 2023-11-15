@@ -6,6 +6,10 @@
 
     </style>
 
+    <style name="Theme.LITSMobileApp.SplashScreen" parent="Theme.SplashScreen">
+        <item name="postSplashScreenTheme">@style/Theme.LITSMobileApp</item>
+    </style>
+
     <style name="Theme.LITSMobileApp" parent="Base.Theme.LITS">
         <item name="android:fontFamily">@font/inter</item>
         <item name="actionBarStyle">@style/MyActionBar</item>
