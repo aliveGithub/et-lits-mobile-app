@@ -28,7 +28,7 @@ limitations under the License. -->
 
     <dimen name="font_size_small">10sp</dimen>
     <dimen name="font_size_smaller">12sp</dimen>
-    <dimen name="font_size_normal">14sp</dimen>
+    <dimen name="font_size_normal">15sp</dimen>
     <dimen name="font_size_bigger">16sp</dimen>
 
     <dimen name="width_vertical_img_btn">48dp</dimen>

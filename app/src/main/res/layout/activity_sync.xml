@@ -127,7 +127,9 @@
                 android:text="@string/btn_sync_start"
                 android:textColor="@color/white"
                 android:drawableLeft="@drawable/ic_play_bold"
-                android:fontFamily="@font/inter_bold"/>
+                android:fontFamily="@font/inter_bold"
+                android:textSize="@dimen/font_size_normal"
+                />
 
             <ProgressBar
                 android:id="@+id/pb_loading"

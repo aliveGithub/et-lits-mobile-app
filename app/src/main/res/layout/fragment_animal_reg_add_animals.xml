@@ -14,13 +14,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/animal_reg_animals_identified_and_registered"
-            android:textSize="@dimen/font_size_normal"
-            android:textStyle="bold"
             android:gravity="center"
-            android:textColor="@color/white"
             android:padding="@dimen/small_padding"
             android:background="@drawable/bg_section_header_green"
-            android:layout_marginBottom="@dimen/small_margin"/>
+            android:layout_marginBottom="@dimen/small_margin"
+            style="@style/FormSectionHeaderStyle"
+            />
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -73,11 +72,10 @@
             android:id="@+id/btn_add_animal"
             android:layout_gravity="center"
             android:layout_margin="@dimen/small_margin"
-            android:background="@drawable/btn_primary_green"
-            android:textColor="@color/white"
             android:padding="@dimen/small_padding"
             android:layout_marginTop="@dimen/small_margin"
             android:layout_marginBottom="@dimen/small_margin"
+            style="@style/ButtonPrimaryStyle"
             />
     </LinearLayout>
 </ScrollView>
