@@ -200,7 +200,7 @@ public class LoginActivity extends AppCompatActivity {
     private void login() {
         if (NetworkUtils.isInternetConnected(LoginActivity.this)) {
             binding.loading.setVisibility(View.VISIBLE);
-            loginViewModel.login(binding.etUsername.getText().toString().trim(),
+            loginViewModel.login(binding.etUsername.getText().toString().trim().toLowerCase(),
                     binding.etPassword.getText().toString().trim());
         } else {
             showLoginFailed(getString(R.string.no_internet_connection));
