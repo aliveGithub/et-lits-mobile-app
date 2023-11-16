@@ -3,6 +3,7 @@ package org.moa.etlits.ui.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.moa.etlits.R;
@@ -12,7 +13,7 @@ import org.moa.etlits.utils.DateUtils;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-class AnimalsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+class AnimalViewViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     private final TextView tvAnimalId;
     private final TextView tvEid;
     private final TextView tvSex;
@@ -22,10 +23,11 @@ class AnimalsViewHolder extends RecyclerView.ViewHolder implements View.OnClickL
     private final TextView tvEvent;
     private final TextView tvEventDate;
 
+    private final ImageView ivAnimalImage;
 
 
-    private AnimalsAdapter.AnimalItemEventsListener animalItemEventsListener;
-    private AnimalsViewHolder(View itemView, AnimalsAdapter.AnimalItemEventsListener animalItemEventsListener) {
+    private AnimalViewListAdapter.AnimalItemEventsListener animalItemEventsListener;
+    private AnimalViewViewHolder(View itemView, AnimalViewListAdapter.AnimalItemEventsListener animalItemEventsListener) {
         super(itemView);
         itemView.setOnClickListener(this);
         this.animalItemEventsListener = animalItemEventsListener;
@@ -37,6 +39,7 @@ class AnimalsViewHolder extends RecyclerView.ViewHolder implements View.OnClickL
         tvSpecies = itemView.findViewById(R.id.tv_species);
         tvEvent = itemView.findViewById(R.id.tv_event);
         tvEventDate = itemView.findViewById(R.id.tv_event_date);
+        ivAnimalImage = itemView.findViewById(R.id.iv_animal_image);
     }
 
     public void bind(AnimalSearchResult animal) {
@@ -52,6 +55,11 @@ class AnimalsViewHolder extends RecyclerView.ViewHolder implements View.OnClickL
             tvEvent.setText(animal.getLasEvent());
         } else {
             tvEvent.setText(R.string.animal_list_status_pending_sync);
+        }
+        if (animal.isDead()) {
+            ivAnimalImage.setImageResource(R.drawable.ic_animal_filled_dead);
+        } else {
+            ivAnimalImage.setImageResource(R.drawable.ic_animal_filled);
         }
     }
 
@@ -69,11 +77,11 @@ class AnimalsViewHolder extends RecyclerView.ViewHolder implements View.OnClickL
     }
 
 
-    public static AnimalsViewHolder create(ViewGroup parent, AnimalsAdapter.AnimalItemEventsListener animalItemEventsListener) {
+    public static AnimalViewViewHolder create(ViewGroup parent, AnimalViewListAdapter.AnimalItemEventsListener animalItemEventsListener) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recyclerview_animals_item, parent, false);
 
-        return new AnimalsViewHolder(view, animalItemEventsListener);
+        return new AnimalViewViewHolder(view, animalItemEventsListener);
     }
 
         @Override

@@ -76,7 +76,7 @@
     <string name="sync_info_close">Close</string>
     <string name="home_establishment_search">Establishment Search</string>
     <string name="establishment_title">Establishment</string>
-    <string name="establishment_summary_pic">PIC</string>
+    <string name="establishment_summary_eid">EID</string>
     <string name="establishment_type">Type</string>
     <string name="establishment_phone">Phone</string>
     <string name="establishment_not_specified">not specified</string>
@@ -115,7 +115,7 @@
     <string name="animal_reg_breed">Breed*</string>
     <string name="animal_reg_select">Select...</string>
     <string name="animal_reg_sex">Sex*</string>
-    <string name="animal_reg_age">Age (Months)</string>
+    <string name="animal_reg_age">Age (Months)*</string>
     <string name="animal_reg_age_hint">Age in months...</string>
     <string name="animal_reg_dead">Dead</string>
     <string name="animal_reg_seller">Seller</string>
@@ -152,6 +152,13 @@
     <string name="animal_reg_leave_form_cancel">Cancel</string>
     <string name="animal_reg_close_snackbar_msg">%1$s animals registered</string>
     <string name="animal_reg_close_snackbar_action">SYNC</string>
+
+    <string name="animal_delete_confirmation_dialog_title">Remove Animal</string>
+    <string name="animal_delete_confirmation_dialog_message">Are you sure you want to remove %1$s animal?</string>
+
+    <string name="label_ok">OK</string>
+    <string name="label_cancel">Cancel</string>
+
     <!--Terms of Use - Placeholder content-->
     <string name="ToU">Terms of Use</string>
     <string name="ToU_welcome_txt">Welcome to our site. We maintain this web site as a service to our members. By using our site, you are agreeing to comply with and be bound by the following terms of use. Please review the following terms carefully. If you do not agree to these terms, you should not use this site.</string>
@@ -207,10 +214,22 @@
     <string name="build_date">Build date: %1$s</string>
 
     <string name="login_alert_ok">OK</string>
-    <string name="home_animal_search">Animal Search</string><string name="animal_id_lookup_hint">Animal ID Lookup</string>
+    <string name="home_animal_search">Animal Search</string>
+    <string name="animal_id_lookup_hint">Animal ID Lookup</string>
     <string name="animals_list_title">Animals</string>
     <string name="animals_list_info">By default, the animals listed and the animals search is limited to the animals stored locally on the device.</string>
     <string name="animals_list_stored_on_device_txt">Animals stored on the device</string>
     <string name="animal_list_status_pending_sync">Pending Sync</string>
-
+    <string name="animal_view_title">Animal</string>
+    <string name="animal_view_terminated_yes">Yes</string>
+    <string name="animal_view_terminated_no">No</string>
+    <string name="animal_view_animal_id">Animal ID</string>
+    <string name="animal_view_terminated">Terminated</string>
+    <string name="animal_view_species">Species</string>
+    <string name="animal_view_breed">Breed</string>
+    <string name="animal_view_establishment">Establishment</string>
+    <string name="animal_view_birth_date">Birth Date</string>
+    <string name="animal_view_age">Age</string>
+    <string name="animal_view_age_months">%1$s months</string>
+    <string name="animl_search_eid">EID %1$s</string>
 </resources>

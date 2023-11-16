@@ -12,7 +12,23 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.splashscreen.SplashScreen;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.SettableFuture;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
+
+import org.moa.etlits.BuildConfig;
 import org.moa.etlits.R;
+import org.moa.etlits.data.dao.AppDatabase;
 import org.moa.etlits.databinding.ActivityLoginBinding;
 import org.moa.etlits.ui.validation.LoginFormState;
 import org.moa.etlits.ui.viewmodels.login.LoginResult;
@@ -24,11 +40,6 @@ import org.moa.etlits.utils.NetworkUtils;
 
 import java.net.HttpURLConnection;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 public class LoginActivity extends AppCompatActivity {
     private ActivityLoginBinding binding;
     private LoginViewModel loginViewModel;
@@ -39,21 +50,16 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setupCrashlytics();
+
+        ListenableFuture<Long> initFuture = attemptDatabaseMigrations();
+
+        SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
+        splashScreen.setKeepOnScreenCondition(() -> !initFuture.isDone());
+
         super.onCreate(savedInstanceState);
         encryptedPreferences = new EncryptedPreferences(LoginActivity.this);
         sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES, MODE_PRIVATE);
-
-        if (isUserLoggedIn()) {
-            Intent intent;
-            if(isUserAcceptedTermsOfUse()) {
-                intent = new Intent(LoginActivity.this, MainActivity.class);
-            } else {
-                intent = new Intent(LoginActivity.this, TermsOfUseActivity.class);
-                intent.putExtra("screenModeAccept", true);
-            }
-            startActivity(intent);
-            finish();
-        }
 
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -64,6 +70,47 @@ public class LoginActivity extends AppCompatActivity {
         }
         initViewModels();
         attachEventListeners();
+    }
+
+    private void setupCrashlytics() {
+        if (!BuildConfig.CRASHLYTICS_DISABLED) {
+            FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true);
+        }
+    }
+
+    private ListenableFuture<Long> attemptDatabaseMigrations() {
+        ListenableFuture<Long> countFuture = AppDatabase.getDatabase(getApplicationContext())
+                .syncLogDao()
+                .count();
+
+        SettableFuture<Long> initFuture = SettableFuture.create();
+        FutureCallback<Long> callback = new FutureCallback<Long>() {
+            @Override
+            public void onSuccess(Long result) {
+                if (isUserLoggedIn()) {
+                    Intent intent;
+                    if(isUserAcceptedTermsOfUse()) {
+                        intent = new Intent(LoginActivity.this, MainActivity.class);
+                    } else {
+                        intent = new Intent(LoginActivity.this, TermsOfUseActivity.class);
+                        intent.putExtra("screenModeAccept", true);
+                    }
+                    startActivity(intent);
+                    finish();
+                }
+                initFuture.set(result);
+            }
+
+            @Override
+            public void onFailure(@NonNull Throwable t) {
+                initFuture.setException(t);
+                throw new RuntimeException("Failed to initialise the database.", t);
+            }
+        };
+
+        Futures.addCallback(countFuture, callback, ContextCompat.getMainExecutor(this));
+
+        return initFuture;
     }
 
     private boolean isUserLoggedIn() {
@@ -146,6 +193,11 @@ public class LoginActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        if (!BuildConfig.USERNAME.isEmpty() && !BuildConfig.PASSWORD.isEmpty()) {
+            binding.etUsername.setText(BuildConfig.USERNAME);
+            binding.etPassword.setText(BuildConfig.PASSWORD);
+        }
 
         binding.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override

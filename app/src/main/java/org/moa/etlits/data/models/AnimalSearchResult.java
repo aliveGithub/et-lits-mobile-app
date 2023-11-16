@@ -21,10 +21,15 @@ public class AnimalSearchResult implements Comparable<AnimalSearchResult> {
     @Nullable
     private String eid;
 
+    @Nullable
+    private String establishmentName;
+
     private String lasEvent;
 
-    @Nullable
+        @Nullable
     private Date lastEventDate;
+    @Nullable
+    private Boolean dead = false;
     public Long getId() {
         return id;
     }
@@ -98,6 +103,21 @@ public class AnimalSearchResult implements Comparable<AnimalSearchResult> {
         this.lastEventDate = lastEventDate;
     }
 
+    public String getEstablishmentName() {
+        return establishmentName;
+    }
+
+    public void setEstablishmentName(@Nullable String establishmentName) {
+        this.establishmentName = establishmentName;
+    }
+
+    public boolean isDead() {
+        return dead;
+    }
+
+    public void setDead(boolean dead) {
+        this.dead = dead;
+    }
     @Override
     public int compareTo(AnimalSearchResult o) {
         return this.getAnimalId().compareTo(o.getAnimalId());

@@ -14,26 +14,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/animal_reg_on_holding_ground"
-        android:textSize="@dimen/font_size_normal"
-        android:textStyle="bold"
         android:gravity="center"
-        android:textColor="@color/white"
         android:padding="@dimen/small_padding"
         android:background="@drawable/bg_section_header_green"
-        android:layout_marginBottom="@dimen/small_margin"/>
+        android:layout_marginBottom="@dimen/small_margin"
+        style="@style/FormSectionHeaderStyle"
+        />
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_gravity="center"
-        >
+        android:layout_gravity="center">
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_home"
             android:layout_margin="@dimen/big_padding"
-            android:layout_gravity="center"
-            />
+            android:layout_gravity="center" />
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -43,7 +40,8 @@
                 android:id="@+id/tv_move_off_eid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/animal_reg_establishment_eid" />
+                android:text="@string/animal_reg_establishment_eid"
+                style="@style/FieldLabelStyle" />
             <AutoCompleteTextView
                 android:id="@+id/actv_move_off_eid"
                 android:layout_width="match_parent"
@@ -54,18 +52,19 @@
                 android:paddingLeft="@dimen/very_small_padding"
                 android:background="@drawable/bg_dropdown_default"
                 android:paddingRight="@dimen/big_padding"
-                />
+                style="@style/AutoCompleteTextViewStyle" />
             <TextView
                 android:id="@+id/tv_move_off_eid_error"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/actv_move_off_eid"
                 android:text=""
-                android:textColor="@android:color/holo_red_light"
+                android:drawableStart="@drawable/ic_error"
+                android:drawablePadding="@dimen/very_small_padding"
                 android:visibility="gone"
                 android:paddingLeft="@dimen/very_small_padding"
                 android:paddingBottom="@dimen/small_padding"
-                android:textSize="@dimen/font_size_smaller"
+                style="@style/FieldErrorStyle"
                 />
         </RelativeLayout>
     </LinearLayout>
@@ -73,8 +72,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -91,7 +89,9 @@
                 android:id="@+id/tv_date_identification"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/animal_reg_date_identification" />
+                android:text="@string/animal_reg_date_identification"
+                style="@style/FieldLabelStyle"
+                />
 
             <Button
                 android:id="@+id/btn_date_identification"
@@ -103,7 +103,8 @@
                 android:gravity="left|center_vertical"
                 android:padding="@dimen/very_small_padding"
                 android:background="@drawable/bg_input_default"
-                android:drawableRight="@drawable/ic_calendar_small" />
+                android:drawableRight="@drawable/ic_calendar_small"
+                style="@style/DatePickerStyle" />
 
             <TextView
                 android:id="@+id/tv_date_identification_error"
@@ -111,123 +112,12 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/btn_date_identification"
                 android:text=""
-                android:textColor="@android:color/holo_red_light"
+                android:drawableStart="@drawable/ic_error"
+                android:drawablePadding="@dimen/very_small_padding"
                 android:visibility="gone"
                 android:paddingLeft="@dimen/very_small_padding"
                 android:paddingBottom="@dimen/small_padding"
-                android:textSize="@dimen/font_size_smaller"
-                />
-        </RelativeLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_calendar"
-            android:layout_margin="@dimen/big_padding"
-            android:layout_gravity="center"
-            />
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/big_margin"
-            android:layout_weight="1">
-            <TextView
-                android:id="@+id/tv_date_move_off"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/animal_reg_date_move_off" />
-
-            <Button
-                android:id="@+id/btn_date_move_off"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_date_move_off"
-                android:hint="@string/animal_reg_select_date"
-                android:gravity="left|center_vertical"
-                android:padding="@dimen/very_small_padding"
-                android:background="@drawable/bg_input_default"
-                android:drawableRight="@drawable/ic_calendar_small" />
-
-            <TextView
-                android:id="@+id/tv_date_move_off_error"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/btn_date_move_off"
-                android:text=""
-                android:textColor="@android:color/holo_red_light"
-                android:visibility="gone"
-                android:paddingLeft="@dimen/very_small_padding"
-                android:paddingBottom="@dimen/small_padding"
-                android:textSize="@dimen/font_size_smaller"
-                />
-        </RelativeLayout>
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/animal_reg_establishment"
-        android:textSize="@dimen/font_size_normal"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:textColor="@color/white"
-        android:padding="@dimen/small_padding"
-        android:background="@drawable/bg_section_header_green"
-        android:layout_marginBottom="@dimen/small_margin"/>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-
-        >
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_home"
-            android:layout_margin="@dimen/big_padding"
-            android:layout_gravity="center"
-            />
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/big_margin"
-            android:layout_weight="1">
-            <TextView
-                android:id="@+id/tv_move_on_eid"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/animal_reg_establishment" />
-           <AutoCompleteTextView
-                android:id="@+id/actv_move_on_eid"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_move_on_eid"
-                android:hint="@string/animal_reg_lookup_eid"
-                android:minHeight="@dimen/min_touch_target_size"
-                android:paddingLeft="@dimen/very_small_padding"
-               android:paddingRight="@dimen/big_padding"
-                android:background="@drawable/bg_dropdown_default"
-                />
-
-            <TextView
-                android:id="@+id/tv_move_on_eid_error"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/actv_move_on_eid"
-                android:text=""
-                android:textColor="@android:color/holo_red_light"
-                android:visibility="gone"
-                android:paddingLeft="@dimen/very_small_padding"
-                android:paddingBottom="@dimen/small_padding"
-                android:textSize="@dimen/font_size_smaller"
-                />
-
+                style="@style/FieldErrorStyle" />
         </RelativeLayout>
     </LinearLayout>
 
@@ -240,9 +130,120 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_calendar"
             android:layout_margin="@dimen/big_padding"
-            android:layout_gravity="center"
+            android:layout_gravity="center" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/big_margin"
+            android:layout_weight="1">
+            <TextView
+                android:id="@+id/tv_date_move_off"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/animal_reg_date_move_off"
+                style="@style/FieldLabelStyle"/>
 
+            <Button
+                android:id="@+id/btn_date_move_off"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_date_move_off"
+                android:hint="@string/animal_reg_select_date"
+                android:gravity="left|center_vertical"
+                android:padding="@dimen/very_small_padding"
+                android:background="@drawable/bg_input_default"
+                android:drawableRight="@drawable/ic_calendar_small"
+                style="@style/DatePickerStyle" />
+
+            <TextView
+                android:id="@+id/tv_date_move_off_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_date_move_off"
+                android:text=""
+                android:drawableStart="@drawable/ic_error"
+                android:drawablePadding="@dimen/very_small_padding"
+                android:visibility="gone"
+                android:paddingLeft="@dimen/very_small_padding"
+                android:paddingBottom="@dimen/small_padding"
+                style="@style/FieldErrorStyle" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/animal_reg_establishment"
+        android:gravity="center"
+        android:padding="@dimen/small_padding"
+        android:background="@drawable/bg_section_header_green"
+        android:layout_marginBottom="@dimen/small_margin"
+        style="@style/FormSectionHeaderStyle"
+        />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_home"
+            android:layout_margin="@dimen/big_padding"
+            android:layout_gravity="center"
             />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/big_margin"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/tv_move_on_eid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/animal_reg_establishment"
+                style="@style/FieldLabelStyle"/>
+
+           <AutoCompleteTextView
+                android:id="@+id/actv_move_on_eid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_move_on_eid"
+                android:hint="@string/animal_reg_lookup_eid"
+                android:minHeight="@dimen/min_touch_target_size"
+                android:paddingLeft="@dimen/very_small_padding"
+               android:paddingRight="@dimen/big_padding"
+                android:background="@drawable/bg_dropdown_default"
+               style="@style/AutoCompleteTextViewStyle"
+                />
+
+            <TextView
+                android:id="@+id/tv_move_on_eid_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/actv_move_on_eid"
+                android:text=""
+                android:drawableStart="@drawable/ic_error"
+                android:drawablePadding="@dimen/very_small_padding"
+                android:visibility="gone"
+                android:paddingLeft="@dimen/very_small_padding"
+                android:paddingBottom="@dimen/small_padding"
+                style="@style/FieldErrorStyle"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_calendar"
+            android:layout_margin="@dimen/big_padding"
+            android:layout_gravity="center" />
+
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -252,7 +253,8 @@
                 android:id="@+id/tv_date_move_on"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/animal_reg_date_move_on" />
+                android:text="@string/animal_reg_date_move_on"
+                style="@style/FieldLabelStyle"/>
             <Button
                 android:id="@+id/btn_date_move_on"
                 android:layout_width="match_parent"
@@ -262,7 +264,8 @@
                 android:gravity="left|center_vertical"
                 android:padding="@dimen/very_small_padding"
                 android:background="@drawable/bg_input_default"
-                android:drawableRight="@drawable/ic_calendar_small" />
+                android:drawableRight="@drawable/ic_calendar_small"
+                style="@style/DatePickerStyle" />
 
             <TextView
                 android:id="@+id/tv_date_move_on_error"
@@ -270,12 +273,12 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/btn_date_move_on"
                 android:text=""
-                android:textColor="@android:color/holo_red_light"
+                android:drawableStart="@drawable/ic_error"
+                android:drawablePadding="@dimen/very_small_padding"
                 android:visibility="gone"
                 android:paddingLeft="@dimen/very_small_padding"
                 android:paddingBottom="@dimen/small_padding"
-                android:textSize="@dimen/font_size_smaller"
-                />
+                style="@style/FieldErrorStyle" />
 
         </RelativeLayout>
     </LinearLayout>

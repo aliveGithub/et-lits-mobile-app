@@ -9,9 +9,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import org.moa.etlits.R;
-import org.moa.etlits.ui.adapters.AnimalsAdapter;
+import org.moa.etlits.ui.adapters.AnimalViewListAdapter;
 import org.moa.etlits.ui.fragments.SearchFragment;
-import org.moa.etlits.ui.viewmodels.AnimalsViewModel;
+import org.moa.etlits.ui.viewmodels.AnimalListViewModel;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,9 +23,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class AnimalListActivity extends AppCompatActivity implements AnimalsAdapter.AnimalItemEventsListener {
-    private AnimalsViewModel viewModel;
-    private AnimalsAdapter animalsAdapter;
+public class AnimalListActivity extends AppCompatActivity implements AnimalViewListAdapter.AnimalItemEventsListener {
+    private AnimalListViewModel viewModel;
+    private AnimalViewListAdapter animalsAdapter;
 
     private ActionBar actionBar;
 
@@ -35,12 +35,12 @@ public class AnimalListActivity extends AppCompatActivity implements AnimalsAdap
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_animal_list);
 
-        animalsAdapter = new AnimalsAdapter(new AnimalsAdapter.AnimalRegDiff(), this);
+        animalsAdapter = new AnimalViewListAdapter(new AnimalViewListAdapter.AnimalRegDiff(), this);
         RecyclerView recyclerView = findViewById(R.id.rv_animal_list);
         recyclerView.setAdapter(animalsAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        viewModel = new ViewModelProvider(this, new AnimalsViewModel.Factory(getApplication())).get(AnimalsViewModel.class);
+        viewModel = new ViewModelProvider(this, new AnimalListViewModel.Factory(getApplication())).get(AnimalListViewModel.class);
         viewModel.getAnimalList().observe(this, animals -> {
             if (animals != null) {
                 animalsAdapter.submitList(animals);
@@ -99,6 +99,8 @@ public class AnimalListActivity extends AppCompatActivity implements AnimalsAdap
     }
     @Override
     public void onAnimalItemClick(int position) {
-
+        Intent intent = new Intent(this, AnimalViewActivity.class);
+        intent.putExtra("animalId", viewModel.getAnimalList().getValue().get(position).getAnimalId());
+        startActivity(intent);
     }
 }

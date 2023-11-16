@@ -50,7 +50,9 @@ tools:context=".ui.fragments.SearchFragment">
     android:background="@drawable/btn_green_white"
     android:layout_marginTop="-10dp"
     android:text=""
-    android:hint="@string/establishment_search_hint"/>
+    android:hint="@string/establishment_search_hint"
+    style="@style/AutoCompleteTextViewStyle"
+    />
   <AutoCompleteTextView
       android:id="@+id/acv_animal_search"
       android:layout_width="match_parent"
@@ -66,6 +68,6 @@ tools:context=".ui.fragments.SearchFragment">
       android:text=""
       android:hint="@string/animal_id_lookup_hint"
       android:visibility="gone"
-      />
+      style="@style/AutoCompleteTextViewStyle" />
 
 </LinearLayout>

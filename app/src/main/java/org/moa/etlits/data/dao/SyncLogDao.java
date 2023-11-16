@@ -15,6 +15,8 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
+import com.google.common.util.concurrent.ListenableFuture;
+
 @Dao
 public interface SyncLogDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -24,6 +26,9 @@ public interface SyncLogDao {
     void insert(SyncError error);
     @Update
     void update(SyncLog syncLog);
+
+    @Query("SELECT count(*) FROM sync_logs")
+    ListenableFuture<Long> count();
 
     @Query("SELECT * FROM sync_logs")
     LiveData<List<SyncLog>> getAllSyncLogs();

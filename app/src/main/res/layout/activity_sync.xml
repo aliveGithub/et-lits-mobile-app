@@ -127,7 +127,9 @@
                 android:text="@string/btn_sync_start"
                 android:textColor="@color/white"
                 android:drawableLeft="@drawable/ic_play_bold"
-                android:fontFamily="@font/inter_bold"/>
+                android:fontFamily="@font/inter_bold"
+                android:textSize="@dimen/font_size_normal"
+                />
 
             <ProgressBar
                 android:id="@+id/pb_loading"
@@ -274,10 +276,10 @@
                     android:padding="@dimen/very_small_padding"/>
 
                 <TextView
-                    android:id="@+id/tv_records_received"
+                    android:id="@+id/tv_records_sent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/sync_records_received"
+                    android:text="@string/sync_records_sent"
                     android:padding="@dimen/very_small_padding"/>
 
                 <TextView
@@ -285,13 +287,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/sync_records_not_sent"
+                    android:visibility="gone"
                     android:padding="@dimen/very_small_padding"/>
 
                 <TextView
-                    android:id="@+id/tv_records_sent"
+                    android:id="@+id/tv_records_received"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/sync_records_sent"
+                    android:text="@string/sync_records_received"
                     android:padding="@dimen/very_small_padding"/>
             </LinearLayout>
 

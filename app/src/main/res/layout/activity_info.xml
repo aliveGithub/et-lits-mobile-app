@@ -12,17 +12,16 @@ android:padding="@dimen/big_padding">
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/sync_info_text"
-            android:textSize="16sp" />
+             style="@style/InfoTextViewStyle" />
         <Button
             android:id="@+id/btn_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:background="@color/white"
-            android:backgroundTint="@color/white"
-            android:textColor="@color/colorPrimary"
             android:text="@string/sync_info_close"
-            android:layout_gravity="end"/>
+            android:layout_gravity="end"
+            style="@style/ButtonWhiteStyle"
+             />
     </LinearLayout>
 
 </ScrollView>
