@@ -70,6 +70,17 @@ public class TermsOfUseActivity extends AppCompatActivity {
             });
         }
 
+        getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (screenModeAccept) {
+                    disagreeTermsOfUse();
+                } else {
+                    finish();
+                }
+            }
+        });
+
         setUpActionBar();
     }
 
@@ -91,14 +102,12 @@ public class TermsOfUseActivity extends AppCompatActivity {
     }
 
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == android.R.id.home) {
-
-            if(screenModeAccept) {
+        if (item.getItemId() == android.R.id.home) {
+            if (screenModeAccept) {
                 disagreeTermsOfUse();
             } else {
                 finish();
             }
-
         }
 
         return super.onOptionsItemSelected(item);
@@ -121,13 +130,5 @@ public class TermsOfUseActivity extends AppCompatActivity {
         Intent intent = new Intent(TermsOfUseActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
-    }
-
-    @Override
-    public void onBackPressed() {
-
-        if(screenModeAccept) disagreeTermsOfUse();
-
-        super.onBackPressed();
     }
 }
