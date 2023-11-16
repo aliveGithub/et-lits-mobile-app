@@ -68,19 +68,18 @@ public class TermsOfUseActivity extends AppCompatActivity {
                     disagreeTermsOfUse();
                 }
             });
-
-
         }
 
-//        custom back navigation implementation
-        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+        getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                disagreeTermsOfUse();
-
+                if (screenModeAccept) {
+                    disagreeTermsOfUse();
+                } else {
+                    finish();
+                }
             }
-        };
-
+        });
 
         setUpActionBar();
     }
@@ -103,14 +102,12 @@ public class TermsOfUseActivity extends AppCompatActivity {
     }
 
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == android.R.id.home) {
-
-            if(screenModeAccept) {
+        if (item.getItemId() == android.R.id.home) {
+            if (screenModeAccept) {
                 disagreeTermsOfUse();
             } else {
                 finish();
             }
-
         }
 
         return super.onOptionsItemSelected(item);

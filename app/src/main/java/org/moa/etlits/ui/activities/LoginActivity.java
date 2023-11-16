@@ -88,9 +88,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Long result) {
                 if (isUserLoggedIn()) {
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
+                    navigateOnLoginSuccess();
                 }
                 initFuture.set(result);
             }
@@ -109,6 +107,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean isUserLoggedIn() {
         return encryptedPreferences.read(Constants.IS_USER_LOGGED_IN).equals("true");
+    }
+
+    private boolean isUserAcceptedTermsOfUse() {
+        return sharedPreferences.getBoolean(Constants.HAS_TERMS_OR_USE_ACCEPTED, false);
     }
 
     private void initViewModels() {
@@ -211,20 +213,21 @@ public class LoginActivity extends AppCompatActivity {
         encryptedPreferences.write(Constants.USERNAME, loginResult.getUsername());
         encryptedPreferences.write(Constants.PASSWORD, loginResult.getPassword());
         encryptedPreferences.write(Constants.IS_USER_LOGGED_IN, "true");
-        boolean hasTermsOfUseAccepted = sharedPreferences.getBoolean(Constants.HAS_TERMS_OR_USE_ACCEPTED, false);
 
+        navigateOnLoginSuccess();
+    }
+
+    private void navigateOnLoginSuccess() {
         Intent intent;
-        if(hasTermsOfUseAccepted) {
+        if (isUserAcceptedTermsOfUse()) {
             intent = new Intent(LoginActivity.this, MainActivity.class);
         } else {
             intent = new Intent(LoginActivity.this, TermsOfUseActivity.class);
             intent.putExtra("screenModeAccept", true);
         }
-
         startActivity(intent);
         finish();
     }
-
 
     private String getMessage(Integer errorCode) {
         if (errorCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
