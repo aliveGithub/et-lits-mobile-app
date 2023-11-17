@@ -38,7 +38,7 @@ public class EstablishmentRepository {
         });
     }
 
-    public void insert(TypeObjectUnmovable unmovable, Set<String> productionTypes) {
+    public void insert(TypeObjectUnmovable unmovable, Set<String> productionTypes, String[] coordinates) {
         Establishment establishment = new Establishment();
         establishment.setCode(unmovable.getKey());
         establishment.setType(Constants.UNMOVABLE_ESTABLISHMENT);
@@ -58,7 +58,16 @@ public class EstablishmentRepository {
         if (unmovable.getContactDetails() != null) {
             establishment.setTelephoneNumber(unmovable.getContactDetails().getTelephoneNumber());
             establishment.setMobileNumber(unmovable.getContactDetails().getMobilePhoneNumber());
-            establishment.setEmail(unmovable.getContactDetails().geteMailAddress());
+            establishment.setEmail(unmovable.getContactDetails().getEmailAddress());
+        }
+        if (unmovable.getPostalLocation() != null) {
+            String address =  unmovable.getPostalLocation().getCity() + " " + unmovable.getPostalLocation().getPostcode();
+            establishment.setAlternativePostalAddress(address);
+        }
+
+        if (coordinates != null) {
+            establishment.setLatitude(coordinates[1]);
+            establishment.setLongitude(coordinates[0]);
         }
 
         insert(establishment);

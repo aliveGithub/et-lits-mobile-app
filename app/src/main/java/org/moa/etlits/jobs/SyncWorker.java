@@ -12,6 +12,7 @@ import org.moa.etlits.api.response.ConfigResponse;
 import org.moa.etlits.api.response.EntryType;
 import org.moa.etlits.api.response.TypeObjectDetail;
 import org.moa.etlits.api.response.TypeObjectUnmovable;
+import org.moa.etlits.api.response.TypeObjectUnmovableCoordinates;
 import org.moa.etlits.api.response.ValueType;
 import org.moa.etlits.api.services.AnimalService;
 import org.moa.etlits.api.services.ConfigService;
@@ -139,7 +140,9 @@ public class SyncWorker extends Worker {
 
             if (configResponse.getObjectUnmovable() != null) {
                for (TypeObjectUnmovable unmovable : configResponse.getObjectUnmovable()) {
-                    establishmentRepository.insert(unmovable, getEstablishmentProductionTypes(unmovable, configResponse.getObjectDetail()));
+                   Set<String> productionTypes = getEstablishmentProductionTypes(unmovable, configResponse.getObjectDetail());
+                   String[] coordinates = getGpsCoordinates(unmovable, configResponse.getObjectUnmovableCoordinates());
+                   establishmentRepository.insert(unmovable, productionTypes, coordinates);
                     ++received;
                 }
             }
@@ -149,6 +152,37 @@ public class SyncWorker extends Worker {
         }
 
         return null;
+    }
+
+    private String[] getGpsCoordinates(TypeObjectUnmovable unmovable, List<TypeObjectUnmovableCoordinates> unmovableCoordinates) {
+        if (unmovableCoordinates == null) {
+            return null;
+        }
+
+        for (TypeObjectUnmovableCoordinates coordinates : unmovableCoordinates) {
+            if (coordinates.getKey().equals(unmovable.getKey())) {
+                return extractGpsCoordinates(coordinates.getGeometry());
+            }
+        }
+
+        return null;
+    }
+
+    private String[] extractGpsCoordinates(String geometry) {
+        int startIndex = geometry.indexOf('(') + 1;
+        int endIndex = geometry.indexOf(')');
+
+        if (startIndex < 0 || endIndex < 0 || startIndex >= endIndex) {
+            throw new IllegalArgumentException("Invalid geometry string");
+        }
+
+       String coordinates = geometry.substring(startIndex, endIndex);
+        String[] parts = coordinates.split(" ");
+        if (parts.length != 2) {
+            throw new IllegalArgumentException("Invalid coordinates format");
+        }
+
+        return new String[]{parts[0], parts[1]};
     }
 
     private Set<String> getEstablishmentProductionTypes(TypeObjectUnmovable est, List<TypeObjectDetail> details) {
