@@ -50,6 +50,7 @@
                 android:minHeight="@dimen/min_touch_target_size"
                 android:background="@drawable/bg_input_default"
                 android:paddingLeft="@dimen/very_small_padding"
+                android:inputType="textCapCharacters"
                 style="@style/EditTextStyle"
                 />
 
