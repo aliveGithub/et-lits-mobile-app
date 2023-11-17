@@ -34,6 +34,7 @@ import org.moa.etlits.utils.EncryptedPreferences;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -139,9 +140,11 @@ public class SyncWorker extends Worker {
             }
 
             if (configResponse.getObjectUnmovable() != null) {
+                HashMap<String, Set<String>> productionTypesMap = getProductionTypesMap(configResponse.getObjectDetail());
+                HashMap<String, String> coordinatesMap = getCoordinatesMap(configResponse.getObjectUnmovableCoordinates());
                for (TypeObjectUnmovable unmovable : configResponse.getObjectUnmovable()) {
-                   Set<String> productionTypes = getEstablishmentProductionTypes(unmovable, configResponse.getObjectDetail());
-                   String[] coordinates = getGpsCoordinates(unmovable, configResponse.getObjectUnmovableCoordinates());
+                   Set<String> productionTypes = productionTypesMap.get(unmovable.getKey());
+                   String[] coordinates = extractGpsCoordinates(coordinatesMap.get(unmovable.getKey()));
                    establishmentRepository.insert(unmovable, productionTypes, coordinates);
                     ++received;
                 }
@@ -154,18 +157,17 @@ public class SyncWorker extends Worker {
         return null;
     }
 
-    private String[] getGpsCoordinates(TypeObjectUnmovable unmovable, List<TypeObjectUnmovableCoordinates> unmovableCoordinates) {
+    private HashMap<String, String> getCoordinatesMap(List<TypeObjectUnmovableCoordinates> unmovableCoordinates) {
+        HashMap<String, String> coordinatesMap = new HashMap<>();
         if (unmovableCoordinates == null) {
-            return null;
+            return coordinatesMap;
         }
 
         for (TypeObjectUnmovableCoordinates coordinates : unmovableCoordinates) {
-            if (coordinates.getKey().equals(unmovable.getKey())) {
-                return extractGpsCoordinates(coordinates.getGeometry());
-            }
+            coordinatesMap.put(coordinates.getKey(), coordinates.getGeometry());
         }
 
-        return null;
+        return coordinatesMap;
     }
 
     private String[] extractGpsCoordinates(String geometry) {
@@ -183,6 +185,25 @@ public class SyncWorker extends Worker {
         }
 
         return new String[]{parts[0], parts[1]};
+    }
+
+    private HashMap<String,Set<String>> getProductionTypesMap(List<TypeObjectDetail> details) {
+        HashMap<String, Set<String>> productionTypesMap = new HashMap<>();
+        if (details == null) {
+            return productionTypesMap;
+        }
+
+        for (TypeObjectDetail detail : details) {
+            Set<String> types = productionTypesMap.get(detail.getObject().getKey());
+            if (types == null) {
+                types = new HashSet<>();
+                productionTypesMap.put(detail.getObject().getKey(), types);
+            }
+
+            types.add(detail.getCategory());
+        }
+
+        return productionTypesMap;
     }
 
     private Set<String> getEstablishmentProductionTypes(TypeObjectUnmovable est, List<TypeObjectDetail> details) {
