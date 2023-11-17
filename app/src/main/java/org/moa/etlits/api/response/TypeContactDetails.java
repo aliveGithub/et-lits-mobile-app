@@ -4,7 +4,7 @@ public class TypeContactDetails {
     private String telephoneNumber;
     private String mobilePhoneNumber;
     private String faxNumber;
-    private String eMailAddress;
+    private String emailAddress;
 
     public String getTelephoneNumber() {
         return telephoneNumber;
@@ -30,11 +30,11 @@ public class TypeContactDetails {
         this.faxNumber = faxNumber;
     }
 
-    public String geteMailAddress() {
-        return eMailAddress;
+    public String getEmailAddress() {
+        return emailAddress;
     }
 
-    public void seteMailAddress(String eMailAddress) {
-        this.eMailAddress = eMailAddress;
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 }
