@@ -19,10 +19,9 @@ import com.google.android.material.navigation.NavigationView;
 import org.moa.etlits.R;
 import org.moa.etlits.ui.activities.AboutActivity;
 import org.moa.etlits.ui.activities.EstablishmentSummaryActivity;
-import org.moa.etlits.ui.activities.SyncActivity;
 import org.moa.etlits.ui.activities.LoginActivity;
 import org.moa.etlits.ui.activities.MainActivity;
-import org.moa.etlits.ui.activities.TermsOfUseActivity;
+import org.moa.etlits.ui.activities.SyncActivity;
 import org.moa.etlits.utils.Constants;
 import org.moa.etlits.utils.EncryptedPreferences;
 
@@ -30,6 +29,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 public class HomeTabsFragment extends Fragment {
     private Fragment activeFragment;
@@ -96,13 +96,18 @@ public class HomeTabsFragment extends Fragment {
             syncFragment = getChildFragmentManager().findFragmentByTag("sync");
             animalsFragment = getChildFragmentManager().findFragmentByTag("animals");
             moveFragment = getChildFragmentManager().findFragmentByTag("move");
+            activeFragment = getChildFragmentManager().findFragmentByTag(savedInstanceState.getString("activeFragment"));
         }
-
     }
 
     private void loadFragment(Fragment fragment) {
         if (activeFragment != fragment) {
-            getChildFragmentManager().beginTransaction().hide(activeFragment).show(fragment).commit();
+            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+            if (activeFragment != null) {
+                transaction.hide(activeFragment);
+            }
+            transaction.show(fragment);
+            transaction.commit();
             activeFragment = fragment;
         }
     }
@@ -182,6 +187,12 @@ public class HomeTabsFragment extends Fragment {
         super.onResume();
         String defaultEstablishment = sharedPreferences.getString(Constants.DEFAULT_ESTABLISHMENT, "");
         selectedEstablishment.setText(defaultEstablishment);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("activeFragment", activeFragment.getTag());
     }
 }
 

@@ -18,12 +18,15 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 public class MainActivity extends AppCompatActivity {
     private HomeViewModel homeViewModel;
 
     private ActionBarDrawerToggle drawerToggle;
+
+    private Fragment homeTabsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +42,14 @@ public class MainActivity extends AppCompatActivity {
             actionBar.setHomeButtonEnabled(true);
         }
 
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, new HomeTabsFragment())
-                .commit();
+        homeTabsFragment = getSupportFragmentManager().findFragmentByTag("home_tabs");
+        if (homeTabsFragment == null) {
+            homeTabsFragment = new HomeTabsFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, homeTabsFragment, "home_tabs")
+                    .commit();
+        }
+
 
         homeViewModel = new ViewModelProvider(MainActivity.this, new HomeViewModel.HomeViewModelFactory(getApplication()))
                 .get(HomeViewModel.class);
