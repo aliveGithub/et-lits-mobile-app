@@ -44,7 +44,7 @@
                             android:id="@+id/tv_records_count"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/inter_bold"
+                            android:fontFamily="@font/roboto_bold"
                             android:gravity="center"
                             android:paddingRight="@dimen/big_padding"
                             android:text="0"
@@ -127,7 +127,7 @@
                 android:text="@string/btn_sync_start"
                 android:textColor="@color/white"
                 android:drawableLeft="@drawable/ic_play_bold"
-                android:fontFamily="@font/inter_bold"
+                android:fontFamily="@font/roboto_bold"
                 android:textSize="@dimen/font_size_normal"
                 />
 
@@ -169,7 +169,7 @@
                     android:text="@string/sync_status"
                     android:textAllCaps="true"
                     android:textColor="@color/white"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/roboto_bold"
                     android:textSize="16sp" />
 
                 <LinearLayout
@@ -250,7 +250,7 @@
                     android:textColor="@color/colorPrimary"
                     android:padding="@dimen/small_padding"
                     android:layout_gravity="center_horizontal"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/roboto_bold"
                     />
             </LinearLayout>
 

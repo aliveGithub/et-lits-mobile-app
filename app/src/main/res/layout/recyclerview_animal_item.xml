@@ -9,14 +9,14 @@
         android:id="@+id/tv_animal_id"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="0000908980"
+        android:text=""
         android:layout_weight="4"
         android:maxLines="1"
         android:layout_marginTop="@dimen/small_padding"
         android:layout_marginBottom="@dimen/small_padding"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/font_size_smaller"
-        />
+        android:fontFamily="@font/roboto_medium"
+        android:textSize="@dimen/font_size_smaller" />
 
     <TextView
         android:id="@+id/tv_breed"
