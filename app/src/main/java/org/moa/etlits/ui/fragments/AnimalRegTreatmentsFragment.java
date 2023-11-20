@@ -2,7 +2,6 @@ package org.moa.etlits.ui.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
 import org.moa.etlits.data.models.CategoryValue;
-import org.moa.etlits.data.models.Treatment;
 import org.moa.etlits.databinding.FragmentAnimalRegTreatmentsBinding;
 import org.moa.etlits.ui.activities.AnimalRegActivity;
 import org.moa.etlits.ui.viewmodels.AnimalRegViewModel;
@@ -19,7 +17,6 @@ import java.util.List;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -49,7 +46,8 @@ public class AnimalRegTreatmentsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewModel = new ViewModelProvider((ViewModelStoreOwner) getActivity(), (ViewModelProvider.Factory) new AnimalRegViewModel.Factory(getActivity().getApplication(), 0)).get(AnimalRegViewModel.class);
+
+        viewModel = new ViewModelProvider(requireActivity()).get(AnimalRegViewModel.class);
 
         viewModel.getTreatmentTypeList().observe(getActivity(), treatmentTypes -> {
             if (treatmentTypes != null) {

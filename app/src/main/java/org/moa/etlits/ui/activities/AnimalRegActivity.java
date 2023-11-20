@@ -28,7 +28,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 
 public class AnimalRegActivity extends AppCompatActivity {
     private Fragment moveEventsFragment;
@@ -46,8 +45,11 @@ public class AnimalRegActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES, MODE_PRIVATE);
 
-        Long registrationId = getIntent().getLongExtra("registrationId", 0);
-        viewModel = new ViewModelProvider((ViewModelStoreOwner) this, (ViewModelProvider.Factory) new AnimalRegViewModel.Factory(getApplication(), registrationId)).get(AnimalRegViewModel.class);
+        long registrationId = getIntent().getLongExtra("registrationId", 0);
+        viewModel = new ViewModelProvider(
+                this,
+                new AnimalRegViewModel.Factory(getApplication(), registrationId)
+        ).get(AnimalRegViewModel.class);
 
         if (savedInstanceState == null) {
             addFragments();
