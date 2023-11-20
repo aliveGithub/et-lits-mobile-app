@@ -145,7 +145,7 @@ public class SyncWorker extends Worker {
                for (TypeObjectUnmovable unmovable : configResponse.getObjectUnmovable()) {
                    Set<String> productionTypes = productionTypesMap.get(unmovable.getKey());
                    String[] coordinates = extractGpsCoordinates(coordinatesMap.get(unmovable.getKey()));
-                   establishmentRepository.insert(unmovable, productionTypes, coordinates);
+                   establishmentRepository.insert(unmovable, productionTypes != null ? productionTypes : new HashSet<>(), coordinates);
                     ++received;
                 }
             }
@@ -171,6 +171,9 @@ public class SyncWorker extends Worker {
     }
 
     private String[] extractGpsCoordinates(String geometry) {
+        if (geometry == null) {
+            return null;
+        }
         int startIndex = geometry.indexOf('(') + 1;
         int endIndex = geometry.indexOf(')');
 
