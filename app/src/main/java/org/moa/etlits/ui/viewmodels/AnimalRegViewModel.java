@@ -1,7 +1,16 @@
 package org.moa.etlits.ui.viewmodels;
 
 import android.app.Application;
-import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.core.util.Supplier;
+import androidx.lifecycle.AbstractSavedStateViewModelFactory;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.SavedStateHandle;
+import androidx.lifecycle.ViewModel;
 
 import org.moa.etlits.data.models.Animal;
 import org.moa.etlits.data.models.AnimalRegistration;
@@ -20,12 +29,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
-
 
 public class AnimalRegViewModel extends AndroidViewModel {
 
@@ -38,7 +41,7 @@ public class AnimalRegViewModel extends AndroidViewModel {
     private CategoryValueRepository categoryValueRepository;
     private final MutableLiveData<Integer> currentStep = new MutableLiveData<>(0);
 
-    private LiveData<AnimalRegistration> animalRegistration = new MutableLiveData<>(new AnimalRegistration());
+    private LiveData<AnimalRegistration> animalRegistration;
 
     private MutableLiveData<AnimalRegFormState> animalRegFormState = new MutableLiveData<>();
     private LiveData<List<Establishment>> establishmentList;
@@ -62,7 +65,7 @@ public class AnimalRegViewModel extends AndroidViewModel {
         return breedList;
     }
 
-    public AnimalRegViewModel(Application application, long id) {
+    public AnimalRegViewModel(Application application, long id, SavedStateHandle savedStateHandle) {
         super(application);
         animalRegistrationRepository = new AnimalRegistrationRepository(application);
         animalRepository = new AnimalRepository(application);
@@ -74,15 +77,33 @@ public class AnimalRegViewModel extends AndroidViewModel {
         breedList = this.categoryValueRepository.loadByType(Constants.CATEGORY_KEY_BREEDS);
         populateSpeciesList();
 
-        animalRegistration = animalRegistrationRepository.loadById(id);
-        establishmentList = establishmentRepository.getAll();
-        animalList = animalRepository.getByAnimalRegistrationId(id);
-        treatmentList = treatmentRepository.getByAnimalRegistrationId(id);
+        animalRegistration = getRoomLiveData(() -> animalRegistrationRepository.loadById(id),
+                savedStateHandle, "animalRegistration");
 
+        establishmentList = establishmentRepository.getAll();
+        animalList = getRoomLiveData(() -> animalRepository.getByAnimalRegistrationId(id),
+                savedStateHandle, "animalList");
+        treatmentList = getRoomLiveData(() -> treatmentRepository.getByAnimalRegistrationId(id),
+                savedStateHandle, "treatmentList");
 
         dateMoveOn = Calendar.getInstance();
         dateMoveOff = Calendar.getInstance();
         dateIdentification = Calendar.getInstance();
+    }
+
+    private <T> LiveData<T> getRoomLiveData(Supplier<LiveData<T>> roomLiveDataSupplier,
+                SavedStateHandle savedStateHandle, String key) {
+        if (!savedStateHandle.contains(key)) {
+            LiveData<T> roomLiveData = roomLiveDataSupplier.get();
+            roomLiveData.observeForever(new Observer<T>() {
+                @Override
+                public void onChanged(T value) {
+                    savedStateHandle.set(key, value);
+                    roomLiveData.removeObserver(this);
+                }
+            });
+        }
+        return savedStateHandle.getLiveData(key);
     }
 
     private void populateSpeciesList() {
@@ -314,18 +335,21 @@ public class AnimalRegViewModel extends AndroidViewModel {
         return animalRegFormState;
     }
 
-   public static class Factory extends ViewModelProvider.NewInstanceFactory {
-        private Application application;
-        private long id;
+    public static class Factory extends AbstractSavedStateViewModelFactory {
+        private final Application application;
+        private final long id;
 
         public Factory(Application application, long id) {
             this.id = id;
             this.application = application;
         }
 
+        @SuppressWarnings("unchecked")
+        @NonNull
         @Override
-        public <T extends ViewModel> T create(Class<T> modelClass) {
-            return (T) new AnimalRegViewModel(application, id);
+        protected <T extends ViewModel> T create(@NonNull String s, @NonNull Class<T> aClass,
+                                                 @NonNull SavedStateHandle savedStateHandle) {
+            return (T) new AnimalRegViewModel(application, id, savedStateHandle);
         }
     }
 }

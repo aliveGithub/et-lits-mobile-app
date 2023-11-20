@@ -18,7 +18,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import org.moa.etlits.R;
@@ -61,7 +60,7 @@ public class AnimalRegAddAnimalsFragment extends Fragment implements AnimalEditL
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewModel = new ViewModelProvider((ViewModelStoreOwner) getActivity(), (ViewModelProvider.Factory) new AnimalRegViewModel.Factory(getActivity().getApplication(), 0)).get(AnimalRegViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(AnimalRegViewModel.class);
 
         adapter = new AnimalEditListAdapter(new AnimalEditListAdapter.AnimalDiff(), this);
         binding.rvAnimals.setAdapter(adapter);

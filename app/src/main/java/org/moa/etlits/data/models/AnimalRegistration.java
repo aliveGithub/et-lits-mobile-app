@@ -1,5 +1,6 @@
 package org.moa.etlits.data.models;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import androidx.room.ColumnInfo;
@@ -7,7 +8,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "animal_registrations")
-public class AnimalRegistration {
+public class AnimalRegistration implements Serializable {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     private long id;
