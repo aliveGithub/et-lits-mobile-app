@@ -18,6 +18,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,9 +40,11 @@ public class MainActivity extends AppCompatActivity {
             actionBar.setHomeButtonEnabled(true);
         }
 
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, new HomeTabsFragment())
-                .commit();
+       if (savedInstanceState == null) {
+           getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, new HomeTabsFragment(), "home_tabs")
+                    .commit();
+        }
 
         homeViewModel = new ViewModelProvider(MainActivity.this, new HomeViewModel.HomeViewModelFactory(getApplication()))
                 .get(HomeViewModel.class);
