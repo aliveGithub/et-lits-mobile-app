@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,9 @@ import java.util.Set;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 public class AnimalRegMoveEventsFragment extends Fragment {
@@ -36,7 +39,6 @@ public class AnimalRegMoveEventsFragment extends Fragment {
     private EstablishmentSearchAdapter holdingGroundEstablishmentAdapter;
 
     private EstablishmentSearchAdapter moveOnEstablishmentAdapter;
-    private SharedPreferences sharedPreferences;
 
     private DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, Locale.getDefault());
 
@@ -64,41 +66,36 @@ public class AnimalRegMoveEventsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        sharedPreferences = getActivity().getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE);
 
         holdingGroundEstablishmentAdapter = new EstablishmentSearchAdapter(getActivity(), new ArrayList<>());
         moveOnEstablishmentAdapter = new EstablishmentSearchAdapter(getActivity(), new ArrayList<>());
 
         viewModel = new ViewModelProvider(requireActivity()).get(AnimalRegViewModel.class);
+
         viewModel.getEstablishments().observe(getActivity(), lst -> {
             holdingGroundEstablishmentAdapter.submitList(filterEstablishmentsByCategory(lst, Constants.HOLDING_GROUND_ESTABLISHMENT_CATEGORIES));
             moveOnEstablishmentAdapter.submitList(filterEstablishmentsByCategory(lst, Constants.PRODUCTION_TYPE_ESTABLISHMENT_CATEGORIES));
         });
+
         viewModel.getAnimalRegistration().observe(getActivity(), animalRegistration -> {
-            AnimalRegistration ar = animalRegistration;
-            if (ar != null) {
-                binding.actvMoveOffEid.setText(ar.getHoldingGroundEid());
-            } else {
-                String eid = sharedPreferences.getString(Constants.DEFAULT_ESTABLISHMENT, "");
-                viewModel.initAnimalRegistration(eid);
-                ar = viewModel.getAnimalRegistration().getValue();
-            }
-            binding.actvMoveOnEid.setText(ar.getEstablishmentEid());
-            binding.btnDateMoveOff.setText(dateFormat.format(ar.getDateMoveOff().getTime()));
-            binding.btnDateMoveOn.setText(dateFormat.format(ar.getDateMoveOn().getTime()));
-            binding.btnDateIdentification.setText(dateFormat.format(ar.getDateIdentification().getTime()));
+            binding.btnDateMoveOff.setText(dateFormat.format(animalRegistration.getDateMoveOff().getTime()));
+            binding.btnDateMoveOn.setText(dateFormat.format(animalRegistration.getDateMoveOn().getTime()));
+            binding.btnDateIdentification.setText(dateFormat.format(animalRegistration.getDateIdentification().getTime()));
         });
 
-        viewModel.getAnimalRegFormState().observe(getActivity(), formState -> {
-            if (formState == null) {
-                return;
-            }
 
-            ViewUtils.showError(getActivity(), formState.getHoldingGroundEidError(), binding.actvMoveOffEid, binding.tvMoveOffEidError);
-            ViewUtils.showError(getActivity(), formState.getEstablishmentEidError(), binding.actvMoveOnEid, binding.tvMoveOnEidError);
-            ViewUtils.showError(getActivity(), formState.getDateIdentificationError(), binding.btnDateIdentification, binding.tvDateIdentificationError);
-            ViewUtils.showError(getActivity(), formState.getDateMoveOffError(), binding.btnDateMoveOff, binding.tvDateMoveOffError);
-            ViewUtils.showError(getActivity(), formState.getDateMoveOnError(), binding.btnDateMoveOn, binding.tvDateMoveOnError);
+        viewModel.getAnimalRegEstablismentsCombined().observe(getActivity(), combinedData -> {
+            Pair<AnimalRegistration, List<Establishment>> pair = combinedData;
+            AnimalRegistration animalRegistration = pair.first;
+            List<Establishment> establishments = pair.second;
+            for (Establishment e : establishments) {
+                if (e.getCode().equals(animalRegistration.getHoldingGroundEid())) {
+                    binding.actvMoveOffEid.setText(e.toString());
+                }
+                if (e.getCode().equals(animalRegistration.getEstablishmentEid())) {
+                    binding.actvMoveOnEid.setText(e.toString());
+                }
+            }
         });
 
         binding.actvMoveOffEid.setAdapter(holdingGroundEstablishmentAdapter);
@@ -164,7 +161,20 @@ public class AnimalRegMoveEventsFragment extends Fragment {
                 binding.btnDateIdentification.setText(dateFormat.format(viewModel.getDateIdentification().getTime()));
             }, viewModel.getDateIdentification().get(Calendar.YEAR), viewModel.getDateIdentification().get(Calendar.MONTH), viewModel.getDateIdentification().get(Calendar.DAY_OF_MONTH)).show();
         });
+
+        viewModel.getAnimalRegFormState().observe(getActivity(), formState -> {
+            if (formState == null) {
+                return;
+            }
+
+            ViewUtils.showError(getActivity(), formState.getHoldingGroundEidError(), binding.actvMoveOffEid, binding.tvMoveOffEidError);
+            ViewUtils.showError(getActivity(), formState.getEstablishmentEidError(), binding.actvMoveOnEid, binding.tvMoveOnEidError);
+            ViewUtils.showError(getActivity(), formState.getDateIdentificationError(), binding.btnDateIdentification, binding.tvDateIdentificationError);
+            ViewUtils.showError(getActivity(), formState.getDateMoveOffError(), binding.btnDateMoveOff, binding.tvDateMoveOffError);
+            ViewUtils.showError(getActivity(), formState.getDateMoveOnError(), binding.btnDateMoveOn, binding.tvDateMoveOnError);
+        });
     }
+
 
     private boolean isInCategory(List <String> categories, Set<String> productionTypes) {
         for (String productionType : productionTypes) {

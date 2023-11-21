@@ -1,12 +1,16 @@
 package org.moa.etlits.ui.viewmodels;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
+import androidx.core.util.Pair;
 import androidx.core.util.Supplier;
 import androidx.lifecycle.AbstractSavedStateViewModelFactory;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.SavedStateHandle;
@@ -56,6 +60,8 @@ public class AnimalRegViewModel extends AndroidViewModel {
 
     private LiveData<List<CategoryValue>> breedList;
 
+    private final MediatorLiveData<Pair<AnimalRegistration, List<Establishment>>> animalRegEstablismentsCombined = new MediatorLiveData<>();
+
     private Calendar dateMoveOn;
     private Calendar dateMoveOff;
 
@@ -65,19 +71,25 @@ public class AnimalRegViewModel extends AndroidViewModel {
         return breedList;
     }
 
+    private SharedPreferences sharedPreferences;
+
     public AnimalRegViewModel(Application application, long id, SavedStateHandle savedStateHandle) {
         super(application);
+        sharedPreferences = application.getSharedPreferences(Constants.SHARED_PREFERENCES, Context.MODE_PRIVATE);
+
         animalRegistrationRepository = new AnimalRegistrationRepository(application);
         animalRepository = new AnimalRepository(application);
         establishmentRepository = new EstablishmentRepository(application);
         treatmentRepository = new TreatmentRepository(application);
         categoryValueRepository = new CategoryValueRepository(application);
-
         treatmentTypeList = categoryValueRepository.loadByType(Constants.CATEGORY_KEY_TREATMENT_TYPE);
         breedList = this.categoryValueRepository.loadByType(Constants.CATEGORY_KEY_BREEDS);
+
         populateSpeciesList();
 
-        animalRegistration = getRoomLiveData(() -> animalRegistrationRepository.loadById(id),
+        animalRegistration = getRoomLiveData(() -> id == 0 ?
+                        createAnimalRegistration() :
+        animalRegistrationRepository.loadById(id),
                 savedStateHandle, "animalRegistration");
 
         establishmentList = establishmentRepository.getAll();
@@ -86,13 +98,49 @@ public class AnimalRegViewModel extends AndroidViewModel {
         treatmentList = getRoomLiveData(() -> treatmentRepository.getByAnimalRegistrationId(id),
                 savedStateHandle, "treatmentList");
 
+        animalRegEstablismentsCombined.addSource(animalRegistration, animalReg -> {
+            combineAnimalRegistrationAndEstablishments(animalReg, establishmentList.getValue());
+        });
+
+        animalRegEstablismentsCombined.addSource(establishmentList, establishments -> {
+            combineAnimalRegistrationAndEstablishments(animalRegistration.getValue(), establishments);
+        });
+
         dateMoveOn = Calendar.getInstance();
         dateMoveOff = Calendar.getInstance();
         dateIdentification = Calendar.getInstance();
     }
 
+    private MutableLiveData<AnimalRegistration> createAnimalRegistration() {
+        MutableLiveData<AnimalRegistration> animalRegistration = new MutableLiveData<>();
+        Calendar yesterdayCal = Calendar.getInstance();
+        yesterdayCal.add(Calendar.DAY_OF_MONTH, -1);
+
+        AnimalRegistration newAnimalRegistration = new AnimalRegistration();
+        newAnimalRegistration.setDateIdentification(yesterdayCal.getTime());
+        newAnimalRegistration.setDateMoveOff(yesterdayCal.getTime());
+        newAnimalRegistration.setDateMoveOn(Calendar.getInstance().getTime());
+        String eid = sharedPreferences.getString(Constants.DEFAULT_ESTABLISHMENT, "");
+        newAnimalRegistration.setEstablishmentEid(eid);
+
+        animalRegistration.setValue(newAnimalRegistration);
+        return animalRegistration;
+    }
+
+    private void combineAnimalRegistrationAndEstablishments(AnimalRegistration animalRegistration,
+                                                            List<Establishment> establishmentList) {
+        if (animalRegistration != null && establishmentList != null) {
+              animalRegEstablismentsCombined.setValue(new Pair<>(animalRegistration, establishmentList));
+       }
+    }
+
+    public LiveData<Pair<AnimalRegistration, List<Establishment>>> getAnimalRegEstablismentsCombined() {
+        return animalRegEstablismentsCombined;
+    }
+
     private <T> LiveData<T> getRoomLiveData(Supplier<LiveData<T>> roomLiveDataSupplier,
                 SavedStateHandle savedStateHandle, String key) {
+
         if (!savedStateHandle.contains(key)) {
             LiveData<T> roomLiveData = roomLiveDataSupplier.get();
             roomLiveData.observeForever(new Observer<T>() {
@@ -117,22 +165,7 @@ public class AnimalRegViewModel extends AndroidViewModel {
         speciesList = new MutableLiveData<>(species);
     }
 
-    public void initAnimalRegistration(String eid) {
-        Calendar yesterdayCal = Calendar.getInstance();
-        yesterdayCal.add(Calendar.DAY_OF_MONTH, -1);
-
-        AnimalRegistration newAnimalRegistration = new AnimalRegistration();
-        newAnimalRegistration.setDateIdentification(yesterdayCal.getTime());
-        newAnimalRegistration.setDateMoveOff(yesterdayCal.getTime());
-        newAnimalRegistration.setDateMoveOn(Calendar.getInstance().getTime());
-        newAnimalRegistration.setEstablishmentEid(eid);
-
-        animalRegistration = new MutableLiveData<>(newAnimalRegistration);
-    }
-
-
-
-    public void moveNext() {
+   public void moveNext() {
         if (currentStepIsValid() && currentStep.getValue() < Constants.AnimalRegStep.values().length - 1) {
             currentStep.setValue(currentStep.getValue() + 1);
         }
