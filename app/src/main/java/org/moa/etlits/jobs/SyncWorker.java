@@ -3,6 +3,7 @@ package org.moa.etlits.jobs;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteException;
 
 import org.moa.etlits.api.RetrofitUtil;
 import org.moa.etlits.api.request.AnimalRegRequest;
@@ -142,15 +143,10 @@ public class SyncWorker extends Worker {
             if (configResponse.getObjectUnmovable() != null) {
                 HashMap<String, Set<String>> productionTypesMap = getProductionTypesMap(configResponse.getObjectDetail());
                 HashMap<String, String> coordinatesMap = getCoordinatesMap(configResponse.getObjectUnmovableCoordinates());
-               for (TypeObjectUnmovable unmovable : configResponse.getObjectUnmovable()) {
-                   Set<String> productionTypes = productionTypesMap.get(unmovable.getKey());
-                   String[] coordinates = extractGpsCoordinates(coordinatesMap.get(unmovable.getKey()));
-                   establishmentRepository.insert(unmovable, productionTypes != null ? productionTypes : new HashSet<>(), coordinates);
-                    ++received;
-                }
+                establishmentRepository.insert(configResponse.getObjectUnmovable(), productionTypesMap, coordinatesMap);
+                received += configResponse.getObjectUnmovable().size();
             }
 
-            //TODO: save - objectDetail
             return new SyncResult(true, 0, received, 0, "");
         }
 
@@ -170,25 +166,6 @@ public class SyncWorker extends Worker {
         return coordinatesMap;
     }
 
-    private String[] extractGpsCoordinates(String geometry) {
-        if (geometry == null) {
-            return null;
-        }
-        int startIndex = geometry.indexOf('(') + 1;
-        int endIndex = geometry.indexOf(')');
-
-        if (startIndex < 0 || endIndex < 0 || startIndex >= endIndex) {
-            throw new IllegalArgumentException("Invalid geometry string");
-        }
-
-       String coordinates = geometry.substring(startIndex, endIndex);
-        String[] parts = coordinates.split(" ");
-        if (parts.length != 2) {
-            throw new IllegalArgumentException("Invalid coordinates format");
-        }
-
-        return new String[]{parts[0], parts[1]};
-    }
 
     private HashMap<String,Set<String>> getProductionTypesMap(List<TypeObjectDetail> details) {
         HashMap<String, Set<String>> productionTypesMap = new HashMap<>();
@@ -289,7 +266,17 @@ public class SyncWorker extends Worker {
         } catch (SyncStoppedException e) {
             updateSyncStatus(Constants.SyncStatus.STOPPED.toString(), null);
             return Result.failure();
-        } catch (UnknownHostException e) {
+        }  catch (SQLiteException ex) {
+            if (getRunAttemptCount() < 3) {
+                logError(Constants.DATABASE_ERROR, "Database error when saving data.");
+                updateSyncStatus(Constants.SyncStatus.FAILED.toString(), null);
+                return Result.retry();
+            } else {
+                logError(Constants.DATABASE_ERROR, "Database error when saving data.");
+                updateSyncStatus(Constants.SyncStatus.FAILED.toString(), null);
+                return Result.failure();
+            }
+        }   catch (UnknownHostException e) {
             if (getRunAttemptCount() < 3) {
                 logError(Constants.SERVER_UNREACHABLE, "Server cannot be reached.");
                 updateSyncStatus(Constants.SyncStatus.FAILED.toString(), null);

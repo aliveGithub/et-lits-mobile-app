@@ -10,19 +10,27 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
 @Dao
-public interface EstablishmentDao {
+public abstract class EstablishmentDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Establishment establishment);
+    public abstract void insert(Establishment establishment);
 
     @Update
-    void update(Establishment establishment);
+    public abstract void update(Establishment establishment);
+
+    @Transaction
+    public void insertEstablishments(List<Establishment> establishments) {
+        for (Establishment establishment : establishments) {
+            insert(establishment);
+        }
+    }
 
     @Query("SELECT * FROM establishments")
-    LiveData<List<Establishment>> getAll();
+    public abstract LiveData<List<Establishment>> getAll();
 
     @Query("SELECT * FROM establishments WHERE code=:code LIMIT 1")
-    LiveData<Establishment> loadByCode(String code);
+    public abstract LiveData<Establishment> loadByCode(String code);
 }
