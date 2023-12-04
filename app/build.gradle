@@ -62,7 +62,8 @@ android {
                 groups="qa-group"
             }
 
-            buildConfigField("boolean", "CRASHLYTICS_DISABLED", "true")
+            buildConfigField("boolean", "CRASHLYTICS_DISABLED",
+                    project.properties['CRASHLYTICS_DISABLED'] ?: "false")
 
             versionNameSuffix=" (${Objects.toString(System.getenv("BUILD_TAG_PRETTY"), "dev")})"
         }
