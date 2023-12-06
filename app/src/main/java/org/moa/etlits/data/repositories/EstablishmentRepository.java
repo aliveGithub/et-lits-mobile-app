@@ -8,6 +8,9 @@ import org.moa.etlits.data.dao.EstablishmentDao;
 import org.moa.etlits.data.models.Establishment;
 import org.moa.etlits.utils.Constants;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -38,7 +41,39 @@ public class EstablishmentRepository {
         });
     }
 
-    public void insert(TypeObjectUnmovable unmovable, Set<String> productionTypes, String[] coordinates) {
+    public void insertAll(List<TypeObjectUnmovable> unmovables ,  HashMap<String, Set<String>> productionTypesMap , HashMap<String, String> coordinatesMap) {
+        List<Establishment> establishments = new ArrayList<>();
+        for (TypeObjectUnmovable unmovable : unmovables) {
+            Set<String> productionTypes = productionTypesMap.get(unmovable.getKey());
+            String[] coordinates = extractGpsCoordinates(coordinatesMap.get(unmovable.getKey()));
+            Establishment establishment = createEstablishment(unmovable, productionTypes != null ? productionTypes : new HashSet<>(), coordinates);
+            establishments.add(establishment);
+        }
+
+        establishmentDao.insertAll(establishments);
+    }
+
+    private String[] extractGpsCoordinates(String geometry) {
+        if (geometry == null) {
+            return null;
+        }
+        int startIndex = geometry.indexOf('(') + 1;
+        int endIndex = geometry.indexOf(')');
+
+        if (startIndex < 0 || endIndex < 0 || startIndex >= endIndex) {
+            throw new IllegalArgumentException("Invalid geometry string");
+        }
+
+        String coordinates = geometry.substring(startIndex, endIndex);
+        String[] parts = coordinates.split(" ");
+        if (parts.length != 2) {
+            throw new IllegalArgumentException("Invalid coordinates format");
+        }
+
+        return new String[]{parts[0], parts[1]};
+    }
+
+    private Establishment createEstablishment(TypeObjectUnmovable unmovable, Set<String> productionTypes, String[] coordinates) {
         Establishment establishment = new Establishment();
         establishment.setCode(unmovable.getKey());
         establishment.setType(Constants.UNMOVABLE_ESTABLISHMENT);
@@ -70,6 +105,10 @@ public class EstablishmentRepository {
             establishment.setLongitude(coordinates[0]);
         }
 
+        return establishment;
+    }
+    public void insert(TypeObjectUnmovable unmovable, Set<String> productionTypes, String[] coordinates) {
+        Establishment establishment = createEstablishment(unmovable, productionTypes, coordinates);
         insert(establishment);
     }
 

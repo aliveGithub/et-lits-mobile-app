@@ -10,22 +10,31 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
 @Dao
-public interface CategoryValueDao {
+public abstract class CategoryValueDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(CategoryValue categoryValue);
+    public abstract void insert(CategoryValue categoryValue);
 
     @Update
-    void update(CategoryValue categoryValue);
+    public abstract void update(CategoryValue categoryValue);
 
     @Query("SELECT * FROM category_values")
-    LiveData<List<CategoryValue>> getAllCategoryValues();
+    public abstract LiveData<List<CategoryValue>> getAllCategoryValues();
 
    @Query("SELECT * FROM category_values where category_key=:categoryKey")
-    LiveData<List<CategoryValue>> loadByCategoryKey(String categoryKey);
+   public abstract LiveData<List<CategoryValue>> loadByCategoryKey(String categoryKey);
 
     @Query("SELECT * FROM category_values where value_id=:valueId")
-    LiveData<CategoryValue> loadByValueId(String valueId);
+    public abstract LiveData<CategoryValue> loadByValueId(String valueId);
+
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    public void insertAll(List<CategoryValue> categoryValues) {
+        for (CategoryValue categoryValue : categoryValues) {
+            insert(categoryValue);
+        }
+    }
 }

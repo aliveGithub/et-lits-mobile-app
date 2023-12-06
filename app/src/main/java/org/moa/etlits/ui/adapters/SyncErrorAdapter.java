@@ -45,7 +45,7 @@ public class SyncErrorAdapter extends ArrayAdapter<SyncError> {
             return R.string.sync_error_server_unreachable;
         } else if (String.valueOf(HttpURLConnection.HTTP_UNAUTHORIZED).equals(errorKey)) {
             return R.string.sync_error_401;
-        } else {
+       } else {
             return R.string.sync_error_generic;
         }
     }

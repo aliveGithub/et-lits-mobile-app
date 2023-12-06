@@ -4,6 +4,9 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
+
+import org.moa.etlits.BuildConfig;
 import org.moa.etlits.api.RetrofitUtil;
 import org.moa.etlits.api.request.AnimalRegRequest;
 import org.moa.etlits.api.response.AnimalRegResponse;
@@ -33,6 +36,7 @@ import org.moa.etlits.utils.EncryptedPreferences;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -122,6 +126,7 @@ public class SyncWorker extends Worker {
 
     private SyncResult saveConfigData(ConfigResponse configResponse) {
         if (configResponse != null) {
+            List<CategoryValue> categoryValues = new ArrayList<>();
             int received = 0;
             if (configResponse.getCatalogs() != null) {
                 for (CatalogType catalog : configResponse.getCatalogs()) {
@@ -132,25 +137,22 @@ public class SyncWorker extends Worker {
                         for (ValueType value : entry.getValue()) {
                             catValue.setValue(value.getValue());
                             catValue.setLanguage(value.getLanguage() != null ? value.getLanguage() : "en");
-                            categoryValueRepository.insert(catValue);
-                            ++received;
+                            categoryValues.add(catValue);
                         }
                     }
                 }
+
+                categoryValueRepository.insertAll(categoryValues);
+                received += categoryValues.size();
             }
 
             if (configResponse.getObjectUnmovable() != null) {
                 HashMap<String, Set<String>> productionTypesMap = getProductionTypesMap(configResponse.getObjectDetail());
                 HashMap<String, String> coordinatesMap = getCoordinatesMap(configResponse.getObjectUnmovableCoordinates());
-               for (TypeObjectUnmovable unmovable : configResponse.getObjectUnmovable()) {
-                   Set<String> productionTypes = productionTypesMap.get(unmovable.getKey());
-                   String[] coordinates = extractGpsCoordinates(coordinatesMap.get(unmovable.getKey()));
-                   establishmentRepository.insert(unmovable, productionTypes != null ? productionTypes : new HashSet<>(), coordinates);
-                    ++received;
-                }
+                establishmentRepository.insertAll(configResponse.getObjectUnmovable(), productionTypesMap, coordinatesMap);
+                received += configResponse.getObjectUnmovable().size();
             }
 
-            //TODO: save - objectDetail
             return new SyncResult(true, 0, received, 0, "");
         }
 
@@ -170,25 +172,6 @@ public class SyncWorker extends Worker {
         return coordinatesMap;
     }
 
-    private String[] extractGpsCoordinates(String geometry) {
-        if (geometry == null) {
-            return null;
-        }
-        int startIndex = geometry.indexOf('(') + 1;
-        int endIndex = geometry.indexOf(')');
-
-        if (startIndex < 0 || endIndex < 0 || startIndex >= endIndex) {
-            throw new IllegalArgumentException("Invalid geometry string");
-        }
-
-       String coordinates = geometry.substring(startIndex, endIndex);
-        String[] parts = coordinates.split(" ");
-        if (parts.length != 2) {
-            throw new IllegalArgumentException("Invalid coordinates format");
-        }
-
-        return new String[]{parts[0], parts[1]};
-    }
 
     private HashMap<String,Set<String>> getProductionTypesMap(List<TypeObjectDetail> details) {
         HashMap<String, Set<String>> productionTypesMap = new HashMap<>();
@@ -289,7 +272,7 @@ public class SyncWorker extends Worker {
         } catch (SyncStoppedException e) {
             updateSyncStatus(Constants.SyncStatus.STOPPED.toString(), null);
             return Result.failure();
-        } catch (UnknownHostException e) {
+        }   catch (UnknownHostException e) {
             if (getRunAttemptCount() < 3) {
                 logError(Constants.SERVER_UNREACHABLE, "Server cannot be reached.");
                 updateSyncStatus(Constants.SyncStatus.FAILED.toString(), null);
@@ -301,6 +284,9 @@ public class SyncWorker extends Worker {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            if (!BuildConfig.CRASHLYTICS_DISABLED) {
+                FirebaseCrashlytics.getInstance().recordException(e);
+            }
             if (getRunAttemptCount() < 3) {
                 logError(Constants.UNKNOWN_SYNC_ERROR, e.toString());
                 updateSyncStatus(Constants.SyncStatus.FAILED.toString(), null);

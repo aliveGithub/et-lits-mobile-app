@@ -31,6 +31,10 @@ public class CategoryValueRepository {
         });
     }
 
+    public void insertAll(List<CategoryValue> categoryValues) {
+        categoryValueDao.insertAll(categoryValues);
+    }
+
     public void update(CategoryValue categoryValue) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             categoryValueDao.update(categoryValue);
