@@ -34,6 +34,7 @@ import org.moa.etlits.utils.EncryptedPreferences;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -123,6 +124,7 @@ public class SyncWorker extends Worker {
 
     private SyncResult saveConfigData(ConfigResponse configResponse) {
         if (configResponse != null) {
+            List<CategoryValue> categoryValues = new ArrayList<>();
             int received = 0;
             if (configResponse.getCatalogs() != null) {
                 for (CatalogType catalog : configResponse.getCatalogs()) {
@@ -133,11 +135,13 @@ public class SyncWorker extends Worker {
                         for (ValueType value : entry.getValue()) {
                             catValue.setValue(value.getValue());
                             catValue.setLanguage(value.getLanguage() != null ? value.getLanguage() : "en");
-                            categoryValueRepository.insert(catValue);
-                            ++received;
+                            categoryValues.add(catValue);
                         }
                     }
                 }
+
+                categoryValueRepository.insertAll(categoryValues);
+                received += categoryValues.size();
             }
 
             if (configResponse.getObjectUnmovable() != null) {
