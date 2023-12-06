@@ -25,8 +25,6 @@ public class Constants {
 
     public static String SERVER_UNREACHABLE = "SERVER_UNREACHABLE";
 
-    public static String DATABASE_ERROR = "DATABASE_ERROR";
-
     //Unmovable types
     public static String UNMOVABLE_ESTABLISHMENT = "ESTABLISHMENT";
 

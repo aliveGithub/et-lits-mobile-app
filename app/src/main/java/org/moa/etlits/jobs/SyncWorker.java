@@ -3,8 +3,10 @@ package org.moa.etlits.jobs;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteException;
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
+
+import org.moa.etlits.BuildConfig;
 import org.moa.etlits.api.RetrofitUtil;
 import org.moa.etlits.api.request.AnimalRegRequest;
 import org.moa.etlits.api.response.AnimalRegResponse;
@@ -270,16 +272,6 @@ public class SyncWorker extends Worker {
         } catch (SyncStoppedException e) {
             updateSyncStatus(Constants.SyncStatus.STOPPED.toString(), null);
             return Result.failure();
-        }  catch (SQLiteException ex) {
-            if (getRunAttemptCount() < 3) {
-                logError(Constants.DATABASE_ERROR, "Database error when saving data.");
-                updateSyncStatus(Constants.SyncStatus.FAILED.toString(), null);
-                return Result.retry();
-            } else {
-                logError(Constants.DATABASE_ERROR, "Database error when saving data.");
-                updateSyncStatus(Constants.SyncStatus.FAILED.toString(), null);
-                return Result.failure();
-            }
         }   catch (UnknownHostException e) {
             if (getRunAttemptCount() < 3) {
                 logError(Constants.SERVER_UNREACHABLE, "Server cannot be reached.");
@@ -291,7 +283,9 @@ public class SyncWorker extends Worker {
                 return Result.failure();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            if (!BuildConfig.CRASHLYTICS_DISABLED) {
+                FirebaseCrashlytics.getInstance().recordException(e);
+            }
             if (getRunAttemptCount() < 3) {
                 logError(Constants.UNKNOWN_SYNC_ERROR, e.toString());
                 updateSyncStatus(Constants.SyncStatus.FAILED.toString(), null);
