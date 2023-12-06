@@ -22,7 +22,7 @@ public abstract class EstablishmentDao {
     public abstract void update(Establishment establishment);
 
     @Transaction
-    public void insertEstablishments(List<Establishment> establishments) {
+    public void insertAll(List<Establishment> establishments) {
         for (Establishment establishment : establishments) {
             insert(establishment);
         }

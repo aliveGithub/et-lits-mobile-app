@@ -147,7 +147,7 @@ public class SyncWorker extends Worker {
             if (configResponse.getObjectUnmovable() != null) {
                 HashMap<String, Set<String>> productionTypesMap = getProductionTypesMap(configResponse.getObjectDetail());
                 HashMap<String, String> coordinatesMap = getCoordinatesMap(configResponse.getObjectUnmovableCoordinates());
-                establishmentRepository.insert(configResponse.getObjectUnmovable(), productionTypesMap, coordinatesMap);
+                establishmentRepository.insertAll(configResponse.getObjectUnmovable(), productionTypesMap, coordinatesMap);
                 received += configResponse.getObjectUnmovable().size();
             }
 

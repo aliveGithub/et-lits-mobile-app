@@ -41,7 +41,7 @@ public class EstablishmentRepository {
         });
     }
 
-    public void insert(List<TypeObjectUnmovable> unmovables ,  HashMap<String, Set<String>> productionTypesMap , HashMap<String, String> coordinatesMap) {
+    public void insertAll(List<TypeObjectUnmovable> unmovables ,  HashMap<String, Set<String>> productionTypesMap , HashMap<String, String> coordinatesMap) {
         List<Establishment> establishments = new ArrayList<>();
         for (TypeObjectUnmovable unmovable : unmovables) {
             Set<String> productionTypes = productionTypesMap.get(unmovable.getKey());
@@ -50,7 +50,7 @@ public class EstablishmentRepository {
             establishments.add(establishment);
         }
 
-        establishmentDao.insertEstablishments(establishments);
+        establishmentDao.insertAll(establishments);
     }
 
     private String[] extractGpsCoordinates(String geometry) {
