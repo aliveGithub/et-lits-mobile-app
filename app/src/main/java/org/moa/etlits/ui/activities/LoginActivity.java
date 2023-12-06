@@ -73,9 +73,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setupCrashlytics() {
-        if (!BuildConfig.CRASHLYTICS_DISABLED) {
-            FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true);
-        }
+        FirebaseCrashlytics.getInstance()
+                .setCrashlyticsCollectionEnabled(!BuildConfig.CRASHLYTICS_DISABLED);
     }
 
     private ListenableFuture<Long> attemptDatabaseMigrations() {
