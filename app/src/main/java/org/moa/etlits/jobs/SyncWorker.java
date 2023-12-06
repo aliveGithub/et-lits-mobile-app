@@ -283,6 +283,7 @@ public class SyncWorker extends Worker {
                 return Result.failure();
             }
         } catch (Exception e) {
+            e.printStackTrace();
             if (!BuildConfig.CRASHLYTICS_DISABLED) {
                 FirebaseCrashlytics.getInstance().recordException(e);
             }
