@@ -25,3 +25,8 @@ The mobile application is used for registering animals and recording animal heal
 3. Wait for the application to be installed and launched.
 4. The application will open on the device
 
+## Important documents
+1. Overview of technical approach: https://docs.google.com/presentation/d/1ESuHwSpZcLtrqa6tutim1zIk402IH-23jSloRkWCYN4/edit#slide=id.g25935bbde32_0_41
+2. Requirements document: https://docs.google.com/document/d/15ybXZa2IgpJA-mrQoe-TmFNBXC2Z7sCWwpaRaLNkkLc/edit
+3. Release process: https://docs.google.com/document/d/1d4CTo6c_DZfX2RHEm4E-TTlaBMoxW8IhrWB--sbw2B8/edit#heading=h.eattw1kvr9k9
+4. ET-LITS Mobile App Build & Distribution Setup: https://docs.google.com/document/d/1NVKsYHw076uTwf_WKtiO2jIdUv_wl66UlorcXjScAcA/edit#heading=h.z7larokk18z9
