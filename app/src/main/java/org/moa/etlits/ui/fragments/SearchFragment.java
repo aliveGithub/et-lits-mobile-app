@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -156,7 +155,7 @@ public class SearchFragment extends Fragment {
 
     private void configureFeaturePermissions() {
         Set<String> assignedRoles = searchViewModel.getRoles();
-        Set<String> viewAnimalRoles = Constants.VIEW_ANIMAL_ROLES;
+        Set<String> viewAnimalRoles = Constants.VIEW_INDIVIDUAL_ANIMAL_ROLES;
         boolean hasViewAnimalRoles = !Collections.disjoint(assignedRoles, viewAnimalRoles);
         if (hasViewAnimalRoles) {
             binding.tvAnimalSearch.setVisibility(View.VISIBLE);

@@ -61,8 +61,13 @@ public class Constants {
         EVENT_STATUS_MAP.put("kcEventsMObLocationDateToRemoval", "Terminated");
     }
 
-    public static Set<String> VIEW_ANIMAL_ROLES = new HashSet<>(Arrays.asList("kcRoleSystemMemberAITUnit", "kcRoleSystemRegQuaranOfficer", "kcRolesSystemAbattoirOperator","kcRoleSystemApprovedKeeper", "kcRoleSystemInspectorAbattoir","kcRoleSystemApprovedPrivateVet"));
+    public static Set<String> VIEW_INDIVIDUAL_ANIMAL_ROLES = new HashSet<>(Arrays.asList("kcRoleSystemMemberAITUnit", "kcRoleSystemRegQuaranOfficer", "kcRolesSystemAbattoirOperator","kcRoleSystemApprovedKeeper", "kcRoleSystemInspectorAbattoir","kcRoleSystemApprovedPrivateVet"));
 
+    public static Set<String> REGISTER_INDIVIDUAL_ANIMAL_ROLES = new HashSet<>(Arrays.asList("kcRolesSystemAbattoirOperator","kcRoleSystemApprovedKeeper","kcRoleSystemInspectorAbattoir","kcRoleSystemApprovedPrivateVet"));
+
+    public static Set<String> REGISTER_REPLACEMENT_EAR_TAG_ROLES =  new HashSet<>(Arrays.asList("kcRoleSystemApprovedKeeper","kcRoleSystemApprovedPrivateVet"));
+
+    public static Set<String> VIEW_REGISTRATION_EVENTS_ROLES =  new HashSet<>(Arrays.asList("kcRoleSystemMemberAITUnit","kcRoleSystemRegQuaranOfficer","kcRoleSystemApprovedPrivateVet"));
 
     public enum SyncType {
         CONFIG_DATA,

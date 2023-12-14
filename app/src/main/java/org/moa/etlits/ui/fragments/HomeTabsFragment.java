@@ -25,6 +25,9 @@ import org.moa.etlits.ui.activities.SyncActivity;
 import org.moa.etlits.utils.Constants;
 import org.moa.etlits.utils.EncryptedPreferences;
 
+import java.util.Collections;
+import java.util.Set;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -54,9 +57,25 @@ public class HomeTabsFragment extends Fragment {
     }
 
     private void initializeBottomNavigation(View v, Bundle savedInstanceState) {
-        getActivity().setTitle(R.string.menu_home);
+        EncryptedPreferences encryptedPreferences = new EncryptedPreferences(getActivity());
+        Set<String> roles = encryptedPreferences.readSet(Constants.ROLES);
+        boolean hasRegisterAnimalRole = !Collections.disjoint(Constants.REGISTER_INDIVIDUAL_ANIMAL_ROLES, roles);
+        boolean hasViewAnimalRole = !Collections.disjoint(Constants.VIEW_INDIVIDUAL_ANIMAL_ROLES, roles);
+        boolean hasReplaceTagRole = !Collections.disjoint(Constants.REGISTER_REPLACEMENT_EAR_TAG_ROLES, roles);
+        boolean hasViewRegistrationEventsRole = !Collections.disjoint(Constants.VIEW_REGISTRATION_EVENTS_ROLES, roles);
 
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("hasRegisterAnimalRole", hasRegisterAnimalRole);
+        bundle.putBoolean("hasViewAnimalRole", hasViewAnimalRole);
+        bundle.putBoolean("hasReplaceTagRole", hasReplaceTagRole);
+        bundle.putBoolean("hasViewRegistrationEventsRole", hasViewRegistrationEventsRole);
+
+        getActivity().setTitle(R.string.menu_home);
         BottomNavigationView bottomNavigationView = v.findViewById(R.id.bottom_navigation);
+
+        bottomNavigationView.getMenu().findItem(R.id.navigation_animals).
+                setEnabled(hasRegisterAnimalRole || hasViewAnimalRole || hasReplaceTagRole || hasViewRegistrationEventsRole);
+
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.navigation_btm_home) {
                 loadFragment(homeFragment);
@@ -86,6 +105,11 @@ public class HomeTabsFragment extends Fragment {
             moveFragment = new MoveFragment();
             animalsFragment = new AnimalsFragment();
             activeFragment = homeFragment;
+
+            homeFragment.setArguments(bundle);
+            syncFragment.setArguments(bundle);
+            moveFragment.setArguments(bundle);
+            animalsFragment.setArguments(bundle);
 
             getChildFragmentManager().beginTransaction().add(R.id.home_fragment_container, homeFragment, "home").commit();
             getChildFragmentManager().beginTransaction().add(R.id.home_fragment_container, syncFragment, "sync").hide(syncFragment).commit();

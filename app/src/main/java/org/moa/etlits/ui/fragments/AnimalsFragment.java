@@ -15,6 +15,10 @@ import org.moa.etlits.ui.activities.AnimalRegActivity;
 import org.moa.etlits.ui.activities.AnimalRegListActivity;
 import org.moa.etlits.ui.activities.SyncActivity;
 import org.moa.etlits.utils.Constants;
+import org.moa.etlits.utils.EncryptedPreferences;
+
+import java.util.Collections;
+import java.util.Set;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -57,7 +61,24 @@ public class AnimalsFragment extends Fragment {
         return v;
     }
 
+
     private void initViews(View v) {
+
+        Bundle bundle = getArguments();
+        boolean hasRegisterAnimalRole = false;
+        boolean hasViewAnimalRole = false;
+        boolean hasReplaceTagRole = false;
+        boolean hasViewRegistrationEventsRole = false;
+        if (bundle != null) {
+            hasRegisterAnimalRole = bundle.getBoolean("hasRegisterAnimalRole");
+            hasViewAnimalRole = bundle.getBoolean("hasViewAnimalRole");
+            hasReplaceTagRole = bundle.getBoolean("hasReplaceTagRole");
+            hasViewRegistrationEventsRole = bundle.getBoolean("hasViewRegistrationEventsRole");
+        }
+
+        binding.cardRegister.setVisibility(hasRegisterAnimalRole ||  hasReplaceTagRole ? View.VISIBLE : View.GONE);
+        binding.cardViewRegistrations.setVisibility(hasViewRegistrationEventsRole ? View.VISIBLE : View.GONE);
+        binding.cardAnimals.setVisibility(hasViewAnimalRole ? View.VISIBLE : View.GONE);
 
         binding.cardRegister.setOnClickListener(new View.OnClickListener() {
             @Override
