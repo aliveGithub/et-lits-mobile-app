@@ -20,8 +20,11 @@ import org.moa.etlits.ui.activities.EstablishmentSummaryActivity;
 import org.moa.etlits.ui.adapters.AnimalSearchAdapter;
 import org.moa.etlits.ui.adapters.EstablishmentSearchAdapter;
 import org.moa.etlits.ui.viewmodels.SearchViewModel;
+import org.moa.etlits.utils.Constants;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Set;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -75,6 +78,7 @@ public class SearchFragment extends Fragment {
         setUpAnimalSearch();
         setupEstablishmentSearch();
         setupSearchTabs();
+        configureFeaturePermissions();
 
         if (getArguments() != null) {
             String defaultView = getArguments().getString(DEFAULT_VIEW_PARAM);
@@ -148,6 +152,18 @@ public class SearchFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void configureFeaturePermissions() {
+        Set<String> assignedRoles = searchViewModel.getRoles();
+        Set<String> viewAnimalRoles = Constants.VIEW_ANIMAL_ROLES;
+        boolean hasViewAnimalRoles = !Collections.disjoint(assignedRoles, viewAnimalRoles);
+        if (hasViewAnimalRoles) {
+            binding.tvAnimalSearch.setVisibility(View.VISIBLE);
+        } else {
+            binding.tvAnimalSearch.setVisibility(View.GONE);
+            binding.acvAnimalSearch.setVisibility(View.GONE);
+        }
     }
 
     private void setupSearchTabs() {

@@ -3,14 +3,17 @@ package org.moa.etlits.utils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Constants {
     public static final String SHARED_PREFERENCES = "et-lits-shared-prefs";
     public static final String SYNC_LOG_ID = "syncLogId";
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
+    public static final String ROLES = "roles";
     public static final String IS_USER_LOGGED_IN = "isUserLoggedIn";
     public static final String HAS_INITIALIZED = "hasInitialized";
 
@@ -57,6 +60,9 @@ public class Constants {
         EVENT_STATUS_MAP.put("kcEventsMObLocationDateFromMoveOnImport", "Imported");
         EVENT_STATUS_MAP.put("kcEventsMObLocationDateToRemoval", "Terminated");
     }
+
+    public static Set<String> VIEW_ANIMAL_ROLES = new HashSet<>(Arrays.asList("kcRoleSystemMemberAITUnit", "kcRoleSystemRegQuaranOfficer", "kcRolesSystemAbattoirOperator","kcRoleSystemApprovedKeeper", "kcRoleSystemInspectorAbattoir","kcRoleSystemApprovedPrivateVet"));
+
 
     public enum SyncType {
         CONFIG_DATA,

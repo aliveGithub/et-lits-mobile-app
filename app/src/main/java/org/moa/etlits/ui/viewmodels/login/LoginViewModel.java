@@ -1,7 +1,10 @@
 package org.moa.etlits.ui.viewmodels.login;
 
+import android.util.Log;
+
 import org.moa.etlits.R;
 import org.moa.etlits.api.RetrofitUtil;
+import org.moa.etlits.api.response.AuthResponse;
 import org.moa.etlits.api.services.AuthService;
 import org.moa.etlits.data.repositories.LoginRepository;
 import org.moa.etlits.ui.validation.LoginFormState;
@@ -41,12 +44,13 @@ public class LoginViewModel extends ViewModel {
         }
 
         RetrofitUtil.clearCookies();
-        Call call = authService.login(Credentials.basic(username, password));
+        Call<AuthResponse> call = authService.login(Credentials.basic(username, password));
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
                 if (response.isSuccessful()) {
-                    loginResult.postValue(new LoginResult(username, password, LoginResult.LoginStatus.SUCCESS));
+                    AuthResponse authResponse = (AuthResponse) response.body();
+                    loginResult.postValue(new LoginResult(username, password, authResponse.getRoles(), LoginResult.LoginStatus.SUCCESS));
                 } else {
                     loginResult.postValue(new LoginResult(response.code(),LoginResult.LoginStatus.FAIL));
                 }

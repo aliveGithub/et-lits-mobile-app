@@ -211,6 +211,7 @@ public class LoginActivity extends AppCompatActivity {
     private void onLoginSuccess(LoginResult loginResult) {
         encryptedPreferences.write(Constants.USERNAME, loginResult.getUsername());
         encryptedPreferences.write(Constants.PASSWORD, loginResult.getPassword());
+        encryptedPreferences.write(Constants.ROLES, loginResult.getRoles());
         encryptedPreferences.write(Constants.IS_USER_LOGGED_IN, "true");
 
         navigateOnLoginSuccess();
