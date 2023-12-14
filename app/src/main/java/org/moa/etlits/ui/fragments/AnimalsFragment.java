@@ -52,7 +52,15 @@ public class AnimalsFragment extends Fragment {
        binding = FragmentAnimalsBinding.inflate(inflater, container, false);
        View v = binding.getRoot();
         if (savedInstanceState == null) {
-            searchFragment = SearchFragment.newInstance(SearchFragment.ANIMAL_VIEW, null);
+            searchFragment = new SearchFragment();
+            Bundle bundle = getArguments();
+            Bundle searchBundle = new Bundle();
+            if (bundle != null) {
+                searchBundle.putBoolean("hasViewAnimalRole", bundle.getBoolean("hasViewAnimalRole"));
+                searchBundle.putString(SearchFragment.DEFAULT_VIEW_PARAM, SearchFragment.ANIMAL_VIEW);
+                searchBundle.putString(SearchFragment.ANIMALS_QUERY_PARAM, null);
+            }
+            searchFragment.setArguments(searchBundle);
             getChildFragmentManager().beginTransaction().add(R.id.animals_search_fragment, searchFragment, "search_animals").commit();
         }
 
@@ -63,7 +71,6 @@ public class AnimalsFragment extends Fragment {
 
 
     private void initViews(View v) {
-
         Bundle bundle = getArguments();
         boolean hasRegisterAnimalRole = false;
         boolean hasViewAnimalRole = false;

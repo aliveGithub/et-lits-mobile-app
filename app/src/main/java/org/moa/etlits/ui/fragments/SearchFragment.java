@@ -19,11 +19,8 @@ import org.moa.etlits.ui.activities.EstablishmentSummaryActivity;
 import org.moa.etlits.ui.adapters.AnimalSearchAdapter;
 import org.moa.etlits.ui.adapters.EstablishmentSearchAdapter;
 import org.moa.etlits.ui.viewmodels.SearchViewModel;
-import org.moa.etlits.utils.Constants;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Set;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,8 +42,8 @@ public class SearchFragment extends Fragment {
     public SearchFragment() {
     }
 
-    private static String DEFAULT_VIEW_PARAM = "defaultView";
-    private static String ANIMALS_QUERY_PARAM = "animalsQuery";
+    public static String DEFAULT_VIEW_PARAM = "defaultView";
+    public static String ANIMALS_QUERY_PARAM = "animalsQuery";
     public static SearchFragment newInstance( String defaultView, String animalsQuery) {
         SearchFragment fragment = new SearchFragment();
         Bundle args = new Bundle();
@@ -154,10 +151,12 @@ public class SearchFragment extends Fragment {
     }
 
     private void configureFeaturePermissions() {
-        Set<String> assignedRoles = searchViewModel.getRoles();
-        Set<String> viewAnimalRoles = Constants.VIEW_INDIVIDUAL_ANIMAL_ROLES;
-        boolean hasViewAnimalRoles = !Collections.disjoint(assignedRoles, viewAnimalRoles);
-        if (hasViewAnimalRoles) {
+        Bundle bundle = getArguments();
+        boolean hasViewAnimalRole = false;
+        if (bundle != null) {
+            hasViewAnimalRole = bundle.getBoolean("hasViewAnimalRole");
+        }
+        if (hasViewAnimalRole) {
             binding.tvAnimalSearch.setVisibility(View.VISIBLE);
         } else {
             binding.tvAnimalSearch.setVisibility(View.GONE);
