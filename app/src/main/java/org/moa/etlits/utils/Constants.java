@@ -3,10 +3,8 @@ package org.moa.etlits.utils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class Constants {
     public static final String SHARED_PREFERENCES = "et-lits-shared-prefs";
@@ -60,14 +58,6 @@ public class Constants {
         EVENT_STATUS_MAP.put("kcEventsMObLocationDateFromMoveOnImport", "Imported");
         EVENT_STATUS_MAP.put("kcEventsMObLocationDateToRemoval", "Terminated");
     }
-
-    public static Set<String> VIEW_INDIVIDUAL_ANIMAL_ROLES = new HashSet<>(Arrays.asList("kcRoleSystemMemberAITUnit", "kcRoleSystemRegQuaranOfficer", "kcRolesSystemAbattoirOperator","kcRoleSystemApprovedKeeper", "kcRoleSystemInspectorAbattoir","kcRoleSystemApprovedPrivateVet"));
-
-    public static Set<String> REGISTER_INDIVIDUAL_ANIMAL_ROLES = new HashSet<>(Arrays.asList("kcRolesSystemAbattoirOperator","kcRoleSystemApprovedKeeper","kcRoleSystemInspectorAbattoir","kcRoleSystemApprovedPrivateVet"));
-
-    public static Set<String> REGISTER_REPLACEMENT_EAR_TAG_ROLES =  new HashSet<>(Arrays.asList("kcRoleSystemApprovedKeeper","kcRoleSystemApprovedPrivateVet"));
-
-    public static Set<String> VIEW_REGISTRATION_EVENTS_ROLES =  new HashSet<>(Arrays.asList("kcRoleSystemMemberAITUnit","kcRoleSystemRegQuaranOfficer","kcRoleSystemApprovedPrivateVet"));
 
     public enum SyncType {
         CONFIG_DATA,

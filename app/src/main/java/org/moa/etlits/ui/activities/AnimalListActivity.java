@@ -72,10 +72,8 @@ public class AnimalListActivity extends AppCompatActivity implements AnimalViewL
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Fragment searchFragment = new SearchFragment();
         Bundle bundle = new Bundle();
-        bundle.putBoolean("hasViewAnimalRole", true);
         bundle.putString(SearchFragment.DEFAULT_VIEW_PARAM, SearchFragment.ANIMAL_VIEW);
         searchFragment.setArguments(bundle);
-
         fragmentTransaction.add(R.id.fl_animal_search, searchFragment, "search_animals");
         fragmentTransaction.commit();
     }

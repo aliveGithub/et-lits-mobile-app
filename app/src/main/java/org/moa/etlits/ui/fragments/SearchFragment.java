@@ -19,6 +19,7 @@ import org.moa.etlits.ui.activities.EstablishmentSummaryActivity;
 import org.moa.etlits.ui.adapters.AnimalSearchAdapter;
 import org.moa.etlits.ui.adapters.EstablishmentSearchAdapter;
 import org.moa.etlits.ui.viewmodels.SearchViewModel;
+import org.moa.etlits.utils.PermissionsUtil;
 
 import java.util.ArrayList;
 
@@ -151,12 +152,8 @@ public class SearchFragment extends Fragment {
     }
 
     private void configureFeaturePermissions() {
-        Bundle bundle = getArguments();
-        boolean hasViewAnimalRole = false;
-        if (bundle != null) {
-            hasViewAnimalRole = bundle.getBoolean("hasViewAnimalRole");
-        }
-        if (hasViewAnimalRole) {
+        PermissionsUtil permissionsUtil = new PermissionsUtil(getActivity());
+        if (permissionsUtil.hasViewAnimalRole()) {
             binding.tvAnimalSearch.setVisibility(View.VISIBLE);
         } else {
             binding.tvAnimalSearch.setVisibility(View.GONE);

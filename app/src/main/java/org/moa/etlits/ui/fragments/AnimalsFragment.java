@@ -15,10 +15,7 @@ import org.moa.etlits.ui.activities.AnimalRegActivity;
 import org.moa.etlits.ui.activities.AnimalRegListActivity;
 import org.moa.etlits.ui.activities.SyncActivity;
 import org.moa.etlits.utils.Constants;
-import org.moa.etlits.utils.EncryptedPreferences;
-
-import java.util.Collections;
-import java.util.Set;
+import org.moa.etlits.utils.PermissionsUtil;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -53,14 +50,9 @@ public class AnimalsFragment extends Fragment {
        View v = binding.getRoot();
         if (savedInstanceState == null) {
             searchFragment = new SearchFragment();
-            Bundle bundle = getArguments();
             Bundle searchBundle = new Bundle();
-            if (bundle != null) {
-                searchBundle.putBoolean("hasViewAnimalRole", bundle.getBoolean("hasViewAnimalRole"));
-                searchBundle.putString(SearchFragment.DEFAULT_VIEW_PARAM, SearchFragment.ANIMAL_VIEW);
-                searchBundle.putString(SearchFragment.ANIMALS_QUERY_PARAM, null);
-            }
-            searchFragment.setArguments(searchBundle);
+            searchBundle.putString(SearchFragment.DEFAULT_VIEW_PARAM, SearchFragment.ANIMAL_VIEW);
+            searchBundle.putString(SearchFragment.ANIMALS_QUERY_PARAM, null);
             getChildFragmentManager().beginTransaction().add(R.id.animals_search_fragment, searchFragment, "search_animals").commit();
         }
 
@@ -71,21 +63,10 @@ public class AnimalsFragment extends Fragment {
 
 
     private void initViews(View v) {
-        Bundle bundle = getArguments();
-        boolean hasRegisterAnimalRole = false;
-        boolean hasViewAnimalRole = false;
-        boolean hasReplaceTagRole = false;
-        boolean hasViewRegistrationEventsRole = false;
-        if (bundle != null) {
-            hasRegisterAnimalRole = bundle.getBoolean("hasRegisterAnimalRole");
-            hasViewAnimalRole = bundle.getBoolean("hasViewAnimalRole");
-            hasReplaceTagRole = bundle.getBoolean("hasReplaceTagRole");
-            hasViewRegistrationEventsRole = bundle.getBoolean("hasViewRegistrationEventsRole");
-        }
-
-        binding.cardRegister.setVisibility(hasRegisterAnimalRole ||  hasReplaceTagRole ? View.VISIBLE : View.GONE);
-        binding.cardViewRegistrations.setVisibility(hasViewRegistrationEventsRole ? View.VISIBLE : View.GONE);
-        binding.cardAnimals.setVisibility(hasViewAnimalRole ? View.VISIBLE : View.GONE);
+        PermissionsUtil permissionsUtil = new PermissionsUtil(getActivity());
+        binding.cardRegister.setVisibility(permissionsUtil.hasRegisterAnimalRole() ||  permissionsUtil.hasReplaceTagRole() ? View.VISIBLE : View.GONE);
+        binding.cardViewRegistrations.setVisibility(permissionsUtil.hasViewRegistrationEventsRole() ? View.VISIBLE : View.GONE);
+        binding.cardAnimals.setVisibility(permissionsUtil.hasViewAnimalRole() ? View.VISIBLE : View.GONE);
 
         binding.cardRegister.setOnClickListener(new View.OnClickListener() {
             @Override

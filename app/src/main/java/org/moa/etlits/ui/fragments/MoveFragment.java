@@ -31,12 +31,6 @@ public class MoveFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_move, container, false);
         if (savedInstanceState == null) {
             searchFragment = new SearchFragment();
-            Bundle bundle = getArguments();
-            Bundle searchBundle = new Bundle();
-            if (bundle != null) {
-                searchBundle.putBoolean("hasViewAnimalRole", bundle.getBoolean("hasViewAnimalRole"));
-            }
-            searchFragment.setArguments(searchBundle);
             getChildFragmentManager().beginTransaction().add(R.id.move_search_fragment, searchFragment, "search_move").commit();
         }
 
