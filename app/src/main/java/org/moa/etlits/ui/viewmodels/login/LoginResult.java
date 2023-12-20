@@ -1,6 +1,8 @@
 package org.moa.etlits.ui.viewmodels.login;
 
 
+import java.util.Set;
+
 import androidx.annotation.Nullable;
 
 /**
@@ -16,11 +18,14 @@ public class LoginResult {
     @Nullable
     private LoginStatus loginStatus;
 
+    private Set<String> roles;
+
     @Nullable
     private Integer error;
-    public LoginResult(@Nullable String username, String password, @Nullable LoginStatus loginStatus) {
+    public LoginResult(@Nullable String username, String password, Set<String> roles, @Nullable LoginStatus loginStatus) {
         this.username = username;
         this.password = password;
+        this.roles = roles;
         this.loginStatus = loginStatus;
     }
 
@@ -38,6 +43,9 @@ public class LoginResult {
         return username;
     }
 
+    public Set<String> getRoles() {
+        return roles;
+    }
 
     public LoginStatus getLoginStatus() {
         return loginStatus;

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +19,7 @@ import org.moa.etlits.ui.activities.EstablishmentSummaryActivity;
 import org.moa.etlits.ui.adapters.AnimalSearchAdapter;
 import org.moa.etlits.ui.adapters.EstablishmentSearchAdapter;
 import org.moa.etlits.ui.viewmodels.SearchViewModel;
+import org.moa.etlits.utils.PermissionsUtil;
 
 import java.util.ArrayList;
 
@@ -43,8 +43,8 @@ public class SearchFragment extends Fragment {
     public SearchFragment() {
     }
 
-    private static String DEFAULT_VIEW_PARAM = "defaultView";
-    private static String ANIMALS_QUERY_PARAM = "animalsQuery";
+    public static String DEFAULT_VIEW_PARAM = "defaultView";
+    public static String ANIMALS_QUERY_PARAM = "animalsQuery";
     public static SearchFragment newInstance( String defaultView, String animalsQuery) {
         SearchFragment fragment = new SearchFragment();
         Bundle args = new Bundle();
@@ -75,6 +75,7 @@ public class SearchFragment extends Fragment {
         setUpAnimalSearch();
         setupEstablishmentSearch();
         setupSearchTabs();
+        configureFeaturePermissions();
 
         if (getArguments() != null) {
             String defaultView = getArguments().getString(DEFAULT_VIEW_PARAM);
@@ -148,6 +149,16 @@ public class SearchFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void configureFeaturePermissions() {
+        PermissionsUtil permissionsUtil = new PermissionsUtil(getActivity());
+        if (permissionsUtil.hasViewAnimalRole()) {
+            binding.tvAnimalSearch.setVisibility(View.VISIBLE);
+        } else {
+            binding.tvAnimalSearch.setVisibility(View.GONE);
+            binding.acvAnimalSearch.setVisibility(View.GONE);
+        }
     }
 
     private void setupSearchTabs() {

@@ -15,6 +15,7 @@ import org.moa.etlits.ui.activities.AnimalRegActivity;
 import org.moa.etlits.ui.activities.AnimalRegListActivity;
 import org.moa.etlits.ui.activities.SyncActivity;
 import org.moa.etlits.utils.Constants;
+import org.moa.etlits.utils.PermissionsUtil;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -48,7 +49,10 @@ public class AnimalsFragment extends Fragment {
        binding = FragmentAnimalsBinding.inflate(inflater, container, false);
        View v = binding.getRoot();
         if (savedInstanceState == null) {
-            searchFragment = SearchFragment.newInstance(SearchFragment.ANIMAL_VIEW, null);
+            searchFragment = new SearchFragment();
+            Bundle searchBundle = new Bundle();
+            searchBundle.putString(SearchFragment.DEFAULT_VIEW_PARAM, SearchFragment.ANIMAL_VIEW);
+            searchBundle.putString(SearchFragment.ANIMALS_QUERY_PARAM, null);
             getChildFragmentManager().beginTransaction().add(R.id.animals_search_fragment, searchFragment, "search_animals").commit();
         }
 
@@ -57,7 +61,12 @@ public class AnimalsFragment extends Fragment {
         return v;
     }
 
+
     private void initViews(View v) {
+        PermissionsUtil permissionsUtil = new PermissionsUtil(getActivity());
+        binding.cardRegister.setVisibility(permissionsUtil.hasRegisterAnimalRole() ||  permissionsUtil.hasReplaceTagRole() ? View.VISIBLE : View.GONE);
+        binding.cardViewRegistrations.setVisibility(permissionsUtil.hasViewRegistrationEventsRole() ? View.VISIBLE : View.GONE);
+        binding.cardAnimals.setVisibility(permissionsUtil.hasViewAnimalRole() ? View.VISIBLE : View.GONE);
 
         binding.cardRegister.setOnClickListener(new View.OnClickListener() {
             @Override

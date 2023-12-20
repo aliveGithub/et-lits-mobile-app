@@ -3,6 +3,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKeys;
 
@@ -31,6 +34,14 @@ public class EncryptedPreferences {
         }
     }
 
+    public void write(String key, Set<String> value) {
+        if (mEncryptedSharedPref != null) {
+            SharedPreferences.Editor editor = mEncryptedSharedPref.edit();
+            editor.putStringSet(key, value).apply();
+        }
+    }
+
+
     public String read(String key) {
         if (mEncryptedSharedPref != null) {
             return mEncryptedSharedPref.getString(key, "");
@@ -38,6 +49,12 @@ public class EncryptedPreferences {
         return "";
     }
 
+    public Set<String> readSet(String key) {
+        if (mEncryptedSharedPref != null) {
+            return mEncryptedSharedPref.getStringSet(key, new HashSet<>());
+        }
+        return new HashSet<>();
+    }
     public void remove(String key) {
         if (mEncryptedSharedPref != null) {
             SharedPreferences.Editor editor = mEncryptedSharedPref.edit();

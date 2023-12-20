@@ -11,6 +11,7 @@ public class Constants {
     public static final String SYNC_LOG_ID = "syncLogId";
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
+    public static final String ROLES = "roles";
     public static final String IS_USER_LOGGED_IN = "isUserLoggedIn";
     public static final String HAS_INITIALIZED = "hasInitialized";
 

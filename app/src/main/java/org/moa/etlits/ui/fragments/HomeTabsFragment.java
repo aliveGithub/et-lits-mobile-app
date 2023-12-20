@@ -24,6 +24,7 @@ import org.moa.etlits.ui.activities.MainActivity;
 import org.moa.etlits.ui.activities.SyncActivity;
 import org.moa.etlits.utils.Constants;
 import org.moa.etlits.utils.EncryptedPreferences;
+import org.moa.etlits.utils.PermissionsUtil;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -54,9 +55,15 @@ public class HomeTabsFragment extends Fragment {
     }
 
     private void initializeBottomNavigation(View v, Bundle savedInstanceState) {
-        getActivity().setTitle(R.string.menu_home);
+        PermissionsUtil permissionsUtil = new PermissionsUtil(getActivity());
+        EncryptedPreferences encryptedPreferences = new EncryptedPreferences(getActivity());
 
+        getActivity().setTitle(R.string.menu_home);
         BottomNavigationView bottomNavigationView = v.findViewById(R.id.bottom_navigation);
+
+        bottomNavigationView.getMenu().findItem(R.id.navigation_animals).
+                setEnabled(permissionsUtil.hasAnyAnimalRoles());
+
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.navigation_btm_home) {
                 loadFragment(homeFragment);

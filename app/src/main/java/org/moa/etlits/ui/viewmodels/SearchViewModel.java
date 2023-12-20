@@ -25,7 +25,7 @@ public class SearchViewModel extends ViewModel {
 
     private MutableLiveData<String> searchView = new MutableLiveData<>(SearchFragment.ESTABLISHMENT_VIEW);
 
-    public LiveData<List<Establishment>> getEstablishments() {
+   public LiveData<List<Establishment>> getEstablishments() {
         return establishments;
     }
 
@@ -34,7 +34,7 @@ public class SearchViewModel extends ViewModel {
         this.animalRepository = new AnimalRepository(application);
         this.establishments = establishmentRepository.getAll();
         this.animals = new MutableLiveData<>(new ArrayList<>());
-    }
+   }
 
     public LiveData<List<AnimalSearchResult>> searchAnimals(String query) {
         animals = animalRepository.searchAnimals(query);
@@ -52,4 +52,5 @@ public class SearchViewModel extends ViewModel {
     public LiveData<List<AnimalSearchResult>> getAnimals() {
         return animals;
     }
+
 }
