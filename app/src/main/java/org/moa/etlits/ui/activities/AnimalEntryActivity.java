@@ -95,6 +95,7 @@ public class AnimalEntryActivity extends AppCompatActivity {
         });
 
         binding.btnAddNextAnimal.setOnClickListener(v -> {
+            validateAllFields();
             if (viewModel.getAnimalFormState().getValue() != null && viewModel.getAnimalFormState().getValue().isDataValid()) {
                 returnResult(true);
             }
