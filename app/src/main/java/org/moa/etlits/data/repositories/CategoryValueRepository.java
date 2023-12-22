@@ -45,6 +45,10 @@ public class CategoryValueRepository {
         return categoryValueDao.loadByCategoryKey(categoryKey);
     }
 
+    public LiveData<List<CategoryValue>>loadByTypes(String[] categoryKeys){
+        return categoryValueDao.loadByCategoryKeys(categoryKeys);
+    }
+
     public LiveData<CategoryValue>loadByValueId(String valueId){
         return categoryValueDao.loadByValueId(valueId);
     }

@@ -27,6 +27,9 @@ public abstract class CategoryValueDao {
    @Query("SELECT * FROM category_values where category_key=:categoryKey")
    public abstract LiveData<List<CategoryValue>> loadByCategoryKey(String categoryKey);
 
+    @Query("SELECT * FROM category_values where category_key IN (:categoryKeys)")
+    public abstract LiveData<List<CategoryValue>> loadByCategoryKeys(String[] categoryKeys);
+
     @Query("SELECT * FROM category_values where value_id=:valueId")
     public abstract LiveData<CategoryValue> loadByValueId(String valueId);
 
