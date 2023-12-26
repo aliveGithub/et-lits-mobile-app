@@ -53,10 +53,10 @@ public interface AnimalDao {
             "ORDER BY animals.animal_id ")
     LiveData<List<AnimalSearchResult>> getAll();
 
-    @Query("SELECT animals.id, animals.animal_id as animalId, animals.sex, animals.age, animals.dead, date_move_on as eventDate, ar.establishment_eid as eid, cv.value as breed,est.name as establishmentName FROM animals " +
+    @Transaction
+    @Query("SELECT animals.id, animals.animal_id as animalId, animals.sex, animals.age, animals.dead, date_move_on as eventDate, ar.establishment_eid as eid, animals.breed,est.name as establishmentName FROM animals " +
             "JOIN animal_registrations ar ON animals.animal_registration_id = ar.id " +
-            "JOIN category_values cv ON animals.breed = cv.value_id " +
             "JOIN establishments est ON est.code = ar.establishment_eid " +
-            "WHERE cv.language='en' AND cv.category_key='csBreeds' AND animals.animal_id=:animalId")
+            "WHERE animals.animal_id=:animalId")
     LiveData<AnimalSearchResult> loadByAnimalId(String animalId);
 }

@@ -11,6 +11,7 @@ import org.moa.etlits.data.models.AnimalSearchResult;
 import org.moa.etlits.data.models.CategoryValue;
 import org.moa.etlits.utils.Constants;
 import org.moa.etlits.utils.DateUtils;
+import org.moa.etlits.utils.ViewUtils;
 
 import java.util.List;
 
@@ -48,8 +49,8 @@ class AnimalViewViewHolder extends RecyclerView.ViewHolder implements View.OnCli
     public void bind(AnimalSearchResult animal, List<CategoryValue> categoryValueList) {
         tvAnimalId.setText(animal.getAnimalId());
         tvEid.setText("EID " + animal.getEid());
-        tvSex.setText(getValue(animal.getSex(), categoryValueList));
-        tvBreed.setText(getValue(animal.getBreed(), categoryValueList));
+        tvSex.setText(ViewUtils.getValue(animal.getSex(), categoryValueList));
+        tvBreed.setText(ViewUtils.getValue(animal.getBreed(), categoryValueList));
         tvAge.setText(tvAge.getContext().getString(R.string.animal_reg_age_months, String.valueOf(animal.getAge())));
         tvSpecies.setText(animal.getSpecies());
         tvEventDate.setText(animal.getLastEventDate() != null ? DateUtils.formatDate(animal.getLastEventDate()) : "");
@@ -64,16 +65,6 @@ class AnimalViewViewHolder extends RecyclerView.ViewHolder implements View.OnCli
         } else {
             ivAnimalImage.setImageResource(R.drawable.ic_animal_filled);
         }
-    }
-    private String getValue(String valueId, List<CategoryValue> list) {
-        if (valueId != null && list != null) {
-            for (CategoryValue categoryValue : list) {
-                if (categoryValue.getValueId().equals(valueId)) {
-                    return categoryValue.getValue();
-                }
-            }
-        }
-        return valueId;
     }
 
     private String getEvent(String event) {

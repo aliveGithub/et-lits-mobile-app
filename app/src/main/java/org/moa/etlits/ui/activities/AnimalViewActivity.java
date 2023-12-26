@@ -6,19 +6,31 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import org.moa.etlits.R;
+import org.moa.etlits.data.models.AnimalSearchResult;
+import org.moa.etlits.data.models.CategoryValue;
 import org.moa.etlits.data.repositories.AnimalRepository;
+import org.moa.etlits.data.repositories.CategoryValueRepository;
 import org.moa.etlits.databinding.ActivityAnimalViewBinding;
+import org.moa.etlits.utils.Constants;
 import org.moa.etlits.utils.DateUtils;
+import org.moa.etlits.utils.ViewUtils;
 
 import java.util.Calendar;
+import java.util.List;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.util.Pair;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 
 public class AnimalViewActivity extends AppCompatActivity {
     private ActivityAnimalViewBinding binding = null;
     private AnimalRepository animalRepository;
+    private CategoryValueRepository categoryValueRepository;
+
+    private MediatorLiveData<Pair<AnimalSearchResult, List<CategoryValue>>> animalDataMediator = new MediatorLiveData<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,15 +38,31 @@ public class AnimalViewActivity extends AppCompatActivity {
         binding = ActivityAnimalViewBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         initActionBar();
-        animalRepository = new AnimalRepository(this.getApplication());
+
         String animalId = getIntent().getStringExtra("animalId");
-        animalRepository.loadByAnimalId(animalId).observe(this, animal -> {
+        animalRepository = new AnimalRepository(this.getApplication());
+        categoryValueRepository = new CategoryValueRepository(this.getApplication());
+
+        LiveData<AnimalSearchResult> animalSearchResultLiveData = animalRepository.loadByAnimalId(animalId);
+        LiveData<List<CategoryValue>> categoryValueListLiveData = categoryValueRepository.loadByTypes(new String[]{Constants.CATEGORY_KEY_BREEDS,Constants.CATEGORY_KEY_SEX});
+
+        animalDataMediator.addSource(animalSearchResultLiveData, animalSearchResultx -> {
+            updateAnimalDataMediator(animalSearchResultLiveData.getValue(), categoryValueListLiveData.getValue());
+        });
+
+        animalDataMediator.addSource(categoryValueListLiveData, categoryValueList -> {
+            updateAnimalDataMediator(animalSearchResultLiveData.getValue(), categoryValueListLiveData.getValue());
+        });
+
+        animalDataMediator.observe(this, combined -> {
+            AnimalSearchResult animal = combined.first;
+            List<CategoryValue> categoryValueList = combined.second;
             if (animal != null) {
                 binding.tvAnimalId.setText(animal.getAnimalId());
-                binding.tvSex.setText(getSex(animal.getSex()));
+                binding.tvSex.setText(ViewUtils.getValue(animal.getSex(), categoryValueList));
                 binding.tvAge.setText(getString(R.string.animal_reg_age_months, String.valueOf(animal.getAge())));
                 binding.tvBirthDate.setText(getDateOfBirth(animal.getAge()));
-                binding.tvBreed.setText(animal.getBreed());
+                binding.tvBreed.setText(ViewUtils.getValue(animal.getBreed(), categoryValueList));
                 binding.tvSpecies.setText(animal.getSpecies());
                 binding.tvEstablishment.setText(animal.getEid() + " - " + animal.getEstablishmentName());
                 binding.tvTerminated.setText(animal.isDead() ? R.string.animal_view_terminated_yes : R.string.animal_view_terminated_no);
@@ -42,19 +70,17 @@ public class AnimalViewActivity extends AppCompatActivity {
         });
     }
 
+    private void updateAnimalDataMediator(AnimalSearchResult animalRegistration, List<CategoryValue> categoryValueList) {
+        if (animalRegistration != null && categoryValueList != null) {
+            animalDataMediator.setValue(new Pair<>(animalRegistration, categoryValueList));
+        }
+    }
+
     private String getDateOfBirth(int months) {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.MONTH, -months);
         cal.set(Calendar.DAY_OF_MONTH, 1);
         return DateUtils.formatDate(cal.getTime());
-    }
-
-   private String getSex(String value){
-        if (value != null && value.length() > 2 && value.startsWith("cs")) {
-            return String.valueOf(value.substring(2).charAt(0));
-        }
-
-        return value;
     }
 
     private void initActionBar() {

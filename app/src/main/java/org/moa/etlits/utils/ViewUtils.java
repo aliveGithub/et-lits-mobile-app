@@ -9,6 +9,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.moa.etlits.R;
+import org.moa.etlits.data.models.CategoryValue;
+
+import java.util.List;
 
 public class ViewUtils {
 
@@ -29,5 +32,16 @@ public class ViewUtils {
                 inputView.setBackgroundResource(R.drawable.bg_input_default);
             }
         }
+    }
+
+    public static String getValue(String valueId, List<CategoryValue> list) {
+        if (valueId != null && list != null) {
+            for (CategoryValue categoryValue : list) {
+                if (categoryValue.getValueId().equals(valueId)) {
+                    return categoryValue.getValue();
+                }
+            }
+        }
+        return valueId;
     }
 }
