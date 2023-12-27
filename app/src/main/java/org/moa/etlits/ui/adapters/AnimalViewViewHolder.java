@@ -49,8 +49,8 @@ class AnimalViewViewHolder extends RecyclerView.ViewHolder implements View.OnCli
     public void bind(AnimalSearchResult animal, List<CategoryValue> categoryValueList) {
         tvAnimalId.setText(animal.getAnimalId());
         tvEid.setText("EID " + animal.getEid());
-        tvSex.setText(ViewUtils.getValue(animal.getSex(), categoryValueList));
-        tvBreed.setText(ViewUtils.getValue(animal.getBreed(), categoryValueList));
+        tvSex.setText(ViewUtils.getValue(animal.getSex(), categoryValueList, Constants.CATEGORY_KEY_SEX));
+        tvBreed.setText(ViewUtils.getValue(animal.getBreed(), categoryValueList, Constants.CATEGORY_KEY_BREEDS));
         tvAge.setText(tvAge.getContext().getString(R.string.animal_reg_age_months, String.valueOf(animal.getAge())));
         tvSpecies.setText(animal.getSpecies());
         tvEventDate.setText(animal.getLastEventDate() != null ? DateUtils.formatDate(animal.getLastEventDate()) : "");

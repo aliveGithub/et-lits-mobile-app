@@ -34,10 +34,10 @@ public class ViewUtils {
         }
     }
 
-    public static String getValue(String valueId, List<CategoryValue> list) {
+    public static String getValue(String valueId, List<CategoryValue> list, String categoryKey) {
         if (valueId != null && list != null) {
-            for (CategoryValue categoryValue : list) {
-                if (categoryValue.getValueId().equals(valueId)) {
+              for (CategoryValue categoryValue : list) {
+                if (categoryValue.getValueId().equals(valueId) && categoryValue.getCategoryKey().equals(categoryKey)) {
                     return categoryValue.getValue();
                 }
             }
