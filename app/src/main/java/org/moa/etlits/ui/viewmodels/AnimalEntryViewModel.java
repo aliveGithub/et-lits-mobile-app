@@ -17,7 +17,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-public class AnimalEntryModel extends ViewModel {
+public class AnimalEntryViewModel extends ViewModel {
 
     private MutableLiveData<AnimalFormState> animalFormState = new MutableLiveData<>();
     private CategoryValueRepository categoryValueRepository;
@@ -26,7 +26,7 @@ public class AnimalEntryModel extends ViewModel {
 
     private static Pattern ANIMAL_ID_REGEX_PATTERN = Pattern.compile("^ET \\d{10}$");
 
-    AnimalEntryModel(Application application) {
+    AnimalEntryViewModel(Application application) {
         this.categoryValueRepository = new CategoryValueRepository(application);
         breedList = this.categoryValueRepository.loadByType(Constants.CATEGORY_KEY_BREEDS);
         sexList = this.categoryValueRepository.loadByType(Constants.CATEGORY_KEY_SEX);
@@ -147,7 +147,7 @@ public class AnimalEntryModel extends ViewModel {
 
         @Override
         public <T extends ViewModel> T create(Class<T> modelClass) {
-            return (T) new AnimalEntryModel(application);
+            return (T) new AnimalEntryViewModel(application);
         }
     }
 }

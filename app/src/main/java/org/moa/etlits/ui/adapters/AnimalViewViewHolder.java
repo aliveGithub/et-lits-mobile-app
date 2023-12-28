@@ -8,8 +8,12 @@ import android.widget.TextView;
 
 import org.moa.etlits.R;
 import org.moa.etlits.data.models.AnimalSearchResult;
+import org.moa.etlits.data.models.CategoryValue;
 import org.moa.etlits.utils.Constants;
 import org.moa.etlits.utils.DateUtils;
+import org.moa.etlits.utils.ViewUtils;
+
+import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,11 +46,11 @@ class AnimalViewViewHolder extends RecyclerView.ViewHolder implements View.OnCli
         ivAnimalImage = itemView.findViewById(R.id.iv_animal_image);
     }
 
-    public void bind(AnimalSearchResult animal) {
+    public void bind(AnimalSearchResult animal, List<CategoryValue> categoryValueList) {
         tvAnimalId.setText(animal.getAnimalId());
         tvEid.setText("EID " + animal.getEid());
-        tvSex.setText(getSex(animal.getSex()));
-        tvBreed.setText(animal.getBreed());
+        tvSex.setText(ViewUtils.getCategoryLabel(animal.getSex(), categoryValueList, Constants.CATEGORY_KEY_SEX));
+        tvBreed.setText(ViewUtils.getCategoryLabel(animal.getBreed(), categoryValueList, Constants.CATEGORY_KEY_BREEDS));
         tvAge.setText(tvAge.getContext().getString(R.string.animal_reg_age_months, String.valueOf(animal.getAge())));
         tvSpecies.setText(animal.getSpecies());
         tvEventDate.setText(animal.getLastEventDate() != null ? DateUtils.formatDate(animal.getLastEventDate()) : "");
@@ -68,16 +72,7 @@ class AnimalViewViewHolder extends RecyclerView.ViewHolder implements View.OnCli
         return eventStatus != null ? eventStatus : event;
     }
 
-    private String getSex(String value) {
-        if (value != null && value.length() > 2 && value.startsWith("cs")) {
-            return String.valueOf(value.substring(2).charAt(0));
-        }
-
-        return value;
-    }
-
-
-    public static AnimalViewViewHolder create(ViewGroup parent, AnimalViewListAdapter.AnimalItemEventsListener animalItemEventsListener) {
+   public static AnimalViewViewHolder create(ViewGroup parent, AnimalViewListAdapter.AnimalItemEventsListener animalItemEventsListener) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recyclerview_animals_item, parent, false);
 

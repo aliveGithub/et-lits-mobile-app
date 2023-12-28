@@ -41,14 +41,14 @@ public class AnimalListActivity extends AppCompatActivity implements AnimalViewL
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         viewModel = new ViewModelProvider(this, new AnimalListViewModel.Factory(getApplication())).get(AnimalListViewModel.class);
-        viewModel.getAnimalList().observe(this, animals -> {
-            if (animals != null) {
-                animalsAdapter.submitList(animals);
+        viewModel.getAnimalListMediator().observe(this, animalSearchResultCombined -> {
+            if (animalSearchResultCombined != null) {
+                animalsAdapter.submitList(animalSearchResultCombined.getAnimalsList());
+                animalsAdapter.setCategoryValueList(animalSearchResultCombined.getCategoryValueList());
             }
         });
 
         setUpActionBar();
-
         if (savedInstanceState == null) {
             addSearchFragment();
         }
