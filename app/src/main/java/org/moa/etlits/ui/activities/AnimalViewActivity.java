@@ -9,7 +9,7 @@ import org.moa.etlits.R;
 import org.moa.etlits.data.models.AnimalSearchResult;
 import org.moa.etlits.data.models.CategoryValue;
 import org.moa.etlits.databinding.ActivityAnimalViewBinding;
-import org.moa.etlits.ui.viewmodels.AnimalViewModel;
+import org.moa.etlits.ui.viewmodels.AnimalDetailsViewModel;
 import org.moa.etlits.utils.Constants;
 import org.moa.etlits.utils.DateUtils;
 import org.moa.etlits.utils.ViewUtils;
@@ -24,7 +24,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 public class AnimalViewActivity extends AppCompatActivity {
     private ActivityAnimalViewBinding binding = null;
-    private AnimalViewModel animalViewModel;
+    private AnimalDetailsViewModel animalViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,18 +36,18 @@ public class AnimalViewActivity extends AppCompatActivity {
         String animalId = getIntent().getStringExtra("animalId");
         animalViewModel = new ViewModelProvider(
                 this,
-                new AnimalViewModel.Factory(getApplication(), animalId)
-        ).get(AnimalViewModel.class);
+                new AnimalDetailsViewModel.Factory(getApplication(), animalId)
+        ).get(AnimalDetailsViewModel.class);
 
-        animalViewModel.getAnimalDataMediator().observe(this, combined -> {
+        animalViewModel.getAnimalData().observe(this, combined -> {
             AnimalSearchResult animal = combined.first;
             List<CategoryValue> categoryValueList = combined.second;
             if (animal != null) {
                 binding.tvAnimalId.setText(animal.getAnimalId());
-                binding.tvSex.setText(ViewUtils.getValue(animal.getSex(), categoryValueList, Constants.CATEGORY_KEY_SEX));
+                binding.tvSex.setText(ViewUtils.getCategoryLabel(animal.getSex(), categoryValueList, Constants.CATEGORY_KEY_SEX));
                 binding.tvAge.setText(getString(R.string.animal_reg_age_months, String.valueOf(animal.getAge())));
                 binding.tvBirthDate.setText(getDateOfBirth(animal.getAge()));
-                binding.tvBreed.setText(ViewUtils.getValue(animal.getBreed(), categoryValueList, Constants.CATEGORY_KEY_BREEDS));
+                binding.tvBreed.setText(ViewUtils.getCategoryLabel(animal.getBreed(), categoryValueList, Constants.CATEGORY_KEY_BREEDS));
                 binding.tvSpecies.setText(animal.getSpecies());
                 binding.tvEstablishment.setText(animal.getEid() + " - " + animal.getEstablishmentName());
                 binding.tvTerminated.setText(animal.isDead() ? R.string.animal_view_terminated_yes : R.string.animal_view_terminated_no);

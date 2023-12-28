@@ -46,7 +46,6 @@ public interface AnimalDao {
     LiveData<List<AnimalSearchResult>> searchAnimals(String query);
 
 
-
     @Transaction
     @Query("SELECT animals.id, animals.animal_id as animalId, animals.sex, animals.age, animals.dead, date_move_on as eventDate, establishment_eid as eid, animals.breed FROM animals " +
             "JOIN animal_registrations ON animals.animal_registration_id = animal_registrations.id " +

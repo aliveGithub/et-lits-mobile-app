@@ -17,7 +17,7 @@ import org.moa.etlits.R;
 import org.moa.etlits.data.models.Animal;
 import org.moa.etlits.data.models.CategoryValue;
 import org.moa.etlits.databinding.ActivityAnimalEntryBinding;
-import org.moa.etlits.ui.viewmodels.AnimalEntryModel;
+import org.moa.etlits.ui.viewmodels.AnimalEntryViewModel;
 import org.moa.etlits.utils.ViewUtils;
 
 
@@ -30,7 +30,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 public class AnimalEntryActivity extends AppCompatActivity {
     private ActivityAnimalEntryBinding binding;
-    private AnimalEntryModel viewModel;
+    private AnimalEntryViewModel viewModel;
 
     private boolean breedSpinnerInitialized = false;
     private boolean sexSpinnerInitialized = false;
@@ -46,7 +46,7 @@ public class AnimalEntryActivity extends AppCompatActivity {
         binding = ActivityAnimalEntryBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         Animal animal = (Animal) getIntent().getSerializableExtra(ANIMAL);
-        viewModel = new ViewModelProvider(AnimalEntryActivity.this, new AnimalEntryModel.AnimalDataEntryViewModelFactory(getApplication())).get(AnimalEntryModel.class);
+        viewModel = new ViewModelProvider(AnimalEntryActivity.this, new AnimalEntryViewModel.AnimalDataEntryViewModelFactory(getApplication())).get(AnimalEntryViewModel.class);
         viewModel.getBreedList().observe(this, breeds -> {
             if (!checkInList(" ", breeds)) {
                 CategoryValue categoryValue = new CategoryValue();

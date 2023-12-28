@@ -21,15 +21,10 @@ public class AnimalSearchAdapter extends ArrayAdapter<AnimalSearchResult> {
     private List<AnimalSearchResult> originalList;
     private CustomFilter filter;
 
-
-
     public AnimalSearchAdapter(Context context, ArrayList<AnimalSearchResult> animals) {
         super(context, 0, animals);
         originalList = new ArrayList<>(animals);
         filter = new CustomFilter();
-
-
-
     }
 
     @Override
