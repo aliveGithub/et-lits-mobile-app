@@ -23,13 +23,13 @@
         android:orientation="horizontal"
         android:layout_gravity="center"
         >
-        <ImageView
+        <ImageButton
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_home"
             android:layout_margin="@dimen/big_padding"
             android:layout_gravity="center"
-            />
+            android:background="@android:color/transparent" />
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -74,12 +74,14 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_gravity="center">
-            <ImageView
+            <ImageButton
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:src="@drawable/ic_animal_filled"
                 android:layout_margin="@dimen/big_padding"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                />
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -123,12 +125,13 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_gravity="center">
-            <ImageView
+            <ImageButton
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_sex"
                 android:layout_margin="@dimen/big_padding"
                 android:layout_gravity="center"
+                android:background="@android:color/transparent"
                 />
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -174,12 +177,13 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_gravity="center">
-            <ImageView
+            <ImageButton
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_hourglass"
                 android:layout_margin="@dimen/big_padding"
                 android:layout_gravity="center"
+                android:background="@android:color/transparent"
                 />
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -226,12 +230,13 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_gravity="center">
-            <ImageView
+            <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_close_square"
                 android:layout_margin="@dimen/big_padding"
                 android:layout_gravity="center"
+                android:background="@android:color/transparent"
                 />
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -260,12 +265,13 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_gravity="center">
-            <ImageView
+            <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_person"
                 android:layout_margin="@dimen/big_padding"
                 android:layout_gravity="center"
+                android:background="@android:color/transparent"
                 />
             <RelativeLayout
                 android:layout_width="wrap_content"

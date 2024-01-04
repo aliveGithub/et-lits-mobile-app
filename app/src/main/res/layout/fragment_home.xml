@@ -44,13 +44,14 @@
                     android:gravity="center_horizontal"
                     android:layout_gravity="center">
 
-                    <ImageView
+                    <ImageButton
                         android:id="@+id/card_stakeholders"
                         android:layout_width="@dimen/card_item_icon_size"
                         android:layout_height="@dimen/card_item_icon_size"
                         android:scaleType="centerCrop"
                         android:padding="@dimen/small_padding"
-                        android:src="@drawable/ic_stakeholder" />
+                        android:src="@drawable/ic_stakeholder"
+                        android:background="@android:color/transparent"/>
 
                     <TextView
                         android:id="@+id/tv_stakeholders"
@@ -82,13 +83,14 @@
                     android:gravity="center_horizontal"
                     android:layout_gravity="center">
 
-                    <ImageView
+                    <ImageButton
                         android:id="@+id/card_documents"
                         android:layout_width="@dimen/card_item_icon_size"
                         android:layout_height="@dimen/card_item_icon_size"
                         android:scaleType="centerCrop"
                         android:padding="@dimen/small_padding"
-                        android:src="@drawable/ic_document" />
+                        android:src="@drawable/ic_document"
+                        android:background="@android:color/transparent"/>
 
                     <TextView
                         android:id="@+id/tv_documents"

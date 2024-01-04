@@ -26,12 +26,13 @@
             android:orientation="horizontal"
             android:layout_gravity="center"
             >
-            <ImageView
+            <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_animal_filled"
                 android:layout_margin="@dimen/big_padding"
                 android:layout_gravity="center"
+                android:background="@android:color/transparent"
                 />
             <RelativeLayout
                 android:layout_width="wrap_content"
