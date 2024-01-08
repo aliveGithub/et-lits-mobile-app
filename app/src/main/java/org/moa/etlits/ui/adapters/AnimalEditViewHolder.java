@@ -4,7 +4,7 @@ package org.moa.etlits.ui.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.moa.etlits.R;
@@ -18,7 +18,7 @@ class AnimalEditViewHolder extends RecyclerView.ViewHolder implements View.OnCli
     private final TextView tvBreed;
     private final TextView tvAge;
 
-    private ImageView ivDelete;
+    private ImageButton ivDelete;
 
     private AnimalEditListAdapter.AnimalItemEventsListener animalItemEventsListener;
     private AnimalEditViewHolder(View itemView, AnimalEditListAdapter.AnimalItemEventsListener animalItemEventsListener) {

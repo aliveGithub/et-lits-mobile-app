@@ -11,7 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.moa.etlits.R;
@@ -175,12 +175,12 @@ public class AnimalRegActivity extends AppCompatActivity {
         }
     }
 
-    private void disableNavigationButton(ImageView button){
+    private void disableNavigationButton(ImageButton button){
         button.setEnabled(false);
         button.setColorFilter(getResources().getColor(R.color.icon_in_active, getTheme()), PorterDuff.Mode.SRC_ATOP);
     }
 
-    private void enableNavigationButton(ImageView button){
+    private void enableNavigationButton(ImageButton button){
         button.setEnabled(true);
         button.setColorFilter(getResources().getColor(R.color.colorPrimaryDark, getTheme()), PorterDuff.Mode.SRC_ATOP);
     }

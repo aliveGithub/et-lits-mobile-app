@@ -3,7 +3,7 @@ package org.moa.etlits.ui.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import org.moa.etlits.R;
@@ -27,7 +27,7 @@ class AnimalViewViewHolder extends RecyclerView.ViewHolder implements View.OnCli
     private final TextView tvEvent;
     private final TextView tvEventDate;
 
-    private final ImageView ivAnimalImage;
+    private final ImageButton ivAnimalImage;
 
 
     private AnimalViewListAdapter.AnimalItemEventsListener animalItemEventsListener;
